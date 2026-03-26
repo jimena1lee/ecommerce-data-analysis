@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data (중요)
+data/*.csv
+data/*.xlsx
+Dataset not included due to size.
+Download: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+
+# 환경파일
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/

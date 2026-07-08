@@ -87,6 +87,6 @@ python musinsa_crawler.py reviews --from-products data/products_002_20260708.jso
 
 ## 다음 단계 (예정)
 
-- [ ] 수집 데이터 EDA 노트북 (`analysis.ipynb`)
-- [ ] 리뷰 텍스트 분석: 사이즈 불만/배송/품질 키워드 분류
+- [x] 수집 데이터 EDA 노트북 (`analysis.ipynb` — 속옷/홈웨어 026: 가격·할인·브랜드·평점·리뷰 텍스트)
+- [ ] 리뷰 텍스트 분석 고도화: 형태소 분석기 적용, 카테고리 간 비교
 - [ ] 29CM · W컨셉 확장 (채널 간 가격/할인 전략 비교)

@@ -53,6 +53,8 @@ CATEGORY_NAMES = {
     "004": "가방",
     "005": "신발",
     "020": "원피스/스커트",
+    "026": "속옷/홈웨어",
+    
 }
 
 HEADERS = {
@@ -260,12 +262,16 @@ def fetch_reviews(args) -> None:
     session.headers.update(HEADERS)
 
     # 대상 상품 목록 구성: 단일 goods-no 또는 products 결과 파일
+    # stem에 출처를 넣어 카테고리별 수집 파일이 서로 덮어쓰지 않게 함
     targets: list[tuple[str, str]] = []  # (goods_no, product_name)
     if args.goods_no:
         targets.append((args.goods_no, args.product_name or ""))
+        stem = f"reviews_{args.goods_no}"
     elif args.from_products:
         products = json.loads(Path(args.from_products).read_text(encoding="utf-8"))
         targets = [(p["_goods_no"], p["Product Name"]) for p in products if p.get("_goods_no")]
+        # products_026_20260708 → reviews_026
+        stem = "reviews_" + Path(args.from_products).stem.replace("products_", "").rsplit("_", 1)[0]
     else:
         print("--goods-no 또는 --from-products 중 하나를 지정하세요.", file=sys.stderr)
         sys.exit(1)
@@ -276,7 +282,7 @@ def fetch_reviews(args) -> None:
         print(f"[{i}/{len(targets)}] 리뷰 수집: {name or goods_no}")
         all_rows.extend(fetch_reviews_for_goods(session, goods_no, name, per_product))
 
-    save_outputs(all_rows, "reviews")
+    save_outputs(all_rows, stem)
 
 
 # ---------------------------------------------------------------------------

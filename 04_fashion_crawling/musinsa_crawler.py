@@ -29,6 +29,11 @@ from pathlib import Path
 
 import requests
 
+# Windows 콘솔(cp949)에서 한글 로그가 깨지지 않도록 출력을 UTF-8로 고정
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # ---------------------------------------------------------------------------
 # 설정 — 엔드포인트가 바뀌면 여기만 고치면 됩니다.
 # ---------------------------------------------------------------------------
@@ -91,6 +96,17 @@ def get_json(session: requests.Session, url: str, params: dict) -> dict:
             print(f"  ! 요청 실패({attempt}/{MAX_RETRIES}): {e}", file=sys.stderr)
         time.sleep(2**attempt)
     return {}
+
+
+def normalize_rating(value) -> str:
+    """평점을 5점 만점 문자열로 환산. PLP API는 100점 만점(예: 96)으로 내려옴."""
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if v > 5:
+        v /= 20
+    return f"{round(v, 1):g}"
 
 
 def first_of(d: dict, *keys, default=""):
@@ -174,7 +190,7 @@ def fetch_products(category: str, pages: int, size: int, dump_raw: bool) -> None
                     f"{first_of(item, 'saleRate', 'discountRate', default=0)}%"
                 ),
                 "Review Count": f"{int(first_of(item, 'reviewCount', default=0)):,}",
-                "Rating": str(first_of(item, "reviewScore", "rating", default="")),
+                "Rating": normalize_rating(first_of(item, "reviewScore", "rating", default="")),
                 "Collected Date": today,
                 # 리뷰 수집 단계에서 사용하는 내부 키 (포트폴리오 산출물에선 제거 가능)
                 "_goods_no": str(first_of(item, "goodsNo", "goodsNumber", "id")),
@@ -213,8 +229,8 @@ def fetch_reviews_for_goods(session: requests.Session, goods_no: str,
 
         for r in reviews:
             profile = r.get("userProfileInfo") or {}
-            height = first_of(profile, "reviewerHeight", "height")
-            weight = first_of(profile, "reviewerWeight", "weight")
+            height = first_of(profile, "userHeight", "reviewerHeight", "height")
+            weight = first_of(profile, "userWeight", "reviewerWeight", "weight")
             option = first_of(r, "goodsOption", "option")
             reviewer_bits = [b for b in (
                 f"{height}cm" if height else "",

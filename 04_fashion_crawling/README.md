@@ -57,6 +57,10 @@ python musinsa_crawler.py reviews --from-products data/products_002_20260708.jso
 결과는 `data/` 폴더에 JSON과 CSV(엑셀 호환 UTF-8 BOM)로 저장됩니다.
 `data/` 폴더는 git에 커밋되지 않습니다(아래 데이터 윤리 참고).
 
+> 💡 Windows: 스크립트가 출력을 UTF-8로 강제하므로 대부분 그대로 잘 보이지만,
+> 구형 cmd 콘솔에서 한글 로그가 깨지면 `chcp 65001`을 먼저 실행하세요.
+> 표시만 깨질 뿐 저장되는 파일은 항상 정상 UTF-8입니다.
+
 카테고리 코드는 무신사 카테고리 페이지 URL에서 확인합니다.
 예: `https://www.musinsa.com/category/002` → 아우터 = `002`
 

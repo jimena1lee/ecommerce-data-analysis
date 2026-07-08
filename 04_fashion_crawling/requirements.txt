@@ -1,0 +1,3 @@
+requests>=2.31
+# Optional: browser fallback if the API gets bot-blocked
+# playwright>=1.44

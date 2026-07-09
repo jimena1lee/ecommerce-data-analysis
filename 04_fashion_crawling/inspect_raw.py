@@ -23,20 +23,22 @@ MAX_PATHS = 400
 MAX_STRINGS = 60
 
 
-def walk(node, path, paths: Counter, strings: set):
+def walk(node, path, paths: Counter, strings: set, examples: dict):
     if isinstance(node, dict):
         if not node:
             paths[f"{path} (빈 dict)"] += 1
         for k, v in node.items():
-            walk(v, f"{path}.{k}", paths, strings)
+            walk(v, f"{path}.{k}", paths, strings, examples)
     elif isinstance(node, list):
         if not node:
             paths[f"{path}[] (빈 배열)"] += 1
         # 배열 요소는 앞쪽 3개만 대표로 순회 (구조 파악에는 충분)
         for x in node[:3]:
-            walk(x, f"{path}[]", paths, strings)
+            walk(x, f"{path}[]", paths, strings, examples)
     else:
         paths[path] += 1
+        if path not in examples:
+            examples[path] = repr(node)[:60]
         if isinstance(node, str) and re.search(r"https?://|api\.|/v\d+/", node):
             strings.add(node[:200])
 
@@ -49,11 +51,13 @@ def main():
 
     paths: Counter = Counter()
     strings: set = set()
-    walk(tree, "$", paths, strings)
+    examples: dict = {}
+    walk(tree, "$", paths, strings, examples)
 
     print(f"== 키 경로 ({len(paths)}종) ==")
     for p, n in sorted(paths.items())[:MAX_PATHS]:
-        print(f"  {p}  x{n}")
+        ex = f"  예: {examples[p]}" if p in examples else ""
+        print(f"  {p}  x{n}{ex}")
     if len(paths) > MAX_PATHS:
         print(f"  ... 외 {len(paths) - MAX_PATHS}종 생략")
 

@@ -222,6 +222,12 @@ def print_api_hints(tree):
             print(f"      {h}")
 
 
+def category_name_from_next_data(tree) -> str:
+    """__NEXT_DATA__의 categoryData.name (2026-07 구조 확인)."""
+    cat = tree.get("props", {}).get("pageProps", {}).get("categoryData", {}) or {}
+    return str(cat.get("name") or "")
+
+
 def category_name_from_html(html: str) -> str:
     m = re.search(r"<title>([^<]+)</title>", html)
     if not m:
@@ -248,7 +254,8 @@ def fetch_products_page_html(session: requests.Session, category: str, page: int
                           file=sys.stderr)
                     return [], {}, ""
                 tree = json.loads(m.group(1))
-                return find_product_list(tree), tree, category_name_from_html(resp.text)
+                name = category_name_from_next_data(tree) or category_name_from_html(resp.text)
+                return find_product_list(tree), tree, name
             print(f"  ! HTTP {resp.status_code} ({url})", file=sys.stderr)
             if resp.status_code in (403, 429):
                 time.sleep(10 * attempt)

@@ -48,6 +48,11 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
 # 카테고리 상품 목록(PLP) API. {category_no} 자리에 카테고리 코드가 들어갑니다.
 PRODUCTS_API = "https://api.kurly.com/collection/v2/home/categories/{category_no}/products"
 
+# API가 404 등으로 실패하면 카테고리 페이지 HTML의 __NEXT_DATA__(서버렌더링
+# 데이터)에서 상품을 직접 추출합니다. 이때 페이지가 실제로 쓰는 API 주소
+# 힌트도 함께 출력하므로, 위 상수를 올바른 값으로 갱신할 수 있습니다.
+CATEGORY_PAGE = "https://www.kurly.com/categories/{category_no}"
+
 # 상품 상세 페이지 하단 리뷰 목록 API. 커서(after) 기반 페이지네이션.
 REVIEWS_API = "https://api.kurly.com/product-review/v1/contents-products/{product_no}/reviews"
 
@@ -107,6 +112,9 @@ def get_json(session: requests.Session, url: str, params: dict) -> dict:
             if resp.status_code == 200:
                 return resp.json()
             print(f"  ! HTTP {resp.status_code} ({url})", file=sys.stderr)
+            if resp.status_code == 404:
+                # 엔드포인트가 바뀐 것 — 재시도해도 소용없으니 바로 반환
+                return {}
             if resp.status_code in (401,):
                 print("  ! 인증 실패 — 개발자도구에서 Bearer 토큰을 복사해 "
                       "KURLY_TOKEN 환경변수 또는 --token으로 넘기세요(README 참고).",
@@ -168,6 +176,86 @@ def save_outputs(rows: list[dict], stem: str, dump_raw=None):
 # 1) 상품 목록 (카테고리)
 # ---------------------------------------------------------------------------
 
+def iter_nodes(node):
+    """중첩 dict/list를 전부 순회 (HTML 폴백에서 상품 배열 탐색용)."""
+    yield node
+    if isinstance(node, dict):
+        for v in node.values():
+            yield from iter_nodes(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from iter_nodes(v)
+
+
+def looks_like_product(d) -> bool:
+    return (
+        isinstance(d, dict)
+        and bool(first_of(d, "name", "goodsName", "productName"))
+        and any(k in d for k in ("salesPrice", "discountedPrice", "no", "productNo", "reviewCount"))
+    )
+
+
+def find_product_list(tree) -> list:
+    """__NEXT_DATA__ 트리에서 상품 dict로만 이뤄진 가장 긴 배열을 찾는다."""
+    best: list = []
+    for node in iter_nodes(tree):
+        if (isinstance(node, list) and node
+                and all(looks_like_product(x) for x in node)
+                and len(node) > len(best)):
+            best = node
+    return best
+
+
+def print_api_hints(tree):
+    """페이지가 실제로 쓰는 API 주소/쿼리키를 출력 — 상단 상수 갱신용 힌트."""
+    hints: set[str] = set()
+    for node in iter_nodes(tree):
+        if isinstance(node, str) and "api.kurly.com" in node:
+            hints.add(node)
+        elif isinstance(node, dict) and node.get("queryKey"):
+            hints.add(json.dumps(node["queryKey"], ensure_ascii=False)[:150])
+    if hints:
+        print("  ↳ 페이지에서 발견한 API 힌트 (PRODUCTS_API/REVIEWS_API 갱신에 사용):")
+        for h in sorted(hints)[:12]:
+            print(f"      {h}")
+
+
+def category_name_from_html(html: str) -> str:
+    m = re.search(r"<title>([^<]+)</title>", html)
+    if not m:
+        return ""
+    t = re.split(r"[|\-–]", m.group(1))[0].strip()
+    return "" if t.lower() in ("kurly", "마켓컬리", "컬리", "뷰티컬리") else t
+
+
+def fetch_products_page_html(session: requests.Session, category: str, page: int,
+                             size: int, sort_type: str) -> tuple[list, dict, str]:
+    """카테고리 페이지 HTML의 __NEXT_DATA__에서 상품 추출. (items, raw, 카테고리명)"""
+    url = CATEGORY_PAGE.format(category_no=category)
+    params = {"page": page, "per_page": size, "sorted_type": sort_type}
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            resp = session.get(url, params=params, timeout=15,
+                               headers={"Accept": "text/html,application/xhtml+xml"})
+            if resp.status_code == 200:
+                m = re.search(
+                    r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
+                    resp.text, re.S)
+                if not m:
+                    print("  ! __NEXT_DATA__를 찾지 못했습니다(봇 차단 페이지일 수 있음).",
+                          file=sys.stderr)
+                    return [], {}, ""
+                tree = json.loads(m.group(1))
+                return find_product_list(tree), tree, category_name_from_html(resp.text)
+            print(f"  ! HTTP {resp.status_code} ({url})", file=sys.stderr)
+            if resp.status_code in (403, 429):
+                time.sleep(10 * attempt)
+        except (requests.RequestException, ValueError) as e:
+            print(f"  ! 요청 실패({attempt}/{MAX_RETRIES}): {e}", file=sys.stderr)
+        time.sleep(2**attempt)
+    return [], {}, ""
+
+
 def fetch_products(args) -> None:
     session = make_session(args.token)
 
@@ -176,23 +264,40 @@ def fetch_products(args) -> None:
     today = date.today().isoformat()
     rows: list[dict] = []
     raw_pages: list[dict] = []
+    use_html = False  # API 실패 시 HTML 폴백으로 전환
 
     for page in range(1, args.pages + 1):
         print(f"[{category_name}] {page}/{args.pages} 페이지 수집 중...")
-        params = {
-            "page": page,
-            "per_page": args.size,
-            # 정렬 코드는 개편에 따라 다를 수 있음 — 개발자도구에서 정렬 탭을
-            # 바꿔가며 sort_type 값을 확인하세요(기본값은 사이트 기본 정렬).
-            "sort_type": args.sort_type,
-            "filters": "",
-        }
-        payload = get_json(session, PRODUCTS_API.format(category_no=category), params)
-        raw_pages.append(payload)
+        items: list = []
 
-        # 응답 내 상품 배열 위치는 개편에 따라 다를 수 있어 후보 경로를 순회
-        data = payload.get("data", payload)
-        items = first_of(data, "products", "list", "items", default=None) or []
+        if not use_html:
+            params = {
+                "page": page,
+                "per_page": args.size,
+                # 정렬 코드는 개편에 따라 다를 수 있음 — 개발자도구에서 정렬 탭을
+                # 바꿔가며 sort_type 값을 확인하세요(기본값은 사이트 기본 정렬).
+                "sort_type": args.sort_type,
+                "filters": "",
+            }
+            payload = get_json(session, PRODUCTS_API.format(category_no=category), params)
+            raw_pages.append(payload)
+            data = payload.get("data", payload)
+            items = first_of(data, "products", "list", "items", default=None) or []
+            if not items and page == 1:
+                print("  ! API 수집 실패 — 카테고리 페이지 HTML(__NEXT_DATA__)로 "
+                      "대체 수집합니다.")
+                use_html = True
+
+        if use_html:
+            items, tree, html_name = fetch_products_page_html(
+                session, category, page, args.size, args.sort_type)
+            raw_pages.append(tree)
+            if page == 1:
+                print_api_hints(tree)
+                if html_name and not CATEGORY_NAMES.get(category):
+                    category_name = html_name
+                    print(f"  ↳ 카테고리명 자동 인식: {category_name}")
+
         if not items:
             print("  ! 상품 목록을 찾지 못했습니다. --dump-raw로 원본을 저장해 "
                   "README의 엔드포인트 확인 방법을 참고하세요.", file=sys.stderr)
@@ -300,6 +405,12 @@ def fetch_reviews(args) -> None:
         print(f"[{i}/{len(targets)}] 리뷰 수집: {name or product_no}")
         all_rows.extend(fetch_reviews_for_product(session, product_no, name, per_product))
         polite_sleep()
+
+    if not all_rows:
+        print("  ! 후기를 하나도 수집하지 못했습니다. 상품 상세 페이지의 후기 영역을 "
+              "연 상태로 개발자도구 Network 탭에서 실제 리뷰 API 주소를 확인해 "
+              "REVIEWS_API 상수를 갱신하세요. products 명령의 HTML 폴백이 출력하는 "
+              "API 힌트도 참고가 됩니다.", file=sys.stderr)
 
     save_outputs(all_rows, stem)
 

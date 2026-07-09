@@ -62,8 +62,8 @@ REVIEWS_API = "https://api.kurly.com/product-review/v1/contents-products/{produc
 # https://www.kurly.com/categories/165 처럼 주소에 코드가 그대로 노출됨)
 # 이름이 비어 있으면 "카테고리 <코드>"로 표기됩니다 — 페이지 상단 타이틀을 보고 채우세요.
 CATEGORY_NAMES = {
-    "165": "",
-    "166": "",
+    "165": "패션의류",
+    "166": "",  # 비워두면 첫 실행 때 카테고리 페이지에서 자동 인식
     "169": "",
 }
 
@@ -271,6 +271,13 @@ def fetch_products(args) -> None:
 
     category = args.category
     category_name = CATEGORY_NAMES.get(category) or f"카테고리 {category}"
+    if not CATEGORY_NAMES.get(category):
+        # 상품 API에는 카테고리명이 없어 페이지의 __NEXT_DATA__에서 한 번 읽어옴
+        _, _, html_name = fetch_products_page_html(session, category, 1, 1, args.sort_type)
+        if html_name:
+            category_name = html_name
+            print(f"카테고리명 자동 인식: {category_name}")
+        polite_sleep()
     today = date.today().isoformat()
     rows: list[dict] = []
     raw_pages: list[dict] = []

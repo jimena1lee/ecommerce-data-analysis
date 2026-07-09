@@ -132,6 +132,30 @@ main{max-width:1060px; margin:0 auto; padding:26px 20px 40px}
 .tag-neg{background:#fdeaea; color:var(--crit)}
 .tag-pos{background:#e9f5e9; color:#0a6b0a}
 
+/* ── 탭2: 브랜드 프로필 ──────────────────────────────────────── */
+.brand-sel{width:100%; max-width:420px; font:inherit; padding:9px 12px; border:1px solid var(--line);
+  border-radius:8px; background:var(--surface); color:var(--ink)}
+.brand-sel:focus-visible{outline:2px solid var(--brand); outline-offset:1px}
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:4px}
+.stat{border:1px solid var(--line); border-radius:8px; padding:12px 14px}
+.stat .st-label{font-size:11.5px; color:var(--muted); margin-bottom:2px}
+.stat .st-val{font-size:20px; font-weight:800; letter-spacing:-0.02em}
+.stat .st-val small{font-size:12px; font-weight:600; margin-left:4px; white-space:nowrap}
+.delta-up{color:var(--crit)} .delta-down{color:var(--good)}
+.badge-thin{display:inline-block; font-size:11px; font-weight:600; color:var(--warn);
+  border:1px solid var(--warn); border-radius:99px; padding:1px 9px; margin-left:8px; vertical-align:middle}
+/* 사이즈 스택 */
+.stack{display:flex; gap:2px; height:26px; border-radius:6px; overflow:hidden; margin:10px 0 8px}
+.stack div{display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; color:#fff; min-width:0}
+.stack .sg-big{background:var(--pos)} .stack .sg-fit{background:var(--neu); color:var(--ink-2)} .stack .sg-small{background:var(--neg)}
+.legend{display:flex; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--ink-2)}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px}
+.mini-table{width:100%; border-collapse:collapse; font-size:13px}
+.mini-table th{font-size:11.5px; color:var(--muted); font-weight:600; text-align:left; padding:6px 8px; border-bottom:1px solid var(--line)}
+.mini-table td{padding:7px 8px; border-bottom:1px solid var(--line)}
+.mini-table td.num,.mini-table th.num{text-align:right}
+.mini-table tr:last-child td{border-bottom:none}
+
 /* ── 푸터 ────────────────────────────────────────────────────── */
 footer{border-top:1px solid var(--line); background:var(--surface); margin-top:30px}
 .ftr-inner{max-width:1060px; margin:0 auto; padding:20px; font-size:12.5px; color:var(--muted)}
@@ -191,7 +215,12 @@ footer{border-top:1px solid var(--line); background:var(--surface); margin-top:3
     </div>
   </section>
   <section id="tab-brand" class="panel" role="tabpanel">
-    <div class="card"><div class="placeholder">브랜드 프로필 — 구현 예정</div></div>
+    <div class="card">
+      <h3>브랜드 프로필</h3>
+      <p class="card-cap" id="brand-cap"></p>
+      <select id="brand-sel" class="brand-sel" aria-label="브랜드 선택"></select>
+    </div>
+    <div id="brand-out"></div>
   </section>
   <section id="tab-explore" class="panel" role="tabpanel">
     <div class="card"><div class="placeholder">연구 탐색 — 구현 예정</div></div>
@@ -398,6 +427,93 @@ $("#inp-reset").addEventListener("click", () => {
 });
 renderPredictInputs();
 renderPredict();
+
+/* ══ 탭2: 브랜드 프로필 ═════════════════════════════════════════ */
+const ALL_REVS = DATA.products.reduce((a, p) => a + p.review_n, 0);
+const ALL_COMPS = DATA.products.reduce((a, p) => a + p.complaint_n, 0);
+const ALL_RATE = ALL_COMPS / ALL_REVS;
+
+function topLabels(mentions, axis, k) {
+  const m = mentions[axis] || {};
+  return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, k);
+}
+
+function renderBrand(name) {
+  const b = DATA.brands.find(x => x.name === name);
+  if (!b) { $("#brand-out").innerHTML = ""; return; }
+
+  const thin = b.n_reviews < 15;
+  const rate = b.complaint_rate;
+  const diff = rate == null ? null : Math.round((rate - ALL_RATE) * 100);
+  const deltaHTML = rate == null ? "" :
+    diff > 0 ? `<small class="delta-up">▲ 평균+${diff}%p</small>` :
+    diff < 0 ? `<small class="delta-down">▼ 평균${diff}%p</small>` :
+    `<small style="color:var(--muted)">평균 수준</small>`;
+
+  /* 사이즈 스택 */
+  const sTot = Object.values(b.size).reduce((a, x) => a + x, 0);
+  const seg = (key, cls, label) => {
+    const n = b.size[key] || 0; if (!sTot || !n) return "";
+    const w = n / sTot * 100;
+    return `<div class="${cls}" style="flex:${w}">${w >= 14 ? Math.round(w) + "%" : ""}</div>`;
+  };
+  const allSmallShare = (() => {
+    let s = 0, t = 0;
+    for (const p of DATA.products) { const m = p.mentions["사이즈감"] || {};
+      for (const [k, n] of Object.entries(m)) { t += n; if (k === "작게 나옴") s += n; } }
+    return t ? s / t : 0;
+  })();
+  const brandSmall = sTot ? (b.size["작게 나옴"] || 0) / sTot : 0;
+  const sizeComment = !sTot ? "사이즈 언급 데이터가 없습니다." :
+    brandSmall >= allSmallShare * 1.5 && brandSmall >= 0.2 ?
+      `'작게 나옴' 언급 비율(${pct(brandSmall)})이 전체 평균(${pct(allSmallShare)})보다 뚜렷하게 높습니다 — 사이즈 안내 문구를 권장합니다.` :
+    (b.size["크게 나옴"] || 0) / sTot >= 0.4 ?
+      `'크게 나옴' 언급이 많은 브랜드입니다 — 여유 핏 기조로 보입니다.` :
+      `사이즈 언급 분포가 전체 평균과 비슷한 수준입니다.`;
+
+  const situ = topLabels(b.mentions, "착용상황", 2).map(([l]) => l);
+  const season = topLabels(b.mentions, "계절감", 2).map(([l]) => l);
+  const chips = arr => arr.length ? arr.map(l => `<span class="sid"><span>${esc(l)}</span></span>`).join(" ") : '<span style="color:var(--muted)">–</span>';
+
+  const reasons = b.reasons.length
+    ? b.reasons.map(([r, n]) => `<li><b>•</b><span>${esc(r)} <small style="color:var(--muted)">(${n}건)</small></span></li>`).join("")
+    : `<li><b>✓</b><span>기록된 불만사유가 없습니다.</span></li>`;
+
+  const prodRows = b.products.map(p =>
+    `<tr><td>${esc(p.name.length > 38 ? p.name.slice(0, 38) + "…" : p.name)}</td>
+     <td class="num">${p.review_n}</td><td class="num">${p.complaint_n}</td>
+     <td class="num">${pct(p.review_n ? p.complaint_n / p.review_n : 0)}</td></tr>`).join("");
+
+  $("#brand-out").innerHTML =
+    `<div class="card"><h3>${esc(b.name)}${thin ? '<span class="badge-thin">표본 작음 — 참고용</span>' : ""}</h3>
+     <p class="card-cap">${b.cats.map(c => DATA.meta.cats[c] || c).join(" · ")}</p>
+     <div class="stat-grid">
+       <div class="stat"><div class="st-label">입점 상품</div><div class="st-val num">${b.n_products}개</div></div>
+       <div class="stat"><div class="st-label">태깅 리뷰</div><div class="st-val num">${b.n_reviews}건</div></div>
+       <div class="stat"><div class="st-label">평균 판매가</div><div class="st-val num" style="font-size:17px">${won(b.avg_price)}</div></div>
+       <div class="stat"><div class="st-label">평균 할인율</div><div class="st-val num">${b.avg_discount != null ? b.avg_discount + "%" : "–"}</div></div>
+       <div class="stat"><div class="st-label">불만율</div><div class="st-val num">${rate != null ? pct(rate) : "–"} ${deltaHTML}</div></div>
+     </div></div>
+     <div class="card"><h3>사이즈 경향</h3><p class="card-cap">리뷰의 사이즈감 언급 ${sTot}건 분포</p>
+     <div class="stack">${seg("크게 나옴", "sg-big")}${seg("정사이즈", "sg-fit")}${seg("작게 나옴", "sg-small")}</div>
+     <div class="legend"><span><i style="background:var(--pos)"></i>크게 나옴 ${b.size["크게 나옴"] || 0}</span>
+       <span><i style="background:var(--neu)"></i>정사이즈 ${b.size["정사이즈"] || 0}</span>
+       <span><i style="background:var(--neg)"></i>작게 나옴 ${b.size["작게 나옴"] || 0}</span></div>
+     <p style="font-size:13.5px; margin-top:10px">${sizeComment}</p></div>
+     <div class="card"><h3>주력 착용상황 · 계절감</h3><p class="card-cap">리뷰에서 가장 자주 언급된 값</p>
+     <p style="font-size:14px">착용상황 ${chips(situ)} &nbsp; 계절감 ${chips(season)}</p></div>
+     <div class="card"><h3>자주 나오는 불만</h3><ul class="action-list">${reasons}</ul></div>
+     <div class="card"><h3>리뷰 데이터가 있는 상품 ${b.products.length}개</h3>
+     <div style="overflow:auto; max-height:340px"><table class="mini-table"><thead><tr><th>상품명</th><th class="num">리뷰</th><th class="num">불만</th><th class="num">불만율</th></tr></thead>
+     <tbody>${prodRows}</tbody></table></div></div>`;
+}
+
+$("#brand-cap").textContent =
+  `상품 3개 이상 입점 브랜드 ${DATA.brands.length}개 — 신규 입점 검토나 리오더 판단 시 참고하세요.`;
+$("#brand-sel").innerHTML = DATA.brands.map(b =>
+  `<option value="${esc(b.name)}">${esc(b.name)} (상품 ${b.n_products} · 리뷰 ${b.n_reviews})</option>`).join("");
+$("#brand-sel").addEventListener("change", e => renderBrand(e.target.value));
+renderBrand(DATA.brands[0].name);
 
 $("#ftr").innerHTML =
   `<b>만든 방법</b> — 컬리 리뷰 수집(크롤러) → Gemini로 8개 실착 속성 태깅 → 코드북 정규화 → ` +

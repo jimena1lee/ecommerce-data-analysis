@@ -56,7 +56,8 @@ PRODUCTS_API = ("https://api.kurly.com/collection/v2/home/sites/market/"
 CATEGORY_PAGE = "https://www.kurly.com/categories/{category_no}"
 
 # 상품 상세 페이지 하단 리뷰 목록 API. 커서(after) 기반 페이지네이션.
-REVIEWS_API = "https://api.kurly.com/product-review/v1/contents-products/{product_no}/reviews"
+# (2026-07 개발자도구로 확인한 실제 주소 — 인증 토큰 불필요)
+REVIEWS_API = "https://api.kurly.com/product-review/v4/contents-products/{product_no}/reviews"
 
 # 컬리 카테고리 코드 예시 (전체 목록은 사이트 카테고리 URL에서 확인 가능:
 # https://www.kurly.com/categories/165 처럼 주소에 코드가 그대로 노출됨)
@@ -358,43 +359,52 @@ def fetch_products(args) -> None:
 # ---------------------------------------------------------------------------
 
 def fetch_reviews_for_product(session: requests.Session, product_no: str,
-                              product_name: str, max_reviews: int) -> list[dict]:
+                              product_name: str, max_reviews: int,
+                              raw_sink: list | None = None) -> list[dict]:
     rows: list[dict] = []
     after = ""  # 커서 기반 페이지네이션 — 응답 meta에서 다음 커서를 받아 이어감
 
     while len(rows) < max_reviews:
         params = {
-            "sortType": "RECENTLY",  # 최신순. 추천순은 RECOMMEND
+            "sortType": "RECOMMEND",  # 추천순(사이트 기본). 최신순은 RECENTLY
             "size": 10,
             "onlyImage": "false",
         }
         if after:
             params["after"] = after
         payload = get_json(session, REVIEWS_API.format(product_no=product_no), params)
+        if raw_sink is not None:
+            raw_sink.append(payload)
         data = payload.get("data", payload)
-        reviews = first_of(data, "list", "reviews", "contents", "items", default=None) or []
+        # 상품 API처럼 배열이 data 바로 아래로 내려올 수 있음
+        if isinstance(data, list):
+            reviews = data
+        else:
+            reviews = first_of(data, "list", "reviews", "contents", "items", default=None) or []
         if not reviews:
             break
 
         for r in reviews:
-            option = first_of(r, "dealProductName", "optionName", "option")
+            option = first_of(r, "deal_product_name", "dealProductName", "option_name", "optionName")
             rows.append({
                 "Channel": CHANNEL,
                 "Product Name": product_name
-                                or first_of(r, "contentsProductName", "productName"),
+                                or first_of(r, "contents_product_name", "contentsProductName", "productName"),
                 "Rating": "",  # 컬리 후기에는 별점이 없음
                 "Review Body": str(first_of(r, "contents", "content", "reviewContent")).strip(),
-                "Review Date": to_date_str(first_of(r, "registeredAt", "createdAt", "registeredAtText")),
+                "Review Date": to_date_str(first_of(
+                    r, "registered_at", "registeredAt", "created_at", "createdAt")),
                 "Reviewer Info": f"{option} 구매" if option else "",
             })
             if len(rows) >= max_reviews:
                 break
 
         # 다음 페이지 커서 — 위치 후보를 순회하고, 없으면 종료
-        meta = first_of(data, "meta", default={}) or {}
+        meta = payload.get("meta") \
+            or (first_of(data, "meta", default={}) if isinstance(data, dict) else {}) or {}
         pagination = first_of(meta, "pagination", default=meta) or {}
-        after = str(first_of(pagination, "after", "nextCursor", default=""))
-        if not after or not first_of(pagination, "hasNext", default=True):
+        after = str(first_of(pagination, "after", "next_cursor", "nextCursor", default=""))
+        if not after or not first_of(pagination, "has_next", "hasNext", default=True):
             break
         polite_sleep()
 
@@ -422,10 +432,12 @@ def fetch_reviews(args) -> None:
         sys.exit(1)
 
     per_product = args.per_product or args.max_reviews
+    raw_sink: list | None = [] if args.dump_raw else None
     all_rows: list[dict] = []
     for i, (product_no, name) in enumerate(targets, 1):
         print(f"[{i}/{len(targets)}] 리뷰 수집: {name or product_no}")
-        all_rows.extend(fetch_reviews_for_product(session, product_no, name, per_product))
+        all_rows.extend(fetch_reviews_for_product(session, product_no, name,
+                                                  per_product, raw_sink))
         polite_sleep()
 
     if not all_rows:
@@ -434,7 +446,7 @@ def fetch_reviews(args) -> None:
               "REVIEWS_API 상수를 갱신하세요. products 명령의 HTML 폴백이 출력하는 "
               "API 힌트도 참고가 됩니다.", file=sys.stderr)
 
-    save_outputs(all_rows, stem)
+    save_outputs(all_rows, stem, raw_sink)
 
 
 # ---------------------------------------------------------------------------
@@ -459,6 +471,7 @@ def main():
     r.add_argument("--from-products", help="products 명령이 만든 JSON 파일 경로")
     r.add_argument("--max-reviews", type=int, default=50, help="단일 상품 최대 리뷰 수")
     r.add_argument("--per-product", type=int, help="--from-products 사용 시 상품당 리뷰 수")
+    r.add_argument("--dump-raw", action="store_true", help="API 원본 응답도 저장")
 
     args = parser.parse_args()
     if args.command == "products":

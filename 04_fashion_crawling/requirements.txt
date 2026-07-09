@@ -1,6 +1,6 @@
 requests>=2.31
 
-# EDA 노트북 · Gradio 대시보드
+# EDA notebooks + Gradio dashboard
 pandas>=2.0
 matplotlib>=3.8
 gradio>=4.44

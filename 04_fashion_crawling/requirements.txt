@@ -1,3 +1,9 @@
 requests>=2.31
 # Optional: browser fallback if the API gets bot-blocked
 # playwright>=1.44
+
+# 리뷰 속성 마이닝 & 콜드스타트 데모 (extract_attributes.py ~ app_demo.py)
+pandas>=2.0
+google-genai>=1.0
+matplotlib>=3.7
+gradio>=4.0

@@ -29,8 +29,15 @@ BLUE = "#2a78d6"
 INK, SECONDARY, MUTED = "#0b0b0b", "#52514e", "#898781"
 SURFACE = "#fcfcfb"
 
+# 설치된 한글 폰트를 골라 하나만 지정 (리스트로 주면 없는 폰트마다 경고가 나옴)
+from matplotlib import font_manager
+
+_KOREAN_FONTS = ("Malgun Gothic", "AppleGothic", "NanumGothic", "Noto Sans CJK KR")
+_available = {f.name for f in font_manager.fontManager.ttflist}
+FONT = next((f for f in _KOREAN_FONTS if f in _available), "DejaVu Sans")
+
 plt.rcParams.update({
-    "font.family": ["Malgun Gothic", "AppleGothic", "NanumGothic", "DejaVu Sans"],
+    "font.family": FONT,
     "axes.unicode_minus": False,
     "figure.facecolor": SURFACE, "axes.facecolor": SURFACE,
     "axes.edgecolor": "#c3c2b7",
@@ -73,7 +80,9 @@ def discover_datasets() -> dict[str, dict]:
         channel = rows[0].get("Channel", "?")
         category = rows[0].get("Category", key)
         rev_glob = ppath.name.replace("products", "reviews").rsplit("_", 1)[0]
-        rev_files = sorted(DATA_DIR.glob(f"{rev_glob}_*.json"))
+        # --dump-raw가 만든 *_raw.json(API 원본)은 리뷰 데이터가 아니므로 제외
+        rev_files = sorted(p for p in DATA_DIR.glob(f"{rev_glob}_*.json")
+                           if not p.stem.endswith("_raw"))
         datasets[f"{channel} · {category}"] = {
             "products": ppath,
             "reviews": rev_files[-1] if rev_files else None,
@@ -162,7 +171,7 @@ def brand_fig(prod: pd.DataFrame):
 
 
 def keyword_fig(rev: pd.DataFrame):
-    if rev.empty:
+    if rev.empty or "Review Body" not in rev.columns:
         return _empty_fig("리뷰 데이터가 없습니다\n(크롤러의 reviews 명령으로 수집)")
     words = Counter(
         t for s in rev["Review Body"]

@@ -9,7 +9,8 @@ __pycache__/
 # Data (중요)
 data/*.csv
 data/*.xlsx
-04_fashion_crawling/data/
+04_fashion_crawling/musinsa/data/
+04_fashion_crawling/kurly/data/
 Dataset not included due to size.
 Download: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 

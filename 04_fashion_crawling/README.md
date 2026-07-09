@@ -7,8 +7,39 @@
 
 | 채널 | 스크립트 | 대상 |
 | --- | --- | --- |
-| 무신사 | `musinsa_crawler.py` | 카테고리 인기순 상품 + 리뷰 |
-| 컬리 | `kurly_crawler.py` | 패션 카테고리(165, 166, 169) 상품 + 후기 |
+| 무신사 | `musinsa/musinsa_crawler.py` | 카테고리 인기순 상품 + 리뷰 |
+| 컬리 | `kurly/kurly_crawler.py` | 패션 카테고리(165, 166, 169) 상품 + 후기 |
+
+## 폴더 구조
+
+```
+04_fashion_crawling/
+├── README.md
+├── requirements.txt
+├── app.py                  # 공용 대시보드 (Gradio) — 두 채널 data/를 자동 인식
+├── inspect_raw.py          # 공용 진단 도구 (--dump-raw 원본 구조 요약)
+├── output/
+│   └── portfolio.html      # 무신사 × 컬리 통합 포트폴리오 (정적 HTML)
+├── musinsa/
+│   ├── musinsa_crawler.py
+│   ├── analysis.ipynb      # 속옷/홈웨어(026) EDA
+│   └── data/               # 수집 데이터 (git 제외)
+└── kurly/
+    ├── kurly_crawler.py
+    ├── analysis_kurly_165.ipynb / _166 / _169   # 카테고리별 EDA
+    ├── extract_attributes_kurly.py    # 1~2단계: 리뷰 → 실착 속성 추출 (Gemini)
+    ├── build_codebook_kurly.py        # 3단계: 속성 코드북 생성
+    ├── build_semantic_id_kurly.py     # 4단계: 상품별 Semantic ID 부여
+    ├── build_insight_report_kurly.py  # 5단계: 차트 + MD 인사이트 리포트
+    ├── build_portfolio_kurly_semantic.py  # 포트폴리오 HTML 생성
+    ├── data/               # 수집 데이터 (git 제외)
+    └── output/
+        ├── kurly_semantic_id.html     # Semantic ID 프로젝트 원페이지
+        └── report/                    # 인사이트 리포트 (차트 PNG + MD)
+```
+
+크롤러·파이프라인 스크립트는 **각 채널 폴더 안에서** 실행합니다
+(`data/`, `output/` 경로가 폴더 기준 상대 경로).
 
 ## 수집 스키마
 
@@ -49,6 +80,7 @@
 
 ```bash
 pip install -r requirements.txt
+cd musinsa
 
 # 1) 아우터(002) 인기순 상품 1페이지(40개) 수집
 python musinsa_crawler.py products --category 002 --pages 1
@@ -60,7 +92,7 @@ python musinsa_crawler.py reviews --goods-no 3082392 --max-reviews 50
 python musinsa_crawler.py reviews --from-products data/products_002_20260708.json --per-product 30
 ```
 
-결과는 `data/` 폴더에 JSON과 CSV(엑셀 호환 UTF-8 BOM)로 저장됩니다.
+결과는 각 채널 폴더의 `data/`에 JSON과 CSV(엑셀 호환 UTF-8 BOM)로 저장됩니다.
 `data/` 폴더는 git에 커밋되지 않습니다(아래 데이터 윤리 참고).
 
 > 💡 Windows: 스크립트가 출력을 UTF-8로 강제하므로 대부분 그대로 잘 보이지만,
@@ -75,6 +107,8 @@ python musinsa_crawler.py reviews --from-products data/products_002_20260708.jso
 > ⚠️ 무신사와 마찬가지로 **로컬(한국 IP) 환경**에서 실행하세요.
 
 ```bash
+cd kurly
+
 # 1) 패션 카테고리(165) 상품 1페이지(96개) 수집
 python kurly_crawler.py products --category 165 --pages 1
 
@@ -109,16 +143,17 @@ python kurly_crawler.py reviews --from-products data/kurly_products_165_20260709
 
 ## EDA · 대시보드
 
-- `analysis.ipynb` — 무신사 속옷/홈웨어(026) EDA
-- `analysis_kurly.ipynb` — 컬리 패션 카테고리 EDA.
-  상단 `CATEGORY` 변수만 바꾸면 165·166·169 등 수집해 둔 카테고리를 전환할 수 있고,
+- `musinsa/analysis.ipynb` — 무신사 속옷/홈웨어(026) EDA
+- `kurly/analysis_kurly_165.ipynb` (·166·169) — 컬리 패션 카테고리별 EDA.
   별점이 없는 컬리 특성에 맞춰 평점 분석 대신 리뷰수 집중도(파레토)를 본다.
 - `app.py` — 수집 데이터 대시보드 (Gradio).
-  `data/`의 products/reviews 파일을 채널·카테고리별로 자동 인식해
-  가격 분포 · 할인 구조 · 브랜드 구도 · 리뷰 키워드를 한 화면에서 비교한다.
-- `portfolio.html` — 포트폴리오용 원페이지 리포트 (정적 HTML, 차트 임베드).
+  `musinsa/data/`·`kurly/data/`의 products/reviews 파일을 채널·카테고리별로
+  자동 인식해 가격 분포 · 할인 구조 · 브랜드 구도 · 리뷰 키워드를 한 화면에서 비교한다.
+- `output/portfolio.html` — 포트폴리오용 원페이지 리포트 (정적 HTML, 차트 임베드).
   브라우저로 바로 열리며, 호스팅(GitHub Pages 등) 후 노션 `/embed`로 넣을 수 있다.
   공개 산출물 원칙에 따라 집계 통계·시각화만 포함.
+- `kurly/output/kurly_semantic_id.html` — 컬리 리뷰 마이닝 → Semantic ID
+  프로젝트 원페이지. `kurly/output/report/`에 근거 차트와 MD 리포트가 있다.
 
 ```bash
 pip install -r requirements.txt

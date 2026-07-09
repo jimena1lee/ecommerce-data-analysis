@@ -7,11 +7,11 @@ MD 인사이트 리포트 생성 (4단계, 가장 중요한 단계)
 차트 4개 + markdown 리포트로 정리한다. API 호출 없음 — 전부 로컬 집계.
 
 산출물:
-- report/chart1_attribute_mentions.png : 리뷰에서 가장 많이 언급된 실착 속성 축 TOP
-- report/chart2_size_by_category.png   : 카테고리별 사이즈감 분포
-- report/chart3_complaint_types.png    : 불만사유 유형 TOP 10
-- report/chart4_risk_products.png      : 불만비율 높은 상품 TOP 10 (반품 리스크 후보)
-- report/insight_report_kurly.md       : 위 차트를 근거로 쓴 MD용 인사이트 리포트
+- output/report/chart1_attribute_mentions.png : 리뷰에서 가장 많이 언급된 실착 속성 축 TOP
+- output/report/chart2_size_by_category.png   : 카테고리별 사이즈감 분포
+- output/report/chart3_complaint_types.png    : 불만사유 유형 TOP 10
+- output/report/chart4_risk_products.png      : 불만비율 높은 상품 TOP 10 (반품 리스크 후보)
+- output/report/insight_report_kurly.md       : 위 차트를 근거로 쓴 MD용 인사이트 리포트
 """
 
 import os
@@ -21,7 +21,7 @@ import pandas as pd
 from matplotlib import font_manager
 
 DATA_DIR = "data"
-REPORT_DIR = "report"
+REPORT_DIR = os.path.join("output", "report")
 
 CODED_PATH = os.path.join(DATA_DIR, "kurly_attributes_coded.csv")
 PRODUCT_PATH = os.path.join(DATA_DIR, "kurly_product_semantic_ids.csv")

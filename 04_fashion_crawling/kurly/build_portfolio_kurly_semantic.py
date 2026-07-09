@@ -2,11 +2,11 @@
 """
 5단계: 리뷰 마이닝 → Semantic ID 프로젝트를 독립 HTML 목업으로 만든다.
 
-기존 portfolio.html의 디자인 시스템(CSS 변수·섹션 패턴)을 그대로 재사용하고,
-report/의 차트 PNG를 base64로 인라인 임베드해 완전히 자기완결적인 단일 HTML
+기존 output/portfolio.html의 디자인 시스템(CSS 변수·섹션 패턴)을 그대로 재사용하고,
+output/report/의 차트 PNG를 base64로 인라인 임베드해 완전히 자기완결적인 단일 HTML
 파일을 만든다 (외부 리소스 요청 없음 → 깃허브 Pages 등에서 그대로 열림).
 
-산출물: kurly_semantic_id.html
+산출물: output/kurly_semantic_id.html
 """
 
 import base64
@@ -17,8 +17,8 @@ import os
 import pandas as pd
 
 DATA_DIR = "data"
-REPORT_DIR = "report"
-OUT_PATH = "kurly_semantic_id.html"
+REPORT_DIR = os.path.join("output", "report")
+OUT_PATH = os.path.join("output", "kurly_semantic_id.html")
 
 
 def b64(path: str) -> str:

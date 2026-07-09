@@ -1,7 +1,7 @@
 """--dump-raw로 저장한 원본 JSON의 구조 요약 — 파싱이 깨졌을 때 진단용.
 
 사용:
-    python inspect_raw.py data/kurly_products_165_20260709_raw.json
+    python inspect_raw.py kurly/data/kurly_products_165_20260709_raw.json
 
 출력:
     1) 트리에 존재하는 모든 키 경로(배열 인덱스는 []로 압축)와 등장 횟수

@@ -1,0 +1,85 @@
+name: Convert Drive video to GIF/WebP
+
+on:
+  workflow_dispatch:
+    inputs:
+      gif_width:
+        description: "GIF width in px"
+        required: false
+        default: "480"
+      gif_fps:
+        description: "GIF fps"
+        required: false
+        default: "12"
+      webp_width:
+        description: "WebP width in px"
+        required: false
+        default: "640"
+      webp_fps:
+        description: "WebP fps"
+        required: false
+        default: "15"
+  push:
+    branches:
+      - claude/notion-autoplay-video-odu4tn
+    paths:
+      - ".github/workflows/convert-drive-video.yml"
+
+permissions:
+  contents: write
+
+env:
+  DRIVE_FILE_ID: 1J0HLo3wx73Uw6pqxKczYRU7W6y65295V
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/notion-autoplay-video-odu4tn
+
+      - name: Download video from Google Drive
+        run: |
+          curl -sSL "https://drive.usercontent.google.com/download?id=${DRIVE_FILE_ID}&export=download&confirm=t" -o source_video
+          file source_video
+          # 바이러스 검사 안내 HTML이 내려온 경우 감지
+          if file source_video | grep -qi 'html'; then
+            echo "::error::Drive returned an HTML page instead of the video (file too large or not public)"
+            head -c 2000 source_video
+            exit 1
+          fi
+
+      - name: Probe video info
+        run: |
+          mkdir -p notion-assets
+          ffprobe -v quiet -print_format json -show_format -show_streams source_video > notion-assets/video-info.json
+          cat notion-assets/video-info.json
+
+      - name: Convert to GIF and animated WebP
+        run: |
+          GIF_W="${{ github.event.inputs.gif_width || '480' }}"
+          GIF_FPS="${{ github.event.inputs.gif_fps || '12' }}"
+          WEBP_W="${{ github.event.inputs.webp_width || '640' }}"
+          WEBP_FPS="${{ github.event.inputs.webp_fps || '15' }}"
+
+          # GIF: 팔레트 2-pass로 화질 대비 용량 최적화
+          ffmpeg -y -i source_video -vf "fps=${GIF_FPS},scale=${GIF_W}:-2:flags=lanczos,palettegen=max_colors=128" palette.png
+          ffmpeg -y -i source_video -i palette.png -lavfi "fps=${GIF_FPS},scale=${GIF_W}:-2:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=4" notion-assets/brand-video-${GIF_W}w.gif
+
+          # 더 작은 GIF 후보
+          ffmpeg -y -i source_video -vf "fps=10,scale=360:-2:flags=lanczos,palettegen=max_colors=96" palette2.png
+          ffmpeg -y -i source_video -i palette2.png -lavfi "fps=10,scale=360:-2:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5" notion-assets/brand-video-360w.gif
+
+          # 애니메이션 WebP: 같은 화질에서 GIF보다 훨씬 작음
+          ffmpeg -y -i source_video -vf "fps=${WEBP_FPS},scale=${WEBP_W}:-2:flags=lanczos" -c:v libwebp -lossless 0 -q:v 60 -loop 0 -an notion-assets/brand-video-${WEBP_W}w.webp
+
+          ls -la notion-assets/
+
+      - name: Commit converted assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add notion-assets/
+          git commit -m "노션 임베드용 변환 에셋 추가 (GIF/WebP) [skip ci]"
+          git push origin claude/notion-autoplay-video-odu4tn

@@ -5,5 +5,8 @@ pandas>=2.0
 matplotlib>=3.8
 gradio>=4.44
 
+# Review attribute extraction (Semantic ID pipeline)
+google-genai>=1.0
+
 # Optional: browser fallback if the API gets bot-blocked
 # playwright>=1.44

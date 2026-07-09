@@ -8,5 +8,8 @@ gradio>=4.44
 # Review attribute extraction (Semantic ID pipeline)
 google-genai>=1.0
 
+# Dashboard build 검증 (kurly/test_dashboard_payload.py)
+pytest>=8.0
+
 # Optional: browser fallback if the API gets bot-blocked
 # playwright>=1.44

@@ -155,6 +155,19 @@ main{max-width:1060px; margin:0 auto; padding:26px 20px 40px}
 .mini-table td{padding:7px 8px; border-bottom:1px solid var(--line)}
 .mini-table td.num,.mini-table th.num{text-align:right}
 .mini-table tr:last-child td{border-bottom:none}
+/* ── 탭3: 연구 탐색 ─────────────────────────────────────────── */
+.size-row{display:grid; grid-template-columns:110px 1fr; gap:12px; align-items:center; padding:7px 0}
+.size-row .sr-label{font-size:13px; font-weight:600}
+.size-row .stack{margin:0}
+.risk-row{cursor:pointer}
+.risk-row:hover td{background:var(--brand-wash)}
+.risk-detail td{background:var(--page); font-size:12.5px}
+.risk-detail .rev-quote{margin:8px 0}
+.pipeline{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:13px}
+.pipe-step{background:var(--brand-wash); border:1px solid var(--brand-line); color:var(--brand-deep);
+  border-radius:8px; padding:8px 13px; font-weight:600}
+.pipe-step small{display:block; font-weight:500; color:var(--brand-mid); font-size:11px}
+.pipe-arrow{color:var(--muted)}
 
 /* ── 푸터 ────────────────────────────────────────────────────── */
 footer{border-top:1px solid var(--line); background:var(--surface); margin-top:30px}
@@ -223,7 +236,33 @@ footer{border-top:1px solid var(--line); background:var(--surface); margin-top:3
     <div id="brand-out"></div>
   </section>
   <section id="tab-explore" class="panel" role="tabpanel">
-    <div class="card"><div class="placeholder">연구 탐색 — 구현 예정</div></div>
+    <div class="card">
+      <h3>리뷰에서 가장 많이 언급된 실착 속성</h3>
+      <p class="card-cap">상세페이지에는 없지만 고객이 실제로 이야기하는 정보 — 카테고리를 눌러 비교해 보세요.</p>
+      <div class="chips" id="xf-cats" style="margin-bottom:14px"></div>
+      <div id="x-mentions"></div>
+    </div>
+    <div class="card">
+      <h3>카테고리별 사이즈감 — "이 카테고리는 크게 사야 하나요?"</h3>
+      <p class="card-cap">사이즈감이 언급된 리뷰의 분포</p>
+      <div id="x-size"></div>
+      <div class="legend" style="margin-top:8px"><span><i style="background:var(--pos)"></i>크게 나옴</span>
+        <span><i style="background:var(--neu)"></i>정사이즈</span><span><i style="background:var(--neg)"></i>작게 나옴</span></div>
+    </div>
+    <div class="card">
+      <h3>반복되는 불만 유형</h3>
+      <p class="card-cap" id="x-comp-cap"></p>
+      <div id="x-complaints"></div>
+    </div>
+    <div class="card">
+      <h3>불만율 TOP 10 상품 — 반품·CS 리스크 후보</h3>
+      <p class="card-cap">리뷰 5건 이상 상품 기준 · 행을 누르면 실제 불만 리뷰가 펼쳐집니다.</p>
+      <div style="overflow-x:auto"><table class="mini-table" id="x-risk"></table></div>
+    </div>
+    <div class="card">
+      <h3>이 대시보드가 만들어진 과정</h3>
+      <div class="pipeline" id="x-pipe"></div>
+    </div>
   </section>
 </main>
 
@@ -514,6 +553,81 @@ $("#brand-sel").innerHTML = DATA.brands.map(b =>
   `<option value="${esc(b.name)}">${esc(b.name)} (상품 ${b.n_products} · 리뷰 ${b.n_reviews})</option>`).join("");
 $("#brand-sel").addEventListener("change", e => renderBrand(e.target.value));
 renderBrand(DATA.brands[0].name);
+
+/* ══ 탭3: 연구 탐색 보드 ════════════════════════════════════════ */
+const XF = { cat: "all" };
+
+function renderExploreMentions() {
+  const stats = XF.cat === "all" ? Object.values(DATA.cat_stats) : [DATA.cat_stats[XF.cat]];
+  const totalRevs = stats.reduce((a, c) => a + c.n_reviews, 0);
+  const counts = DATA.axes.map(axis => [axis, stats.reduce((a, c) => a + (c.mentions[axis] || 0), 0)])
+    .sort((a, b) => b[1] - a[1]);
+  const max = counts[0][1] || 1;
+  $("#x-mentions").innerHTML = counts.map(([axis, n]) =>
+    `<div class="bar-row"><span class="bl">${axis}</span>
+     <div class="bar-track"><div class="bar-fill" style="width:${Math.max(n / max * 100, 1.5)}%"></div></div>
+     <span class="bar-val num">${n}건</span></div>`).join("") +
+    `<p style="font-size:12px;color:var(--muted);margin-top:8px">리뷰 ${totalRevs.toLocaleString()}건 기준</p>`;
+  $("#xf-cats").innerHTML =
+    [["all", "전체"], ...Object.entries(DATA.meta.cats)].map(([c, nm]) =>
+      `<button class="chip${XF.cat === c ? " on" : ""}" data-g="xf" data-v="${c}">${esc(nm)}</button>`).join("");
+}
+
+function renderExploreStatic() {
+  /* 카테고리별 사이즈감 100% 스택 */
+  $("#x-size").innerHTML = Object.entries(DATA.meta.cats).map(([c, nm]) => {
+    const size = DATA.cat_stats[c].size;
+    const tot = Object.values(size).reduce((a, b) => a + b, 0) || 1;
+    const seg = (key, cls) => {
+      const w = (size[key] || 0) / tot * 100;
+      return w ? `<div class="${cls}" style="flex:${w}">${w >= 12 ? Math.round(w) + "%" : ""}</div>` : "";
+    };
+    return `<div class="size-row"><span class="sr-label">${esc(nm)}</span>
+      <div class="stack">${seg("크게 나옴", "sg-big")}${seg("정사이즈", "sg-fit")}${seg("작게 나옴", "sg-small")}</div></div>`;
+  }).join("");
+
+  /* 불만 유형 */
+  const compTotal = DATA.complaint_reasons.reduce((a, [, n]) => a + n, 0);
+  $("#x-comp-cap").textContent =
+    `불만사유가 확인된 리뷰 ${compTotal}건 — 유형화되지 않는 롱테일 불만이 많다는 것 자체가 리뷰 마이닝이 필요한 이유입니다.`;
+  const cMax = Math.max(...DATA.complaint_reasons.map(([, n]) => n));
+  $("#x-complaints").innerHTML = DATA.complaint_reasons.map(([label, n]) =>
+    `<div class="bar-row"><span class="bl">${esc(label)}</span>
+     <div class="bar-track"><div class="bar-fill" style="width:${Math.max(n / cMax * 100, 1.5)}%${label.startsWith("기타") ? ";background:var(--baseline)" : ""}"></div></div>
+     <span class="bar-val num">${n}건</span></div>`).join("");
+
+  /* 불만율 TOP 10 */
+  const risky = DATA.products.filter(p => p.review_n >= 5)
+    .sort((a, b) => b.complaint_n / b.review_n - a.complaint_n / a.review_n).slice(0, 10);
+  $("#x-risk").innerHTML =
+    `<thead><tr><th>상품명</th><th>Semantic ID</th><th class="num">리뷰</th><th class="num">불만율</th></tr></thead><tbody>` +
+    risky.map((p, i) => {
+      const quotes = p.samples.filter(s => s.reason).map(s =>
+        `<div class="rev-quote"><p>"${esc(s.t)}"</p><div class="rq-meta"><span class="tag tag-neg">${esc(s.reason)}</span></div></div>`).join("")
+        || `<p style="color:var(--muted)">발췌 가능한 불만 리뷰가 없습니다.</p>`;
+      return `<tr class="risk-row" data-i="${i}"><td>${esc(p.name.length > 34 ? p.name.slice(0, 34) + "…" : p.name)}</td>
+        <td>${sidChips(p.sid)}</td><td class="num">${p.review_n}</td><td class="num"><b>${pct(p.complaint_n / p.review_n)}</b></td></tr>
+        <tr class="risk-detail" data-d="${i}" hidden><td colspan="4">${quotes}</td></tr>`;
+    }).join("") + "</tbody>";
+
+  /* 파이프라인 */
+  const steps = [["리뷰 수집", "컬리 크롤러"], ["AI 태깅", "Gemini · 실착 속성 8축"],
+    ["코드북 정규화", "표현 통일"], ["Semantic ID", "상품별 실착 요약 코드"], ["이 대시보드", "정적 HTML · AI 호출 없음"]];
+  $("#x-pipe").innerHTML = steps.map(([t, s]) =>
+    `<span class="pipe-step">${t}<small>${s}</small></span>`).join('<span class="pipe-arrow">→</span>');
+}
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest('.chip[data-g="xf"]');
+  if (chip) { XF.cat = chip.dataset.v; renderExploreMentions(); return; }
+  const row = e.target.closest(".risk-row");
+  if (row) {
+    const d = $(`.risk-detail[data-d="${row.dataset.i}"]`);
+    if (d) d.hidden = !d.hidden;
+  }
+});
+renderExploreMentions();
+renderExploreStatic();
 
 $("#ftr").innerHTML =
   `<b>만든 방법</b> — 컬리 리뷰 수집(크롤러) → Gemini로 8개 실착 속성 태깅 → 코드북 정규화 → ` +

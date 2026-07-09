@@ -1,3 +1,9 @@
 requests>=2.31
+
+# EDA 노트북 · Gradio 대시보드
+pandas>=2.0
+matplotlib>=3.8
+gradio>=4.44
+
 # Optional: browser fallback if the API gets bot-blocked
 # playwright>=1.44

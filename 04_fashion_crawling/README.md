@@ -32,14 +32,27 @@
     ├── build_semantic_id_kurly.py     # 4단계: 상품별 Semantic ID 부여
     ├── build_insight_report_kurly.py  # 5단계: 차트 + MD 인사이트 리포트
     ├── build_portfolio_kurly_semantic.py  # 포트폴리오 HTML 생성
+    ├── build_dashboard_kurly.py       # 6단계: MD용 인터랙티브 대시보드 생성
+    ├── dashboard_template.html        # 대시보드 UI 템플릿 (CSS·JS)
+    ├── test_dashboard_payload.py      # 대시보드 통계 검증 (pytest)
     ├── data/               # 수집 데이터 (git 제외)
     └── output/
         ├── kurly_semantic_id.html     # Semantic ID 프로젝트 원페이지
+        ├── dashboard.html             # 리뷰 인사이트 대시보드 (정적 HTML, 링크 공유용)
         └── report/                    # 인사이트 리포트 (차트 PNG + MD)
 ```
 
 크롤러·파이프라인 스크립트는 **각 채널 폴더 안에서** 실행합니다
 (`data/`, `output/` 경로가 폴더 기준 상대 경로).
+
+**리뷰 인사이트 대시보드** — 신상품 리뷰 미리보기·브랜드 프로필·연구 탐색 3개 탭.
+통계를 빌드 시점에 미리 계산해 심은 자기완결 정적 HTML이라 서버·API 없이 열립니다.
+
+```
+cd kurly
+python build_dashboard_kurly.py        # → output/dashboard.html
+python -m pytest test_dashboard_payload.py -q   # 통계 검증
+```
 
 ## 수집 스키마
 

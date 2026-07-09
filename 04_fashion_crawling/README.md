@@ -116,6 +116,9 @@ python kurly_crawler.py reviews --from-products data/kurly_products_165_20260709
 - `app.py` — 수집 데이터 대시보드 (Gradio).
   `data/`의 products/reviews 파일을 채널·카테고리별로 자동 인식해
   가격 분포 · 할인 구조 · 브랜드 구도 · 리뷰 키워드를 한 화면에서 비교한다.
+- `portfolio.html` — 포트폴리오용 원페이지 리포트 (정적 HTML, 차트 임베드).
+  브라우저로 바로 열리며, 호스팅(GitHub Pages 등) 후 노션 `/embed`로 넣을 수 있다.
+  공개 산출물 원칙에 따라 집계 통계·시각화만 포함.
 
 ```bash
 pip install -r requirements.txt

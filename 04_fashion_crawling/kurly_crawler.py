@@ -46,7 +46,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
 # ---------------------------------------------------------------------------
 
 # 카테고리 상품 목록(PLP) API. {category_no} 자리에 카테고리 코드가 들어갑니다.
-PRODUCTS_API = "https://api.kurly.com/collection/v2/home/categories/{category_no}/products"
+# (2026-07 개발자도구로 확인한 실제 주소)
+PRODUCTS_API = ("https://api.kurly.com/collection/v2/home/sites/market/"
+                "product-categories/{category_no}/products")
 
 # API가 404 등으로 실패하면 카테고리 페이지 HTML의 __NEXT_DATA__(서버렌더링
 # 데이터)에서 상품을 직접 추출합니다. 이때 페이지가 실제로 쓰는 API 주소

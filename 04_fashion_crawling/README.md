@@ -107,6 +107,21 @@ python kurly_crawler.py reviews --from-products data/kurly_products_165_20260709
   `PRODUCTS_API`/`REVIEWS_API` 상수를 갱신하면 됩니다. 카테고리명도
   페이지 타이틀에서 자동 인식합니다.
 
+## EDA · 대시보드
+
+- `analysis.ipynb` — 무신사 속옷/홈웨어(026) EDA
+- `analysis_kurly.ipynb` — 컬리 패션 카테고리 EDA.
+  상단 `CATEGORY` 변수만 바꾸면 165·166·169 등 수집해 둔 카테고리를 전환할 수 있고,
+  별점이 없는 컬리 특성에 맞춰 평점 분석 대신 리뷰수 집중도(파레토)를 본다.
+- `app.py` — 수집 데이터 대시보드 (Gradio).
+  `data/`의 products/reviews 파일을 채널·카테고리별로 자동 인식해
+  가격 분포 · 할인 구조 · 브랜드 구도 · 리뷰 키워드를 한 화면에서 비교한다.
+
+```bash
+pip install -r requirements.txt
+python app.py   # http://127.0.0.1:7860
+```
+
 ## 엔드포인트 확인 방법 (파싱이 깨졌을 때)
 
 내부 API는 사이트 개편 시 예고 없이 바뀝니다. 응답이 비거나 필드가 어긋나면:
@@ -134,7 +149,9 @@ python kurly_crawler.py reviews --from-products data/kurly_products_165_20260709
 
 - [x] 수집 데이터 EDA 노트북 (`analysis.ipynb` — 속옷/홈웨어 026: 가격·할인·브랜드·평점·리뷰 텍스트)
 - [x] 컬리 패션 카테고리 확장 (`kurly_crawler.py` — 165 · 166 · 169)
-- [ ] 컬리 로컬 실행 검증: 엔드포인트/응답 키 확인, `CATEGORY_NAMES` 이름 채우기
-- [ ] 컬리 수집 데이터 EDA: 무신사와 가격대·할인율 비교
+- [x] 컬리 로컬 실행 검증: 실제 엔드포인트/응답 키 반영, 카테고리명 자동 인식
+- [x] 컬리 수집 데이터 EDA 노트북 (`analysis_kurly.ipynb`)
+- [x] Gradio 대시보드 (`app.py` — 채널·카테고리별 시각화)
+- [ ] 컬리 166·169 수집 후 무신사와 가격대·할인율 비교 분석
 - [ ] 리뷰 텍스트 분석 고도화: 형태소 분석기 적용, 카테고리 간 비교
 - [ ] 29CM · W컨셉 확장 (채널 간 가격/할인 전략 비교)

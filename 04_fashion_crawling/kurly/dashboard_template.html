@@ -65,6 +65,73 @@ main{max-width:1060px; margin:0 auto; padding:26px 20px 40px}
 .sid span{font-size:11px; font-weight:700; padding:1px 7px; border-radius:5px;
   background:var(--brand-wash); color:var(--brand); border:1px solid var(--brand-line)}
 
+/* ── 탭1: 리뷰 미리보기 ──────────────────────────────────────── */
+.predict-grid{display:grid; grid-template-columns:320px minmax(0,1fr); gap:14px; align-items:start}
+.predict-grid>div{min-width:0}
+.card{min-width:0}
+.inp-group{margin-bottom:15px}
+.inp-group:last-child{margin-bottom:0}
+.inp-label{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:7px;
+  display:flex; justify-content:space-between; align-items:baseline}
+.inp-label small{font-weight:500; color:var(--muted); font-size:11px}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{border:1px solid var(--line); background:var(--surface); border-radius:99px;
+  padding:5px 12px; font-size:13px; color:var(--ink-2); transition:border-color .12s}
+.chip:hover{border-color:var(--brand-mid)}
+.chip.on{background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600}
+.chip:focus-visible{outline:2px solid var(--brand); outline-offset:1px}
+.reset-btn{margin-top:16px; width:100%; border:1px dashed var(--baseline); border-radius:8px;
+  padding:8px; font-size:13px; color:var(--muted)}
+.reset-btn:hover{color:var(--brand); border-color:var(--brand-mid)}
+.basis{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--brand-deep);
+  background:var(--brand-wash); border:1px solid var(--brand-line); border-radius:7px;
+  padding:5px 12px; margin-bottom:12px}
+.notice{border:1px solid var(--line); border-left:4px solid var(--warn); border-radius:8px;
+  background:var(--surface); padding:14px 16px; font-size:13.5px; color:var(--ink-2)}
+/* 리스크 게이지 */
+.risk-line{display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.risk-chip{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700;
+  border-radius:99px; padding:3px 12px; border:1px solid}
+.risk-low{color:var(--good); border-color:var(--good)}
+.risk-mid{color:var(--ink-2); border-color:var(--baseline)}
+.risk-high{color:var(--crit); border-color:var(--crit)}
+.gauge{position:relative; height:12px; border-radius:6px; background:var(--brand-wash);
+  border:1px solid var(--line); margin:16px 0 4px}
+.gauge-fill{position:absolute; left:0; top:0; bottom:0; border-radius:6px 4px 4px 6px; background:var(--bar)}
+.gauge-tick{position:absolute; top:-5px; bottom:-5px; width:2px; background:var(--ink-2)}
+.gauge-tick i{position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-style:normal;
+  font-size:11px; color:var(--muted); white-space:nowrap}
+.gauge-cap{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted)}
+/* 액션 제안 */
+.action-list{list-style:none; display:flex; flex-direction:column; gap:8px}
+.action-list li{display:flex; gap:9px; font-size:13.5px; padding:10px 13px;
+  border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.action-list li b{flex:0 0 auto}
+/* 막대 (예상 리뷰 프로필) */
+.bar-row{display:grid; grid-template-columns:minmax(110px,150px) 1fr 46px; gap:10px;
+  align-items:center; padding:4px 0; font-size:13px}
+.bar-row .bl{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bar-row .bl small{color:var(--muted); font-size:11.5px}
+.bar-track{height:10px}
+.bar-fill{height:10px; background:var(--bar); border-radius:2px 4px 4px 2px; min-width:2px}
+.bar-val{color:var(--ink-2); font-size:12.5px; text-align:right}
+/* 유사 상품 목록 */
+.simlist{display:flex; flex-direction:column; gap:7px; max-height:320px; overflow-y:auto}
+.simrow{display:flex; align-items:center; gap:10px; padding:8px 12px;
+  border:1px solid var(--line); border-radius:8px; font-size:13px}
+.simrow .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.simrow .nm small{display:block; color:var(--muted); font-size:11.5px}
+.simrow .meta{color:var(--ink-2); font-size:12px; white-space:nowrap; text-align:right}
+.simrow .meta small{display:block; color:var(--muted); font-size:11px}
+/* 리뷰 발췌 */
+.rev-quote{border-left:3px solid var(--brand-line); padding:2px 0 2px 13px; margin-bottom:12px}
+.rev-quote:last-child{margin-bottom:0}
+.rev-quote p{font-size:13.5px; color:var(--ink)}
+.rev-quote .rq-meta{font-size:11.5px; color:var(--muted); margin-top:3px}
+.tag{display:inline-block; font-size:11px; font-weight:600; border-radius:5px; padding:1px 7px; margin-left:5px}
+.tag-neg{background:#fdeaea; color:var(--crit)}
+.tag-pos{background:#e9f5e9; color:#0a6b0a}
+
 /* ── 푸터 ────────────────────────────────────────────────────── */
 footer{border-top:1px solid var(--line); background:var(--surface); margin-top:30px}
 .ftr-inner{max-width:1060px; margin:0 auto; padding:20px; font-size:12.5px; color:var(--muted)}
@@ -77,6 +144,8 @@ footer{border-top:1px solid var(--line); background:var(--surface); margin-top:3
   .tab{white-space:nowrap; padding:10px 14px}
   .hdr{padding:26px 16px 50px}
   main{padding:20px 14px 30px}
+  .predict-grid{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:minmax(90px,110px) 1fr 42px}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important; animation:none!important}
@@ -106,7 +175,20 @@ footer{border-top:1px solid var(--line); background:var(--surface); margin-top:3
 
 <main>
   <section id="tab-predict" class="panel active" role="tabpanel">
-    <div class="card"><div class="placeholder">신상품 리뷰 미리보기 — 구현 예정</div></div>
+    <div class="predict-grid">
+      <div class="card">
+        <h3>검토할 신상품 조건</h3>
+        <p class="card-cap">아는 정보만 선택하세요 — 고를수록 예측이 좁혀집니다.</p>
+        <div id="inp-cat" class="inp-group"></div>
+        <div id="inp-axes"></div>
+        <div id="inp-band" class="inp-group"></div>
+        <button id="inp-reset" class="reset-btn">조건 초기화</button>
+      </div>
+      <div>
+        <div id="pr-basis"></div>
+        <div id="pr-out"></div>
+      </div>
+    </div>
   </section>
   <section id="tab-brand" class="panel" role="tabpanel">
     <div class="card"><div class="placeholder">브랜드 프로필 — 구현 예정</div></div>
@@ -147,6 +229,175 @@ $("#hdr-scale").innerHTML =
   `<span>카테고리 <b>${Object.values(DATA.meta.cats).join(" · ")}</b></span>` +
   `<span>상품 <b class="num">${DATA.meta.n_products}개</b></span>` +
   `<span>실착 태깅 리뷰 <b class="num">${DATA.meta.n_reviews.toLocaleString()}건</b></span>`;
+
+/* ══ 탭1: 신상품 리뷰 미리보기 ══════════════════════════════════ */
+const PRED_AXES = ["계절감", "두께", "핏", "신축성", "착용상황"];
+const PRICE_BANDS = [
+  ["a", 0, 20000, "~2만원"], ["b", 20000, 40000, "2~4만원"],
+  ["c", 40000, 70000, "4~7만원"], ["d", 70000, Infinity, "7만원~"],
+];
+const P = { cat: "165", sel: {}, band: null };
+
+function findSimilar() {
+  const nSel = Object.keys(P.sel).length;
+  const bandDef = PRICE_BANDS.find(b => b[0] === P.band);
+  return DATA.products
+    .filter(p => p.cat === P.cat)
+    .map(p => {
+      let score = 0; const matched = [];
+      for (const [axis, label] of Object.entries(P.sel)) {
+        const m = p.mentions[axis] || {};
+        if (m[label]) { score += 2; matched.push(axis); }
+      }
+      if (bandDef && p.price != null && p.price >= bandDef[1] && p.price < bandDef[2]) score += 1;
+      return { p, score, matched };
+    })
+    .filter(x => nSel === 0 ? true : x.score > 0)
+    .sort((a, b) => b.score - a.score || b.p.review_n - a.p.review_n)
+    .slice(0, 12);
+}
+
+function chipHTML(group, val, label, on) {
+  return `<button class="chip${on ? " on" : ""}" data-g="${group}" data-v="${esc(val)}">${esc(label)}</button>`;
+}
+
+function renderPredictInputs() {
+  $("#inp-cat").innerHTML =
+    `<div class="inp-label">카테고리 <small>필수</small></div><div class="chips">` +
+    Object.entries(DATA.meta.cats).map(([c, nm]) => chipHTML("cat", c, nm, P.cat === c)).join("") + "</div>";
+  $("#inp-axes").innerHTML = PRED_AXES.map(axis =>
+    `<div class="inp-group"><div class="inp-label">${axis} <small>선택</small></div><div class="chips">` +
+    DATA.codebook[axis].map(label => chipHTML("ax:" + axis, label, label, P.sel[axis] === label)).join("") +
+    "</div></div>").join("");
+  $("#inp-band").innerHTML =
+    `<div class="inp-label">판매가 <small>선택</small></div><div class="chips">` +
+    PRICE_BANDS.map(([k, , , nm]) => chipHTML("band", k, nm, P.band === k)).join("") + "</div>";
+}
+
+function aggMentions(sims) {
+  const agg = {};
+  for (const { p } of sims)
+    for (const [axis, labels] of Object.entries(p.mentions))
+      for (const [label, n] of Object.entries(labels)) {
+        (agg[axis] = agg[axis] || {})[label] = (agg[axis][label] || 0) + n;
+      }
+  return agg;
+}
+
+function mdActions(agg, rate, catAvg) {
+  const out = [];
+  const share = (axis, label) => {
+    const m = agg[axis] || {}; const tot = Object.values(m).reduce((a, b) => a + b, 0);
+    return tot ? (m[label] || 0) / tot : 0;
+  };
+  if (share("사이즈감", "작게 나옴") >= 0.25)
+    out.push(["⚠️", `이 조합은 <b>'작게 나옴'</b> 언급이 잦습니다(사이즈 언급 중 ${pct(share("사이즈감", "작게 나옴"))}). 상세페이지에 "실측보다 타이트한 편" 안내를 권장합니다.`]);
+  if (share("사이즈감", "크게 나옴") >= 0.35)
+    out.push(["⚠️", `<b>'크게 나옴'</b> 언급이 많습니다(${pct(share("사이즈감", "크게 나옴"))}). "여유 있는 핏" 안내 또는 사이즈 다운 추천 문구를 검토하세요.`]);
+  if (share("비침", "있음") >= 0.30)
+    out.push(["👁️", `<b>비침</b> 언급 비율이 높습니다(비침 언급 중 ${pct(share("비침", "있음"))}). 이너 착용 안내·실측 촬영컷 보강을 권장합니다.`]);
+  if (catAvg > 0 && rate >= catAvg * 1.5)
+    out.push(["🚨", `유사 상품군 불만율(${pct(rate)})이 카테고리 평균(${pct(catAvg)})을 크게 웃돕니다. 입고 전 검수·QC 강화를 검토하세요.`]);
+  else if (catAvg > 0 && rate <= catAvg * 0.6)
+    out.push(["✅", `불만 신호가 적은 안정적인 조합입니다(유사 상품군 불만율 ${pct(rate)} vs 평균 ${pct(catAvg)}).`]);
+  if (!out.length)
+    out.push(["ℹ️", "뚜렷한 리스크 신호는 없습니다 — 아래 실제 리뷰 발췌를 직접 확인해 보세요."]);
+  return out;
+}
+
+function renderPredict() {
+  const sims = findSimilar();
+  const revs = sims.reduce((a, x) => a + x.p.review_n, 0);
+  const comps = sims.reduce((a, x) => a + x.p.complaint_n, 0);
+  const catStat = DATA.cat_stats[P.cat];
+  $("#pr-basis").innerHTML =
+    `<div class="basis">📎 유사 상품 <b class="num">&nbsp;${sims.length}개</b> · 리뷰 <b class="num">&nbsp;${revs}건</b> 기반 예측</div>`;
+
+  /* 정직성 게이트 */
+  if (sims.length < 3 || revs < 15) {
+    $("#pr-out").innerHTML =
+      `<div class="notice"><b>조건에 맞는 데이터가 부족합니다</b> (유사 상품 ${sims.length}개 · 리뷰 ${revs}건).<br>
+      속성을 줄여 범위를 넓히거나, 아래 카테고리 평균을 참고하세요.<br><br>
+      <b>${esc(DATA.meta.cats[P.cat])} 평균</b> — 상품 ${catStat.n_products}개 · 리뷰 ${catStat.n_reviews}건 ·
+      불만율 ${pct(catStat.complaint_rate)} · 평균가 ${won(catStat.avg_price)}</div>`;
+    return;
+  }
+
+  const agg = aggMentions(sims);
+  const rate = revs ? comps / revs : 0;
+  const catAvg = catStat.complaint_rate;
+
+  /* 리스크 게이지 */
+  const level = rate >= catAvg * 1.5 ? ["risk-high", "▲ 불만 리스크 높음"]
+              : rate <= catAvg * 0.6 ? ["risk-low", "✓ 불만 리스크 낮음"]
+              : ["risk-mid", "– 불만 리스크 보통"];
+  const gMax = Math.max(rate, catAvg) * 1.6 || 0.1;
+  const gauge =
+    `<div class="risk-line"><span class="risk-chip ${level[0]}">${level[1]}</span>
+     <span style="font-size:13px;color:var(--ink-2)">예상 불만율 <b class="num">${pct(rate)}</b>
+     <small style="color:var(--muted)">(카테고리 평균 ${pct(catAvg)})</small></span></div>
+     <div class="gauge"><div class="gauge-fill" style="width:${Math.min(rate / gMax * 100, 100)}%"></div>
+     <div class="gauge-tick" style="left:${Math.min(catAvg / gMax * 100, 100)}%"><i>평균 ${pct(catAvg)}</i></div></div>
+     <div class="gauge-cap"><span>0%</span><span>${pct(gMax)}</span></div>`;
+
+  /* MD 액션 */
+  const actions = mdActions(agg, rate, catAvg).map(([ic, t]) => `<li><b>${ic}</b><span>${t}</span></li>`).join("");
+
+  /* 예상 리뷰 프로필: 축:라벨 상위 8개 */
+  const pairs = [];
+  for (const [axis, labels] of Object.entries(agg))
+    for (const [label, n] of Object.entries(labels)) pairs.push([axis, label, n]);
+  pairs.sort((a, b) => b[2] - a[2]);
+  const profile = pairs.slice(0, 8).map(([axis, label, n]) =>
+    `<div class="bar-row"><span class="bl">${esc(label)} <small>${axis}</small></span>
+     <div class="bar-track"><div class="bar-fill" style="width:${Math.max(n / pairs[0][2] * 100, 2)}%"></div></div>
+     <span class="bar-val num">${Math.round(n / revs * 100)}%</span></div>`).join("");
+
+  /* 실제 리뷰 발췌: 불만사유 있는 것 우선 3건 */
+  const quotes = [];
+  const seen = new Set();
+  for (const pass of [true, false])
+    for (const { p } of sims)
+      for (const s of p.samples) {
+        if (quotes.length >= 3 || seen.has(s.t) || (pass ? !s.reason : !!s.reason)) continue;
+        seen.add(s.t);
+        quotes.push(
+          `<div class="rev-quote"><p>"${esc(s.t)}"</p><div class="rq-meta">${esc(p.name.slice(0, 30))}
+           ${s.reason ? `<span class="tag tag-neg">${esc(s.reason)}</span>` : `<span class="tag tag-pos">${esc(s.sent)}</span>`}</div></div>`);
+      }
+
+  /* 유사 상품 목록 */
+  const simrows = sims.map(({ p, matched }) =>
+    `<div class="simrow"><div class="nm">${esc(p.name)}<small>${esc(p.brand)} · ${sidChips(p.sid)}
+     ${matched.length ? ` · 일치 ${matched.join(", ")}` : ""}</small></div>
+     <div class="meta num">리뷰 ${p.review_n} · 불만 ${p.complaint_n}<small>불만율 ${pct(p.review_n ? p.complaint_n / p.review_n : 0)}</small></div></div>`).join("");
+
+  $("#pr-out").innerHTML =
+    `<div class="card"><h3>리스크 진단</h3><p class="card-cap">유사 상품군의 불만율을 카테고리 평균과 비교합니다.</p>${gauge}
+     <ul class="action-list" style="margin-top:16px">${actions}</ul></div>
+     <div class="card"><h3>예상 리뷰 프로필</h3><p class="card-cap">유사 상품 리뷰에서 실제로 언급된 실착 속성 상위 8개 — 이 상품에도 비슷한 이야기가 달릴 확률이 높습니다. (%: 리뷰 ${revs}건 중 언급 비율)</p>${profile}</div>
+     <div class="card"><h3>이런 리뷰가 달릴 수 있어요</h3><p class="card-cap">유사 상품에 실제로 달린 리뷰 발췌</p>${quotes.join("")}</div>
+     <div class="card"><h3>근거가 된 유사 상품 ${sims.length}개</h3><p class="card-cap">선택 조건과 리뷰 언급이 겹치는 기존 판매 상품</p><div class="simlist">${simrows}</div></div>`;
+}
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  const g = chip.dataset.g, v = chip.dataset.v;
+  if (g === "cat") P.cat = v;
+  else if (g === "band") P.band = P.band === v ? null : v;
+  else if (g && g.startsWith("ax:")) {
+    const axis = g.slice(3);
+    if (P.sel[axis] === v) delete P.sel[axis]; else P.sel[axis] = v;
+  } else return;
+  renderPredictInputs(); renderPredict();
+});
+$("#inp-reset").addEventListener("click", () => {
+  P.cat = "165"; P.sel = {}; P.band = null;
+  renderPredictInputs(); renderPredict();
+});
+renderPredictInputs();
+renderPredict();
 
 $("#ftr").innerHTML =
   `<b>만든 방법</b> — 컬리 리뷰 수집(크롤러) → Gemini로 8개 실착 속성 태깅 → 코드북 정규화 → ` +

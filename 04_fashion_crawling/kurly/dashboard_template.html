@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>컬리 패션 리뷰 인사이트 — MD 소싱 도우미</title>
+<style>
+/* ── 디자인 토큰 ─────────────────────────────────────────────── */
+:root{
+  --brand:#5f0080; --brand-deep:#43005b; --brand-mid:#8a4ea8;
+  --brand-wash:#f5ecf9; --brand-line:#e3cdef;
+  --page:#f7f5f3; --surface:#fcfcfb;
+  --ink:#1a141b; --ink-2:#565059; --muted:#8b8590;
+  --line:#e6e2e7; --baseline:#c9c4cd;
+  --pos:#6da7ec; --neu:#dedbd3; --neg:#e34948;      /* 사이즈 스택: 크게/정/작게 */
+  --good:#0ca30c; --warn:#b97f00; --crit:#d03b3b;   /* 상태 (아이콘+라벨 동반) */
+  --bar:#6d2a8f;                                     /* 단일 계열 막대 */
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  background:var(--page); color:var(--ink); line-height:1.55;
+  font-size:15px; letter-spacing:-0.01em;
+}
+button{font:inherit; letter-spacing:inherit; cursor:pointer; background:none; border:none; color:inherit}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── 헤더 ────────────────────────────────────────────────────── */
+.hdr{background:linear-gradient(160deg,var(--brand-deep),var(--brand) 62%,#7c1ea3); color:#fff; padding:34px 20px 58px}
+.hdr-inner{max-width:1060px; margin:0 auto}
+.hdr-eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600;
+  background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+  padding:4px 12px; border-radius:99px; margin-bottom:14px}
+.hdr h1{font-size:clamp(24px,4.2vw,34px); font-weight:800; letter-spacing:-0.03em; line-height:1.25}
+.hdr h1 em{font-style:normal; color:#ecc7ff}
+.hdr-sub{margin-top:10px; font-size:14px; color:rgba(255,255,255,.82); max-width:640px}
+.hdr-scale{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; font-size:12.5px}
+.hdr-scale span{background:rgba(255,255,255,.12); border-radius:6px; padding:3px 10px}
+.hdr-scale b{font-weight:700}
+
+/* ── 탭 ─────────────────────────────────────────────────────── */
+.tabs{max-width:1060px; margin:-26px auto 0; padding:0 20px; display:flex; gap:8px; position:relative; z-index:2}
+.tab{flex:0 0 auto; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:12px 18px; font-weight:600; font-size:14px; color:var(--ink-2);
+  box-shadow:0 2px 6px rgba(26,20,27,.05); transition:border-color .15s,color .15s}
+.tab .tab-no{display:block; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:1px}
+.tab.active{border-color:var(--brand); color:var(--brand); box-shadow:0 3px 10px rgba(95,0,128,.12)}
+.tab.active .tab-no{color:var(--brand-mid)}
+.tab:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
+
+/* ── 패널 공통 ───────────────────────────────────────────────── */
+main{max-width:1060px; margin:0 auto; padding:26px 20px 40px}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:20px}
+.card+.card{margin-top:14px}
+.card h3{font-size:15px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px}
+.card .card-cap{font-size:12.5px; color:var(--muted); margin-bottom:14px}
+.placeholder{color:var(--muted); font-size:14px; padding:30px 0; text-align:center}
+
+/* Semantic ID 칩 — 시그니처 요소 */
+.sid{display:inline-flex; gap:3px; vertical-align:middle}
+.sid span{font-size:11px; font-weight:700; padding:1px 7px; border-radius:5px;
+  background:var(--brand-wash); color:var(--brand); border:1px solid var(--brand-line)}
+
+/* ── 푸터 ────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--line); background:var(--surface); margin-top:30px}
+.ftr-inner{max-width:1060px; margin:0 auto; padding:20px; font-size:12.5px; color:var(--muted)}
+.ftr-inner b{color:var(--ink-2)}
+
+/* ── 모바일 ──────────────────────────────────────────────────── */
+@media (max-width:640px){
+  .tabs{overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{white-space:nowrap; padding:10px 14px}
+  .hdr{padding:26px 16px 50px}
+  main{padding:20px 14px 30px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important; animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-eyebrow">컬리 패션 · 리뷰 마이닝 대시보드</div>
+    <h1>리뷰가 먼저 알려주는 것 —<br><em>신상품의 미래를 기존 리뷰에서 읽는다</em></h1>
+    <p class="hdr-sub">고객 리뷰를 AI로 태깅해 만든 실착 데이터베이스로, 아직 리뷰가 없는
+    신상품에 어떤 반응이 달릴지 미리 가늠하는 MD 보조 도구입니다.</p>
+    <div class="hdr-scale" id="hdr-scale"></div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="대시보드 탭">
+  <button class="tab active" role="tab" aria-selected="true" data-tab="predict">
+    <span class="tab-no">신상품 검토</span>리뷰 미리보기</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="brand">
+    <span class="tab-no">입점·리오더</span>브랜드 프로필</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="explore">
+    <span class="tab-no">데이터 근거</span>연구 탐색</button>
+</nav>
+
+<main>
+  <section id="tab-predict" class="panel active" role="tabpanel">
+    <div class="card"><div class="placeholder">신상품 리뷰 미리보기 — 구현 예정</div></div>
+  </section>
+  <section id="tab-brand" class="panel" role="tabpanel">
+    <div class="card"><div class="placeholder">브랜드 프로필 — 구현 예정</div></div>
+  </section>
+  <section id="tab-explore" class="panel" role="tabpanel">
+    <div class="card"><div class="placeholder">연구 탐색 — 구현 예정</div></div>
+  </section>
+</main>
+
+<footer>
+  <div class="ftr-inner" id="ftr"></div>
+</footer>
+
+<script>
+/*__PAYLOAD__*/
+
+/* ── 공통 유틸 ───────────────────────────────────────────────── */
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pct = x => Math.round(x * 100) + "%";
+const won = n => n == null ? "–" : n.toLocaleString("ko-KR") + "원";
+
+/* Semantic ID → 칩 마크업 */
+function sidChips(sid){
+  if(!sid) return '<span style="color:var(--muted)">–</span>';
+  return '<span class="sid">' + sid.split("-").map(s => "<span>" + esc(s) + "</span>").join("") + "</span>";
+}
+
+/* ── 탭 전환 ─────────────────────────────────────────────────── */
+$$(".tab").forEach(btn => btn.addEventListener("click", () => {
+  $$(".tab").forEach(b => { b.classList.toggle("active", b === btn); b.setAttribute("aria-selected", b === btn); });
+  $$(".panel").forEach(p => p.classList.toggle("active", p.id === "tab-" + btn.dataset.tab));
+}));
+
+/* ── 헤더·푸터 데이터 표기 ───────────────────────────────────── */
+$("#hdr-scale").innerHTML =
+  `<span>카테고리 <b>${Object.values(DATA.meta.cats).join(" · ")}</b></span>` +
+  `<span>상품 <b class="num">${DATA.meta.n_products}개</b></span>` +
+  `<span>실착 태깅 리뷰 <b class="num">${DATA.meta.n_reviews.toLocaleString()}건</b></span>`;
+
+$("#ftr").innerHTML =
+  `<b>만든 방법</b> — 컬리 리뷰 수집(크롤러) → Gemini로 8개 실착 속성 태깅 → 코드북 정규화 → ` +
+  `상품별 Semantic ID 부여 → 이 대시보드(정적 HTML, 실시간 AI 호출 없음) · 데이터 기준일 ${DATA.meta.built}`;
+</script>
+</body>
+</html>

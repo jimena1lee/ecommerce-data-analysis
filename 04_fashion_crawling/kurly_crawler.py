@@ -193,7 +193,8 @@ def looks_like_product(d) -> bool:
     return (
         isinstance(d, dict)
         and bool(first_of(d, "name", "goodsName", "productName"))
-        and any(k in d for k in ("salesPrice", "discountedPrice", "no", "productNo", "reviewCount"))
+        and any(k in d for k in ("sales_price", "discounted_price", "review_count",
+                                 "salesPrice", "discountedPrice", "no", "productNo"))
     )
 
 
@@ -291,7 +292,11 @@ def fetch_products(args) -> None:
             payload = get_json(session, PRODUCTS_API.format(category_no=category), params)
             raw_pages.append(payload)
             data = payload.get("data", payload)
-            items = first_of(data, "products", "list", "items", default=None) or []
+            # 이 API는 상품 배열이 data 바로 아래에 리스트로 내려옴 (2026-07 확인)
+            if isinstance(data, list):
+                items = data
+            else:
+                items = first_of(data, "products", "list", "items", default=None) or []
             if not items and page == 1:
                 print("  ! API 수집 실패 — 카테고리 페이지 HTML(__NEXT_DATA__)로 "
                       "대체 수집합니다.")
@@ -313,12 +318,13 @@ def fetch_products(args) -> None:
             break
 
         for idx, item in enumerate(items, start=(page - 1) * args.size + 1):
+            # 키 이름은 snake_case (2026-07 응답 기준). camelCase는 예비 후보.
             name = str(first_of(item, "name", "goodsName", "productName"))
-            normal_price = first_of(item, "salesPrice", "originalPrice", "price", default=0)
-            sale_price = first_of(item, "discountedPrice", default=0) or normal_price
-            discount_rate = first_of(item, "discountRate", "saleRate", default=0)
+            normal_price = first_of(item, "sales_price", "salesPrice", "price", default=0)
+            sale_price = first_of(item, "discounted_price", "discountedPrice", default=0) or normal_price
+            discount_rate = first_of(item, "discount_rate", "discountRate", "saleRate", default=0)
             # 리뷰 수가 "999+" 같은 문자열로 내려오는 경우가 있어 그대로 보존
-            review_count = first_of(item, "reviewCount", "reviewCountText", default="0")
+            review_count = first_of(item, "review_count", "reviewCount", default="0")
             rows.append({
                 "Channel": CHANNEL,
                 "Category": category_name,

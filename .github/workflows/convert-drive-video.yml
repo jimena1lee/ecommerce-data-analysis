@@ -39,6 +39,11 @@ jobs:
         with:
           ref: claude/notion-autoplay-video-odu4tn
 
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
       - name: Download video from Google Drive
         run: |
           curl -sSL "https://drive.usercontent.google.com/download?id=${DRIVE_FILE_ID}&export=download&confirm=t" -o source_video

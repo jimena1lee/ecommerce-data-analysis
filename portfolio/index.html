@@ -35,6 +35,10 @@
     .reveal, .bw { opacity:1 !important; transform:none !important;
                    filter:none !important; transition:none !important; }
     .scroll-hint { animation:none !important; }
+    .salechart .badge, .barcol .bar, .barcol .val,
+    .salechart .arrow path, .salechart .arrow polygon {
+      opacity:1 !important; transform:none !important;
+      stroke-dashoffset:0 !important; transition:none !important; }
   }
 
   /* ── 고정 내비 ────────────────────────── */
@@ -127,6 +131,54 @@
   .evidence-grid figure { margin:0; }
   video { width:100%; max-width:480px; display:block; margin:24px auto;
           border-radius:16px; box-shadow:var(--card-shadow); }
+
+  /* ── 단독상품 카드: 매출 성장 차트 + 제품 (프로젝트 02) ── */
+  .exclusive-card { display:grid; grid-template-columns:2.2fr 1fr; gap:8px;
+                    align-items:center; background:#fff; border:1px solid var(--line);
+                    border-radius:16px; box-shadow:var(--card-shadow); padding:20px; }
+  .exclusive-card .product { display:flex; flex-direction:column; align-items:center;
+                             gap:8px; align-self:end; padding-bottom:6px; }
+  .exclusive-card .product img { width:100%; max-width:140px; display:block;
+                                 border:none; box-shadow:none; border-radius:0; }
+  .exclusive-card .product .pname { font-size:.82rem; color:var(--sub); text-align:center; }
+  .salechart { position:relative; padding:4px 4px 0; overflow:hidden; }
+  .salechart .title { font-size:.85rem; font-weight:700; color:var(--kurly);
+                      letter-spacing:.02em; margin:0 0 8px; }
+  .salechart .badge { position:absolute; top:34px; left:4px; background:var(--kurly);
+                      color:#fff; font-size:.85rem; font-weight:700; line-height:1.45;
+                      padding:10px 16px; border-radius:14px; text-align:center;
+                      opacity:0; transform:scale(.6);
+                      transition:opacity .5s ease 1.1s, transform .5s cubic-bezier(.34,1.56,.64,1) 1.1s; }
+  .salechart .badge b { display:block; font-size:1.05rem; }
+  .bars { display:flex; align-items:flex-end; justify-content:space-around;
+          height:230px; padding-top:44px; }
+  .barcol { display:flex; flex-direction:column; align-items:center;
+            justify-content:flex-end; width:34%; height:100%; }
+  .barcol .val { font-weight:800; font-size:.95rem; color:var(--kurly-deep);
+                 margin-bottom:-34px; position:relative; z-index:2;
+                 white-space:nowrap; opacity:0; transition:opacity .4s ease .9s; }
+  .barcol.big .val { font-size:1.25rem; color:#fff; margin-bottom:-40px; }
+  .barcol .bar { width:100%; border-radius:8px 8px 0 0; transform:scaleY(0);
+                 transform-origin:bottom; transition:transform 1s var(--ease); }
+  .barcol .bar.prev { height:35%; background:linear-gradient(180deg,#b378d4 0%,#e3c8f2 100%); }
+  .barcol .bar.curr { height:100%; background:linear-gradient(180deg,var(--kurly) 0%,#a06cc4 100%);
+                      transition-delay:.25s; }
+  .barcol .yr { font-size:.82rem; color:var(--sub); margin-top:10px; }
+  .salechart .arrow { position:absolute; top:24px; left:0; width:100%; height:230px;
+                      pointer-events:none; overflow:visible; }
+  .salechart .arrow path { fill:none; stroke:var(--kurly); stroke-width:5; stroke-linecap:round;
+                           stroke-dasharray:340; stroke-dashoffset:340;
+                           transition:stroke-dashoffset 1s ease .8s; }
+  .salechart .arrow polygon { fill:var(--kurly); opacity:0; transition:opacity .3s ease 1.7s; }
+  figure.exclusive.in .bar { transform:scaleY(1); }
+  figure.exclusive.in .val { opacity:1; }
+  figure.exclusive.in .badge { opacity:1; transform:scale(1); }
+  figure.exclusive.in .arrow path { stroke-dashoffset:0; }
+  figure.exclusive.in .arrow polygon { opacity:1; }
+  @media (max-width:560px) {
+    .exclusive-card { grid-template-columns:1fr; }
+    .exclusive-card .product img { max-width:130px; }
+  }
 
   footer { margin-top:96px; padding:32px 20px; text-align:center; font-size:.85rem;
            color:var(--sub); background:var(--kurly-tint); }
@@ -295,6 +347,35 @@
       <li>노출구좌·광고 운영으로 유입 확보, 가격비교 1위 지속 관리</li>
     </ul>
     <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월 매출 <span class="num">5,700만원</span>, 광고비 88만원(효율 운영), 공헌이익률 1%, <span class="num">YoY 185%▲</span>.</div>
+    <figure class="evidence exclusive reveal">
+      <div class="exclusive-card">
+        <div class="salechart">
+          <p class="title">SHP-DP960+ 월 매출 (8월 기준)</p>
+          <div class="badge">전년 대비<b>185% 상승</b></div>
+          <svg class="arrow" viewBox="0 0 400 230" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 150 162 C 200 152, 215 95, 238 45"/>
+            <polygon points="244,33 222,38 236,56" />
+          </svg>
+          <div class="bars" role="img" aria-label="2021년 8월 2,000만원에서 2022년 8월 5,700만원으로 YoY 185% 상승">
+            <div class="barcol">
+              <span class="val">2,000만원</span>
+              <div class="bar prev"></div>
+              <span class="yr">2021년 8월</span>
+            </div>
+            <div class="barcol big">
+              <span class="val">5,700만원</span>
+              <div class="bar curr"></div>
+              <span class="yr">2022년 8월</span>
+            </div>
+          </div>
+        </div>
+        <div class="product">
+          <img src="assets/doorlock-shp-dp960.jpg" alt="삼성도어락 인터파크 단독 상품 SHP-DP960+" loading="lazy">
+          <span class="pname">삼성도어락 'SHP-DP960+'</span>
+        </div>
+      </div>
+      <figcaption>📎 단독 기획 상품 세일즈 리드 — 월 매출 <strong>5,700만원 · YoY 185%▲</strong></figcaption>
+    </figure>
     <p class="quote reveal">단독 상품(Exclusive)·차별화 상품 개발과 적절한 구좌 노출을 통해 성과를 이뤄냈습니다.</p>
 
     <h3 class="reveal">03 · 전사 프로모션 런칭 : 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>

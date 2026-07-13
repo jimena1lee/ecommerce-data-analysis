@@ -6,261 +6,415 @@
 <title>이지원 — 이커머스 MD·마케터 포트폴리오</title>
 <meta name="description" content="이커머스 MD·마케터 이지원의 포트폴리오. 패션 브랜드 전과정 운영, 단독 상품 기획, 데이터 기반 카테고리 운영 경험.">
 <style>
-  :root { --ink:#111; --sub:#666; --line:#e5e5e5; --bg:#fff; }
+  :root {
+    --kurly:#5f0080; --kurly-deep:#43005b; --kurly-tint:#f7f0fa; --kurly-tint2:#efe2f5;
+    --ink:#1c1c1e; --sub:#6e6e73; --line:#e8e2ec; --bg:#fff;
+    --card-shadow:0 10px 36px rgba(95,0,128,.08);
+    --ease:cubic-bezier(.28,.11,.32,1);
+  }
   * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
   body { margin:0; background:var(--bg); color:var(--ink);
          font-family:'Apple SD Gothic Neo','Pretendard','Noto Sans KR','Malgun Gothic',sans-serif;
-         line-height:1.7; -webkit-font-smoothing:antialiased; word-break:keep-all; }
-  main { max-width:760px; margin:0 auto; padding:64px 20px 96px; }
-  h1 { font-size:2rem; margin:0 0 4px; letter-spacing:-.02em; line-height:1.3; }
-  h2 { font-size:1.25rem; margin:72px 0 8px; padding-bottom:12px;
-       border-bottom:1px solid var(--ink); letter-spacing:-.01em; }
-  h3 { font-size:1.05rem; margin:48px 0 4px; }
-  h4 { font-size:.98rem; margin:32px 0 8px; }
+         line-height:1.75; -webkit-font-smoothing:antialiased; word-break:keep-all; }
+  a { color:inherit; }
   p { margin:12px 0; }
   ul { margin:12px 0; padding-left:22px; }
   li { margin:6px 0; }
-  li ul { margin:4px 0; }
-  .sub { color:var(--sub); }
-  .meta { color:var(--sub); font-size:.9rem; margin:0 0 12px; }
-  a { color:inherit; }
-  strong, .num { font-weight:700; }
-  .lead { font-size:1.05rem; }
-  .quote { border-left:2px solid var(--ink); padding-left:16px;
-           color:var(--sub); margin:24px 0; }
-  .links { margin-top:12px; font-size:.95rem; }
-  .links a { margin-right:16px; }
-  .label { display:inline-block; font-size:.78rem; letter-spacing:.08em;
-           color:var(--sub); text-transform:uppercase; margin-top:24px; }
-  .tablewrap { overflow-x:auto; margin:24px 0; }
+
+  /* ── 모션 ─────────────────────────────── */
+  .reveal { opacity:0; transform:translateY(22px);
+            transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in { opacity:1; transform:none; }
+  .d1 { transition-delay:.08s; } .d2 { transition-delay:.16s; } .d3 { transition-delay:.24s; }
+  .bw { display:inline-block; filter:blur(10px); opacity:0;
+        transition:filter .9s ease .15s, opacity .9s ease .15s; }
+  .bw.in { filter:none; opacity:1; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    .reveal, .bw { opacity:1 !important; transform:none !important;
+                   filter:none !important; transition:none !important; }
+    .scroll-hint { animation:none !important; }
+  }
+
+  /* ── 고정 내비 ────────────────────────── */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; height:52px;
+        display:flex; align-items:center; justify-content:space-between; gap:16px;
+        padding:0 20px; background:rgba(255,255,255,.72);
+        backdrop-filter:saturate(180%) blur(18px); -webkit-backdrop-filter:saturate(180%) blur(18px);
+        border-bottom:1px solid rgba(95,0,128,.08); }
+  nav .brand { font-weight:800; font-size:.98rem; letter-spacing:-.01em; text-decoration:none;
+               white-space:nowrap; flex-shrink:0; }
+  nav .brand em { font-style:normal; color:var(--kurly); }
+  nav .menu { display:flex; gap:20px; overflow-x:auto; white-space:nowrap;
+              font-size:.88rem; scrollbar-width:none; }
+  nav .menu::-webkit-scrollbar { display:none; }
+  nav .menu a { text-decoration:none; color:var(--sub); transition:color .25s; }
+  nav .menu a:hover { color:var(--kurly); }
+
+  /* ── 히어로 ───────────────────────────── */
+  #hero { min-height:100svh; display:flex; flex-direction:column; align-items:center;
+          justify-content:center; text-align:center; padding:92px 24px 64px;
+          position:relative;
+          background:
+            radial-gradient(60% 50% at 72% 18%, rgba(95,0,128,.10) 0%, transparent 70%),
+            radial-gradient(50% 42% at 18% 82%, rgba(95,0,128,.07) 0%, transparent 70%),
+            linear-gradient(180deg,#faf6fc 0%,#fff 100%); }
+  #hero .eyebrow { display:inline-block; font-size:.85rem; font-weight:700; color:var(--kurly);
+                   background:var(--kurly-tint); border:1px solid var(--kurly-tint2);
+                   padding:6px 14px; border-radius:999px; letter-spacing:.02em; }
+  #hero h1 { font-size:clamp(1.7rem, 5.4vw, 3rem); line-height:1.32; letter-spacing:-.03em;
+             margin:24px 0 8px; font-weight:800; }
+  #hero h1 .bw { color:var(--kurly); }
+  #hero .tagline { max-width:560px; color:var(--sub); font-size:clamp(.95rem, 2.6vw, 1.06rem); }
+  .chips { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:32px; }
+  .chip { background:#fff; border:1px solid var(--line); border-radius:16px;
+          padding:14px 22px; box-shadow:var(--card-shadow); min-width:128px; }
+  .chip .v { display:block; font-size:1.3rem; font-weight:800; color:var(--kurly);
+             letter-spacing:-.02em; line-height:1.3; }
+  .chip .k { display:block; font-size:.8rem; color:var(--sub); margin-top:2px; }
+  .scroll-hint { position:absolute; bottom:26px; left:50%; margin-left:-11px;
+                 color:var(--kurly); opacity:.7; animation:bounce 1.8s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
+
+  /* ── 섹션 공통 ────────────────────────── */
+  main { max-width:820px; margin:0 auto; padding:0 20px 96px; }
+  section { padding-top:88px; scroll-margin-top:64px; }
+  .sec-eyebrow { font-size:.8rem; font-weight:800; color:var(--kurly);
+                 letter-spacing:.14em; text-transform:uppercase; }
+  h2 { font-size:clamp(1.35rem, 3.6vw, 1.7rem); margin:6px 0 20px; letter-spacing:-.02em;
+       line-height:1.35; font-weight:800; }
+  h3 { font-size:1.08rem; margin:44px 0 2px; letter-spacing:-.01em; }
+  h4 { font-size:.98rem; margin:32px 0 8px; }
+  .meta { color:var(--sub); font-size:.88rem; margin:0 0 12px; }
+  .num { color:var(--kurly); font-weight:800; }
+
+  /* ── 카드·콜아웃 ──────────────────────── */
+  .cards { display:grid; gap:16px; margin:24px 0; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px;
+          padding:22px 24px; box-shadow:var(--card-shadow); }
+  .card b.title { display:block; font-size:1rem; margin-bottom:6px; }
+  .card ul { margin:8px 0 0; font-size:.94rem; color:#3a3a3c; }
+  .callout { border-radius:14px; padding:16px 20px; margin:16px 0; font-size:.96rem; }
+  .callout-problem { background:#f5f5f7; }
+  .callout-result { background:var(--kurly-tint); }
+  .quote { border-left:3px solid var(--kurly); padding-left:16px; color:var(--sub);
+           margin:20px 0; font-size:.95rem; }
+
+  /* ── 표 ───────────────────────────────── */
+  .tablewrap { overflow-x:auto; margin:24px 0; border:1px solid var(--line);
+               border-radius:14px; box-shadow:var(--card-shadow); }
   table { border-collapse:collapse; width:100%; min-width:560px; font-size:.92rem; }
-  th, td { border-top:1px solid var(--line); padding:10px 12px; text-align:left;
-           vertical-align:top; }
-  tr:last-child th, tr:last-child td { border-bottom:1px solid var(--line); }
-  th { font-weight:700; white-space:nowrap; }
+  th, td { padding:12px 16px; text-align:left; vertical-align:top;
+           border-top:1px solid var(--line); }
+  thead th { background:var(--kurly-tint); color:var(--kurly-deep); font-weight:800;
+             border-top:none; white-space:nowrap; }
+
+  /* ── 임베드·증거물 ────────────────────── */
   .embed { margin:24px 0; }
-  .embed iframe { width:100%; border:1px solid var(--line); border-radius:8px; display:block; }
-  .embed .open { display:block; text-align:right; font-size:.85rem;
-                 color:var(--sub); margin-top:6px; }
+  .embed iframe { width:100%; border:1px solid var(--line); border-radius:16px;
+                  display:block; box-shadow:var(--card-shadow); background:#fff; }
+  .embed .open, .evidence .open { display:block; text-align:right; font-size:.85rem;
+                 color:var(--sub); margin-top:8px; }
+  .evidence { margin:24px 0; }
+  .evidence img { width:100%; display:block; border-radius:16px;
+                  border:1px solid var(--line); box-shadow:var(--card-shadow); }
+  .evidence figcaption { font-size:.85rem; color:var(--sub); margin-top:10px; text-align:center; }
+  figure.evidence { margin:24px auto; }
+  figure.evidence.solo { max-width:520px; }
+  .evidence-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px;
+                   align-items:start; margin:24px 0; }
+  .evidence-grid figure { margin:0; }
   video { width:100%; max-width:480px; display:block; margin:24px auto;
-          border-radius:8px; }
-  .divider { border:none; border-top:1px solid var(--line); margin:48px 0; }
-  footer { margin-top:96px; padding-top:24px; border-top:1px solid var(--line);
-           font-size:.85rem; color:var(--sub); }
-  @media (max-width:600px){
-    main { padding:40px 16px 64px; }
-    h1 { font-size:1.6rem; }
-    h2 { margin-top:56px; }
+          border-radius:16px; box-shadow:var(--card-shadow); }
+
+  footer { margin-top:96px; padding:32px 20px; text-align:center; font-size:.85rem;
+           color:var(--sub); background:var(--kurly-tint); }
+  footer a { color:var(--kurly); }
+
+  @media (max-width:640px) {
+    section { padding-top:64px; }
+    .evidence-grid { grid-template-columns:1fr; }
+    .chip { padding:11px 16px; min-width:104px; }
+    nav { padding:0 14px; }
+    nav .brand { font-size:.9rem; }
+    nav .brand em, nav .brand .word { display:none; }
+    nav .menu { gap:14px; font-size:.84rem; }
   }
 </style>
 </head>
 <body>
+
+<nav>
+  <a class="brand" href="#hero">이지원 <em>·</em> <span class="word">Portfolio</span></a>
+  <div class="menu">
+    <a href="#fit">적합성</a>
+    <a href="#mining">리뷰 분석</a>
+    <a href="#exp">경험</a>
+    <a href="#projects">프로젝트</a>
+    <a href="#ai">AI 역량</a>
+  </div>
+</nav>
+
+<!-- 히어로 -->
+<header id="hero">
+  <span class="eyebrow reveal">지원 포지션 · 패션 MD · 컬리(Kurly)</span>
+  <h1 class="reveal">"컬리 안에서 <span class="bw">패션을 성립시키는</span> MD"</h1>
+  <p class="tagline reveal d1">장보기 고객을 패션 구매로 전환시키고, 패션 카테고리가 실제로 남는 구조임을
+  증명하는 것이 지금 컬리 패션에 필요하다고 생각합니다.<br>
+  저는 컬리패션에 필요한 이 일을 8년간 경험해왔습니다.</p>
+  <div class="chips">
+    <div class="chip reveal d1"><span class="v">8년</span><span class="k">이커머스 MD·마케팅</span></div>
+    <div class="chip reveal d2"><span class="v">37배</span><span class="k">META 광고 ROAS</span></div>
+    <div class="chip reveal d3"><span class="v">1,543건</span><span class="k">컬리패션 리뷰 분석</span></div>
+  </div>
+  <p class="reveal d3" style="margin-top:28px; font-size:.92rem;">
+    <a href="mailto:daemie@naver.com">daemie@naver.com</a> ·
+    <a href="https://www.linkedin.com/in/jiwon-lee-5760673ba/" target="_blank" rel="noopener">LinkedIn</a> ·
+    <a href="https://github.com/jimena1lee" target="_blank" rel="noopener">GitHub</a>
+  </p>
+  <span class="scroll-hint" aria-hidden="true">▼</span>
+</header>
+
 <main>
 
-  <!-- 1. 헤더 -->
-  <header>
-    <p class="meta">지원 포지션 · 패션 MD · 컬리(Kurly)</p>
-    <h1>이지원</h1>
-    <p class="sub">이커머스 MD·마케터 (만 8년)</p>
-    <p class="links">
-      <a href="mailto:daemie@naver.com">daemie@naver.com</a>
-      <a href="https://www.linkedin.com/in/jiwon-lee-5760673ba/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/jimena1lee" target="_blank" rel="noopener">GitHub</a>
-    </p>
-  </header>
+  <!-- 적합성 -->
+  <section id="fit">
+    <span class="sec-eyebrow reveal">Fit</span>
+    <h2 class="reveal">한눈에 보는 적합성</h2>
+    <div class="cards">
+      <div class="card reveal">
+        <b class="title">① 이커머스 세일즈 구조를 이해합니다</b>
+        <ul>
+          <li>패션 이커머스 브랜드를 상품 기획부터 판매·데이터 개선까지 직접 운영했습니다. (애슬레저 브랜드 '워너비즈핏', 무신사·지그재그·29CM 입점 운영)</li>
+          <li>신사업의 안정적인 런칭을 위해 전사 차원에서 프로모션을 집행하고 공헌이익을 관리했습니다.</li>
+          <li>분담쿠폰·광고비·공헌이익 등 커머스 비용 구조를 이해하고 수익성까지 관리합니다.</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <b class="title">② 페르소나 기반 큐레이션을 경험했습니다</b>
+        <ul>
+          <li>브랜딩과 고객 페르소나를 기반으로 SNS 콘텐츠 제작 및 CRM 마케팅을 실행했습니다.</li>
+          <li>단독(Exclusive) 상품을 직접 기획해 <span class="num">가격비교 1위 · YoY 185%▲</span>를 만든 경험이 있습니다.</li>
+          <li>신규 브랜드 입점 영업과 온보딩으로 셀러 초기 매출을 활성화한 트랙 레코드가 있습니다.</li>
+        </ul>
+      </div>
+      <div class="card reveal d2">
+        <b class="title">③ 데이터로 의사결정 합니다</b>
+        <ul>
+          <li>매출·이익·유입 지표를 주간/월간으로 직접 관리하며 데이터 기반으로 채널 전략과 핫딜가를 수립했습니다.</li>
+          <li>컬리패션 리뷰 <span class="num">1,543건</span>을 직접 수집·분석해 카테고리 현황과 식품→패션 전환 가설을 미리 검증했습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-  <!-- 2. 소개 -->
-  <p class="lead" style="margin-top:48px;"><strong>"컬리 안에서 패션을 성립시키는 MD"입니다.</strong><br>
-  장보기 고객을 패션 구매로 전환시키고, 패션 카테고리가 실제로 남는 구조임을 증명하는 것이
-  지금 컬리 패션에 필요하다고 생각합니다. 저는 컬리패션에 필요한 이 일을 8년간 경험해왔습니다.</p>
+  <!-- 리뷰 마이닝 -->
+  <section id="mining">
+    <span class="sec-eyebrow reveal">Review Mining</span>
+    <h2 class="reveal">컬리패션을 미리 분석했습니다 — 리뷰 1,543건 마이닝</h2>
+    <p class="reveal">지원 전, 컬리패션 리뷰 1,543건을 직접 수집·태깅해 카테고리 현황을 분석했습니다.</p>
+    <ul class="reveal">
+      <li><strong>언더웨어·홈웨어가 전체 리뷰의 약 55%</strong> — 컬리 고객은 패션을 '외출복'이 아니라 '생활용품'처럼 구매합니다.</li>
+      <li><strong>식품 → 패션 전환은 이미 일어나고 있습니다</strong> — "필요할 때 장보는 김에 한 팩씩 사니까 좋다", "식품만 사봤는데 옷도 컬리에서 사게 됐다"는 실제 리뷰가 그 증거입니다.</li>
+      <li>이 데이터를 근거로, 홈웨어를 깊게 파고 → 원마일웨어 → 애슬레저로 고객 생활 반경을 따라 확장하는 로드맵을 제안합니다.</li>
+    </ul>
 
-  <!-- 3. 한눈에 보는 적합성 -->
-  <h2>한눈에 보는 적합성</h2>
-  <ul>
-    <li><strong>이커머스 세일즈 구조를 이해합니다.</strong>
-      <ul>
-        <li>패션 이커머스 브랜드를 상품 기획부터 판매·데이터 개선까지 직접 운영했습니다. (애슬레저 브랜드 '워너비즈핏', 무신사·지그재그·29CM 입점 운영)</li>
-        <li>신사업의 안정적인 런칭을 위해 전사 차원에서 프로모션을 집행하고 공헌이익을 관리했습니다.</li>
-        <li>분담쿠폰·광고비·공헌이익 등 커머스 비용 구조를 이해하고 수익성까지 관리합니다.</li>
-      </ul>
-    </li>
-    <li><strong>페르소나 기반 큐레이션을 경험했습니다.</strong>
-      <ul>
-        <li>브랜딩과 고객 페르소나를 기반으로 SNS 콘텐츠 제작 및 CRM 마케팅을 실행했습니다.</li>
-        <li>단독(Exclusive) 상품을 직접 기획해 <span class="num">가격비교 1위 · YoY 185%▲</span>를 만든 경험이 있습니다.</li>
-        <li>신규 브랜드 입점 영업과 온보딩으로 셀러 초기 매출을 활성화한 트랙 레코드가 있습니다.</li>
-      </ul>
-    </li>
-    <li><strong>데이터로 의사결정 합니다.</strong>
-      <ul>
-        <li>매출·이익·유입 지표를 주간/월간으로 직접 관리하며 데이터 기반으로 채널 전략과 핫딜가를 수립했습니다.</li>
-        <li>컬리패션 리뷰 <span class="num">1,543건</span>을 직접 수집·분석해 카테고리 현황과 식품→패션 전환 가설을 미리 검증했습니다.</li>
-      </ul>
-    </li>
-  </ul>
+    <h4 class="reveal">① 신규 입점 상품·브랜드 평가 대시보드 (MD 업무 자동화 툴)</h4>
+    <p class="reveal">기존 리뷰 데이터로 신규 입점 상품과 브랜드의 성과를 예측해 볼 수 있는 툴을 제작했습니다.</p>
+    <div class="embed reveal">
+      <iframe src="../04_fashion_crawling/kurly/output/dashboard.html" height="640"
+              loading="lazy" title="신규 입점 상품·브랜드 평가 대시보드"></iframe>
+      <a class="open" href="../04_fashion_crawling/kurly/output/dashboard.html"
+         target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+    </div>
 
-  <!-- 4. 리뷰 마이닝 -->
-  <h2>컬리패션을 미리 분석했습니다 — 리뷰 1,543건 마이닝</h2>
-  <p>지원 전, 컬리패션 리뷰 1,543건을 직접 수집·태깅해 카테고리 현황을 분석했습니다.</p>
-  <ul>
-    <li><strong>언더웨어·홈웨어가 전체 리뷰의 약 55%</strong> — 컬리 고객은 패션을 '외출복'이 아니라 '생활용품'처럼 구매합니다.</li>
-    <li><strong>식품 → 패션 전환은 이미 일어나고 있습니다</strong> — "필요할 때 장보는 김에 한 팩씩 사니까 좋다", "식품만 사봤는데 옷도 컬리에서 사게 됐다"는 실제 리뷰가 그 증거입니다.</li>
-    <li>이 데이터를 근거로, 홈웨어를 깊게 파고 → 원마일웨어 → 애슬레저로 고객 생활 반경을 따라 확장하는 로드맵을 제안합니다.</li>
-  </ul>
+    <h4 class="reveal">② 경쟁사 비교 분석</h4>
+    <div class="embed reveal">
+      <iframe src="../04_fashion_crawling/output/portfolio.html" height="640"
+              loading="lazy" title="경쟁사 비교 분석"></iframe>
+      <a class="open" href="../04_fashion_crawling/output/portfolio.html"
+         target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+    </div>
+  </section>
 
-  <h4>① 신규 입점 상품·브랜드 평가 대시보드 (MD 업무 자동화 툴)</h4>
-  <p>기존 리뷰 데이터로 신규 입점 상품과 브랜드의 성과를 예측해 볼 수 있는 툴을 제작했습니다.</p>
-  <div class="embed">
-    <iframe src="../04_fashion_crawling/kurly/output/dashboard.html" height="640"
-            loading="lazy" title="신규 입점 상품·브랜드 평가 대시보드"></iframe>
-    <a class="open" href="../04_fashion_crawling/kurly/output/dashboard.html"
-       target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-  </div>
+  <!-- 나의 경험 -->
+  <section id="exp">
+    <span class="sec-eyebrow reveal">Experience Map</span>
+    <h2 class="reveal">나의 경험</h2>
+    <div class="tablewrap reveal">
+      <table>
+        <thead>
+          <tr><th>컬리 패션 MD 요건</th><th>나의 경험 · 근거</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>패션 이커머스 유관 경력</td><td>애슬레저 패션 브랜드 '워너비즈핏' 전담 운영(상품기획~판매), 무신사·지그재그·29CM 입점 / 의류·패션잡화 딜 다수 기획</td></tr>
+          <tr><td>지표·KPI 관리</td><td>매출·공헌이익·YoY·MoM·ROAS·GA4 유입을 주간/월간 관리</td></tr>
+          <tr><td>세일즈 드라이브·마케팅</td><td>쎈딜·체험딜·기획전 기획, META 퍼포먼스·CRM 퍼널 운영 (<span class="num">ROAS 약 37배</span>)</td></tr>
+          <tr><td>커머스 운영·브랜드 리드</td><td>8년간 생활/주방/펫/패션 카테고리·브랜드 직접 운영</td></tr>
+          <tr><td>커머스 비용 구조 이해</td><td>분담쿠폰 협의, 광고비 수취, 공헌이익률 관리</td></tr>
+          <tr><td>단독 상품 기획·프로젝트 리딩</td><td>삼성도어락 단독 상품 'SHP-DP960+' 기획, <span class="num">월 5,700만원 · YoY 185%▲</span></td></tr>
+          <tr><td>데이터 분석·툴</td><td>Excel(매크로), SQL(SQLD 보유), Python, GA4 → 일일 매출 리뷰 자동화 툴 제작(Excel 매크로), 주/월/분기 매출 자료 작성</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <h4>② 경쟁사 비교 분석</h4>
-  <div class="embed">
-    <iframe src="../04_fashion_crawling/output/portfolio.html" height="640"
-            loading="lazy" title="경쟁사 비교 분석"></iframe>
-    <a class="open" href="../04_fashion_crawling/output/portfolio.html"
-       target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-  </div>
+  <!-- 대표 프로젝트 -->
+  <section id="projects">
+    <span class="sec-eyebrow reveal">Projects</span>
+    <h2 class="reveal">대표 프로젝트</h2>
 
-  <!-- 5. 나의 경험 -->
-  <h2>나의 경험</h2>
-  <div class="tablewrap">
-    <table>
-      <tr><th>컬리 패션 MD 요건</th><th>나의 경험 · 근거</th></tr>
-      <tr><td>패션 이커머스 유관 경력</td><td>애슬레저 패션 브랜드 '워너비즈핏' 전담 운영(상품기획~판매), 무신사·지그재그·29CM 입점 / 의류·패션잡화 딜 다수 기획</td></tr>
-      <tr><td>지표·KPI 관리</td><td>매출·공헌이익·YoY·MoM·ROAS·GA4 유입을 주간/월간 관리</td></tr>
-      <tr><td>세일즈 드라이브·마케팅</td><td>쎈딜·체험딜·기획전 기획, META 퍼포먼스·CRM 퍼널 운영 (<span class="num">ROAS 약 37배</span>)</td></tr>
-      <tr><td>커머스 운영·브랜드 리드</td><td>8년간 생활/주방/펫/패션 카테고리·브랜드 직접 운영</td></tr>
-      <tr><td>커머스 비용 구조 이해</td><td>분담쿠폰 협의, 광고비 수취, 공헌이익률 관리</td></tr>
-      <tr><td>단독 상품 기획·프로젝트 리딩</td><td>삼성도어락 단독 상품 'SHP-DP960+' 기획, <span class="num">월 5,700만원 · YoY 185%▲</span></td></tr>
-      <tr><td>데이터 분석·툴</td><td>Excel(매크로), SQL(SQLD 보유), Python, GA4 → 일일 매출 리뷰 자동화 툴 제작(Excel 매크로), 주/월/분기 매출 자료 작성</td></tr>
-    </table>
-  </div>
+    <h3 class="reveal">01 · 애슬레저 패션 브랜드 이커머스 전과정 운영</h3>
+    <p class="meta reveal">브랜드 MD · 워너비즈핏 · 2024.09–2025.12</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 자사몰 중심 애슬레저 브랜드의 매출 성장과 채널 확장이 과제였고, 광고비를 늘리지 않고 효율적으로 성장시켜야 했습니다.</div>
+    <p class="reveal"><strong>핵심 액션</strong></p>
+    <ul class="reveal">
+      <li>애슬레저 신상품 기획 및 제품별 포지셔닝 전략 수립 (핏·소재·착용 경험 기반 판매 메시지 설계)</li>
+      <li>자사몰 + 무신사·지그재그·ZVZO·29CM 멀티채널 입점·판매 운영</li>
+      <li>상세페이지·프로모션·SNS 런칭 콘텐츠 기획</li>
+      <li>GA4로 유입·행동·구매여정 분석, META 퍼포먼스 광고를 자연유입·재구매 구조 위에서 효율 운영</li>
+    </ul>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월평균 매출 약 <span class="num">1.2억</span>(최고 월 약 <span class="num">1.8억</span>), 최고 <span class="num">YoY 32%▲ · MoM 26%▲</span>. META 광고는 매출 대비 약 2.7% 수준으로 집행해 ROAS(월매출 기준) 약 <span class="num">37배</span>.</div>
+    <p class="quote reveal">패션 카테고리를 상품 기획~판매~데이터 개선까지 혼자 리드한 경험으로, 신규 패션 카테고리 운영에 즉시 활용 가능합니다.</p>
+    <p class="reveal"><strong>📎 증거물 — 브랜드 컨셉·상품 소개 SNS 콘텐츠</strong><br>
+    브랜딩 및 상품 소구포인트 설득을 위해 제작한 SNS 콘텐츠 예시입니다. 카드를 클릭하면 실제 게시물로 이동합니다.</p>
+    <div class="embed reveal">
+      <iframe src="../04_fashion_crawling/instagram-feed-v5.html" height="720"
+              loading="lazy" title="브랜드 SNS 콘텐츠"></iframe>
+      <a class="open" href="../04_fashion_crawling/instagram-feed-v5.html"
+         target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+    </div>
 
-  <!-- 6. 대표 프로젝트 -->
-  <h2>대표 프로젝트</h2>
+    <h3 class="reveal">02 · 단독(Exclusive) 상품 기획 &amp; 세일즈 리드</h3>
+    <p class="meta reveal">카테고리 MD · 인터파크 · 2022.08</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 경쟁 채널과 동일한 상품으로는 가격 경쟁에 매몰되어 수익성 확보가 어려웠습니다. 차별화된 단독 상품이 필요했습니다.</div>
+    <p class="reveal"><strong>핵심 액션</strong></p>
+    <ul class="reveal">
+      <li>삼성도어락 인터파크 단독 상품 'SHP-DP960+' 기획</li>
+      <li>노출구좌·광고 운영으로 유입 확보, 가격비교 1위 지속 관리</li>
+    </ul>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월 매출 <span class="num">5,700만원</span>, 광고비 88만원(효율 운영), 공헌이익률 1%, <span class="num">YoY 185%▲</span>.</div>
+    <p class="quote reveal">단독 상품(Exclusive)·차별화 상품 개발과 적절한 구좌 노출을 통해 성과를 이뤄냈습니다.</p>
 
-  <h3>01 · 애슬레저 패션 브랜드 이커머스 전과정 운영</h3>
-  <p class="meta">브랜드 MD · 워너비즈핏 · 2024.09–2025.12</p>
-  <p><strong>문제</strong> — 자사몰 중심 애슬레저 브랜드의 매출 성장과 채널 확장이 과제였고, 광고비를 늘리지 않고 효율적으로 성장시켜야 했습니다.</p>
-  <p><strong>핵심 액션</strong></p>
-  <ul>
-    <li>애슬레저 신상품 기획 및 제품별 포지셔닝 전략 수립 (핏·소재·착용 경험 기반 판매 메시지 설계)</li>
-    <li>자사몰 + 무신사·지그재그·ZVZO·29CM 멀티채널 입점·판매 운영</li>
-    <li>상세페이지·프로모션·SNS 런칭 콘텐츠 기획</li>
-    <li>GA4로 유입·행동·구매여정 분석, META 퍼포먼스 광고를 자연유입·재구매 구조 위에서 효율 운영</li>
-  </ul>
-  <p><strong>성과</strong> — 월평균 매출 약 <span class="num">1.2억</span>(최고 월 약 <span class="num">1.8억</span>), 최고 <span class="num">YoY 32%▲ · MoM 26%▲</span>. META 광고는 매출 대비 약 2.7% 수준으로 집행해 ROAS(월매출 기준) 약 <span class="num">37배</span>.</p>
-  <p class="quote">패션 카테고리를 상품 기획~판매~데이터 개선까지 혼자 리드한 경험으로, 신규 패션 카테고리 운영에 즉시 활용 가능합니다.</p>
-  <p><strong>📎 증거물 — 브랜드 컨셉·상품 소개 SNS 콘텐츠</strong><br>
-  브랜딩 및 상품 소구포인트 설득을 위해 제작한 SNS 콘텐츠 예시입니다. 카드를 클릭하면 실제 게시물로 이동합니다.</p>
-  <div class="embed">
-    <iframe src="../04_fashion_crawling/instagram-feed-v5.html" height="720"
-            loading="lazy" title="브랜드 SNS 콘텐츠"></iframe>
-    <a class="open" href="../04_fashion_crawling/instagram-feed-v5.html"
-       target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-  </div>
+    <h3 class="reveal">03 · 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>
+    <p class="meta reveal">프로모션 매니저 · 인터파크커머스 · 2023.08–2024.08</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 신규 사업 '아이프라임'을 사내 핵심 기획으로 정착시켜야 했습니다. (담당 월 매출 8억 / PU 5만 건)</div>
+    <p class="reveal"><strong>핵심 액션</strong></p>
+    <ul class="reveal">
+      <li>전사 프로모션 '아이프라임' 운영·공헌이익 관리</li>
+      <li>셀러/MD向 입점 절차 안내자료 제작, 입점 후 인큐베이팅 프로세스 운영</li>
+      <li>체험딜·쎈딜 기획으로 초기 트래픽·구매 확보, 성장 셀러는 루키셀러로 영업부서 인계</li>
+      <li>분담쿠폰·페이 할인·구좌 지원을 조합한 특가 설계, 커뮤니티 바이럴 연계</li>
+    </ul>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 안나지오 체험딜 1,000건 · 홍대쭈꾸미 2,200만원/1,750건 · <span class="num">유니클로 트렁크 1,600만원/603건</span> · <span class="num">CK퍼포먼스 의류 패키지 250만원</span> · <span class="num">GAP 레인부츠 400만원</span> · 크리오 칫솔 쎈딜 2,800만원/4,300건. 정기전 '아이프라임 위크' <span class="num">7일 2.3억원/14,500건</span>.</div>
+    <div class="evidence-grid">
+      <figure class="evidence reveal">
+        <img src="assets/iprime-growth.png" alt="아이프라임 '23Q2 런칭 이후 주문건수 279배, 거래액 110배 성장 인포그래픽" loading="lazy">
+        <figcaption>📎 런칭 후 주문 <strong>279배</strong> · 거래액 <strong>110배</strong> 성장</figcaption>
+      </figure>
+      <figure class="evidence reveal d1">
+        <img src="assets/iprime-app-banner.png" alt="인터파크 쇼핑 앱 홈 아이프라임 전용관 롤링배너 노출 화면" loading="lazy">
+        <figcaption>📎 앱 홈 전용관·롤링배너 노출 운영</figcaption>
+      </figure>
+    </div>
+    <p class="quote reveal">상품 셀렉션 다양화를 위해 신규 브랜드 입점 영업 추진 → 입점 후 안정적인 운영까지, 전반적인 프로세스 관리를 진행했습니다. 이때, 회사 전체적인 공헌이익을 고려하며 딜 운영을 하도록 계획을 세우고 운영했습니다. 또한, 의류·패션잡화 딜을 직접 다뤄본 경험이 있습니다.</p>
 
-  <hr class="divider">
+    <h3 class="reveal">04 · 카테고리 운영 계획 &amp; 성과(매출·이익) 관리</h3>
+    <p class="meta reveal">카테고리 MD · 인터파크 · 2021.07–2023.07</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 생활/주방/펫 카테고리의 매출과 이익을 동시에 관리하며 카탈로그를 다양화해야 했습니다.</div>
+    <p class="reveal"><strong>핵심 액션</strong></p>
+    <ul class="reveal">
+      <li>검색·카테고리·상세 상단 배너 등 노출구좌 관리, 기획전 구성·디자인 톤앤매너 기획</li>
+      <li>분담쿠폰 협의(예: 15:5 → 13:7로 업체 부담 상향), 광고비 수취로 수익 관리</li>
+      <li>신규·휴면 셀러 소싱(매직캔·송월·해피콜·락앤락 등), 브랜드 월별 행사·할인율 협의</li>
+      <li>일일 매출 리뷰 자동화(Excel 매크로) 및 주/월/분기 매출 자료 작성 → 개선점 도출</li>
+    </ul>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 생활 월 <span class="num">12억</span> · 주방 월 <span class="num">16억</span> · 펫 월 <span class="num">6.5억</span> 운영. 매직캔 <span class="num">MoM 139%▲</span>, 송월 <span class="num">MoM 438%▲</span>. 노비타 비데 월 1억(유입 분석 후 '에누리' 전략 채널화), 왕자행거 월 7천만원(가격비교 1위).</div>
+    <figure class="evidence solo reveal">
+      <img src="assets/novita-brand-deal.png" alt="노비타 브랜드딜 '욕실 필수템 단독특가' 기획전 배너" loading="lazy">
+      <figcaption>📎 직접 기획한 노비타 브랜드딜 — 비데 월 <strong>1억</strong> 채널로 육성</figcaption>
+    </figure>
+    <p class="quote reveal">카테고리 운영 계획 수립 + 주간/월간 매출·이익 관리·분석 경험이 있습니다.</p>
 
-  <h3>02 · 단독(Exclusive) 상품 기획 &amp; 세일즈 리드</h3>
-  <p class="meta">카테고리 MD · 인터파크 · 2022.08</p>
-  <p><strong>문제</strong> — 경쟁 채널과 동일한 상품으로는 가격 경쟁에 매몰되어 수익성 확보가 어려웠습니다. 차별화된 단독 상품이 필요했습니다.</p>
-  <p><strong>핵심 액션</strong></p>
-  <ul>
-    <li>삼성도어락 인터파크 단독 상품 'SHP-DP960+' 기획</li>
-    <li>노출구좌·광고 운영으로 유입 확보, 가격비교 1위 지속 관리</li>
-  </ul>
-  <p><strong>성과</strong> — 월 매출 <span class="num">5,700만원</span>, 광고비 88만원(효율 운영), 공헌이익률 1%, <span class="num">YoY 185%▲</span>.</p>
-  <p class="quote">단독 상품(Exclusive)·차별화 상품 개발과 적절한 구좌 노출을 통해 성과를 이뤄냈습니다.</p>
+    <h3 class="reveal">05 · 브랜드 상품 기획 &amp; 컬리 기획전 운영</h3>
+    <p class="meta reveal">BM · 위메프 · 2020.01–2021.06</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 신규 생활/식품 브랜드를 전채널에 런칭하고 초기 매출·수익성을 확보해야 했습니다.</div>
+    <p class="reveal"><strong>핵심 액션</strong></p>
+    <ul class="reveal">
+      <li>브랜드 컨셉·상품 기획, 자사몰(cafe24·아임웹·스마트스토어)·재고(사방넷) 운영</li>
+      <li>지마켓·위메프·마켓컬리 등 전채널 판매 및 기획전 운영, SNS 광고 콘텐츠 제작</li>
+    </ul>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 발효육포 '아랫목마을' <span class="num">마켓컬리 설 기획전 1일 1,500만원</span>, 섬유탈취제 '데오퍼퓸' 와디즈 목표 <span class="num">931% 초과</span>, 비건 퍼퓸 '피토앤서' 인터파크 쎈딜 공헌이익률 <span class="num">36%</span>(목표 20%).</div>
+    <figure class="evidence solo reveal">
+      <img src="assets/araetmok-detail.jpg" alt="아랫목마을 발효육포 상세페이지 — 카테고리 사상 최단 기간 최다 판매, 고객 만족 후기" loading="lazy">
+      <figcaption>📎 직접 기획·제작한 아랫목마을 상세페이지 — 카테고리 최단 기간 최다 판매</figcaption>
+    </figure>
+    <p class="quote reveal">컬리 플랫폼의 기획전 운영을 이미 경험해, 컬리 환경 온보딩이 빠릅니다.</p>
+  </section>
 
-  <hr class="divider">
+  <!-- 데이터·툴 역량 -->
+  <section id="tools">
+    <span class="sec-eyebrow reveal">Skills</span>
+    <h2 class="reveal">데이터 · 툴 역량</h2>
+    <div class="cards">
+      <div class="card reveal"><b class="title">데이터·분석</b>Excel(매크로), SQL(SQLD 보유), Python, Google Analytics 4</div>
+      <div class="card reveal d1"><b class="title">커머스 운영</b>cafe24, 아임웹, 네이버 스마트스토어, 사방넷 / 무신사·지그재그·29CM 입점 운영</div>
+      <div class="card reveal d2"><b class="title">마케팅</b>META 퍼포먼스 광고, CRM 퍼널 설계, 기획전·프로모션 기획</div>
+      <div class="card reveal d3"><b class="title">AI</b>Microsoft AI School 9기 수료(2026), AI-900 보유 — 이커머스에 AI·자동화 접목 지향</div>
+    </div>
+  </section>
 
-  <h3>03 · 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>
-  <p class="meta">프로모션 매니저 · 인터파크커머스 · 2023.08–2024.08</p>
-  <p><strong>문제</strong> — 신규 사업 '아이프라임'을 사내 핵심 기획으로 정착시켜야 했습니다. (담당 월 매출 8억 / PU 5만 건)</p>
-  <p><strong>핵심 액션</strong></p>
-  <ul>
-    <li>전사 프로모션 '아이프라임' 운영·공헌이익 관리</li>
-    <li>셀러/MD向 입점 절차 안내자료 제작, 입점 후 인큐베이팅 프로세스 운영</li>
-    <li>체험딜·쎈딜 기획으로 초기 트래픽·구매 확보, 성장 셀러는 루키셀러로 영업부서 인계</li>
-    <li>분담쿠폰·페이 할인·구좌 지원을 조합한 특가 설계, 커뮤니티 바이럴 연계</li>
-  </ul>
-  <p><strong>성과</strong> — 안나지오 체험딜 1,000건 · 홍대쭈꾸미 2,200만원/1,750건 · <span class="num">유니클로 트렁크 1,600만원/603건</span> · <span class="num">CK퍼포먼스 의류 패키지 250만원</span> · <span class="num">GAP 레인부츠 400만원</span> · 크리오 칫솔 쎈딜 2,800만원/4,300건. 정기전 '아이프라임 위크' <span class="num">7일 2.3억원/14,500건</span>.</p>
-  <p class="quote">상품 셀렉션 다양화를 위해 신규 브랜드 입점 영업 추진 → 입점 후 안정적인 운영까지, 전반적인 프로세스 관리를 진행했습니다. 이때, 회사 전체적인 공헌이익을 고려하며 딜 운영을 하도록 계획을 세우고 운영했습니다. 또한, 의류·패션잡화 딜을 직접 다뤄본 경험이 있습니다.</p>
+  <!-- AI 역량 증거 -->
+  <section id="ai">
+    <span class="sec-eyebrow reveal">AI Evidence</span>
+    <h2 class="reveal">AI 역량 증거 ① — 고객 니즈 기반 큐레이션 챗봇</h2>
+    <p class="reveal">고객의 상황과 니즈를 대화로 파악해 상품을 추천하는 '러닝화 추천 챗봇'입니다. 고객 상황에 따른 큐레이션 로직을 AI로 구현한 사례입니다.</p>
+    <div class="embed reveal">
+      <iframe src="../04_fashion_crawling/runningshoes-gpt.html" height="700"
+              loading="lazy" title="러닝화 추천 챗봇"></iframe>
+      <a class="open" href="../04_fashion_crawling/runningshoes-gpt.html"
+         target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+    </div>
+    <div class="embed reveal">
+      <iframe src="https://jimena1lee.github.io/miniproject-recommendation-runningshoe/mockup.html" height="700"
+              loading="lazy" title="러닝화 추천 서비스 목업"></iframe>
+      <a class="open" href="https://jimena1lee.github.io/miniproject-recommendation-runningshoe/mockup.html"
+         target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+    </div>
 
-  <hr class="divider">
+    <h2 class="reveal" style="margin-top:64px;">AI 역량 증거 ② — 신규 고객 유입 광고 콘텐츠</h2>
+    <p class="reveal">신규 고객 유입을 위해 제작했던 광고 콘텐츠입니다. AI를 활용해 룩북에 역동성을 부여했습니다.</p>
+    <video class="reveal" src="../04_fashion_crawling/brand-video.mp4"
+           autoplay muted loop playsinline controls preload="metadata"></video>
+  </section>
 
-  <h3>04 · 카테고리 운영 계획 &amp; 성과(매출·이익) 관리</h3>
-  <p class="meta">카테고리 MD · 인터파크 · 2021.07–2023.07</p>
-  <p><strong>문제</strong> — 생활/주방/펫 카테고리의 매출과 이익을 동시에 관리하며 카탈로그를 다양화해야 했습니다.</p>
-  <p><strong>핵심 액션</strong></p>
-  <ul>
-    <li>검색·카테고리·상세 상단 배너 등 노출구좌 관리, 기획전 구성·디자인 톤앤매너 기획</li>
-    <li>분담쿠폰 협의(예: 15:5 → 13:7로 업체 부담 상향), 광고비 수취로 수익 관리</li>
-    <li>신규·휴면 셀러 소싱(매직캔·송월·해피콜·락앤락 등), 브랜드 월별 행사·할인율 협의</li>
-    <li>일일 매출 리뷰 자동화(Excel 매크로) 및 주/월/분기 매출 자료 작성 → 개선점 도출</li>
-  </ul>
-  <p><strong>성과</strong> — 생활 월 <span class="num">12억</span> · 주방 월 <span class="num">16억</span> · 펫 월 <span class="num">6.5억</span> 운영. 매직캔 <span class="num">MoM 139%▲</span>, 송월 <span class="num">MoM 438%▲</span>. 노비타 비데 월 1억(유입 분석 후 '에누리' 전략 채널화), 왕자행거 월 7천만원(가격비교 1위).</p>
-  <p class="quote">카테고리 운영 계획 수립 + 주간/월간 매출·이익 관리·분석 경험이 있습니다.</p>
-
-  <hr class="divider">
-
-  <h3>05 · 브랜드 상품 기획 &amp; 컬리 기획전 운영</h3>
-  <p class="meta">BM · 위메프 · 2020.01–2021.06</p>
-  <p><strong>문제</strong> — 신규 생활/식품 브랜드를 전채널에 런칭하고 초기 매출·수익성을 확보해야 했습니다.</p>
-  <p><strong>핵심 액션</strong></p>
-  <ul>
-    <li>브랜드 컨셉·상품 기획, 자사몰(cafe24·아임웹·스마트스토어)·재고(사방넷) 운영</li>
-    <li>지마켓·위메프·마켓컬리 등 전채널 판매 및 기획전 운영, SNS 광고 콘텐츠 제작</li>
-  </ul>
-  <p><strong>성과</strong> — 발효육포 '아랫목마을' <span class="num">마켓컬리 설 기획전 1일 1,500만원</span>, 섬유탈취제 '데오퍼퓸' 와디즈 목표 <span class="num">931% 초과</span>, 비건 퍼퓸 '피토앤서' 인터파크 쎈딜 공헌이익률 <span class="num">36%</span>(목표 20%).</p>
-  <p class="quote">컬리 플랫폼의 기획전 운영을 이미 경험해, 컬리 환경 온보딩이 빠릅니다.</p>
-
-  <!-- 7. 데이터·툴 역량 -->
-  <h2>데이터 · 툴 역량</h2>
-  <ul>
-    <li><strong>데이터·분석</strong> : Excel(매크로), SQL(SQLD 보유), Python, Google Analytics 4</li>
-    <li><strong>커머스 운영</strong> : cafe24, 아임웹, 네이버 스마트스토어, 사방넷 / 무신사·지그재그·29CM 입점 운영</li>
-    <li><strong>마케팅</strong> : META 퍼포먼스 광고, CRM 퍼널 설계, 기획전·프로모션 기획</li>
-    <li><strong>AI</strong> : Microsoft AI School 9기 수료(2026), AI-900 보유 — 이커머스에 AI·자동화 접목 지향</li>
-  </ul>
-
-  <!-- 8. AI 역량 증거 ① -->
-  <h2>AI 역량 증거 ① — 고객 니즈 기반 큐레이션 챗봇</h2>
-  <p>고객의 상황과 니즈를 대화로 파악해 상품을 추천하는 '러닝화 추천 챗봇'입니다. 고객 상황에 따른 큐레이션 로직을 AI로 구현한 사례입니다.</p>
-  <div class="embed">
-    <iframe src="../04_fashion_crawling/runningshoes-gpt.html" height="700"
-            loading="lazy" title="러닝화 추천 챗봇"></iframe>
-    <a class="open" href="../04_fashion_crawling/runningshoes-gpt.html"
-       target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-  </div>
-  <div class="embed">
-    <iframe src="https://jimena1lee.github.io/miniproject-recommendation-runningshoe/mockup.html" height="700"
-            loading="lazy" title="러닝화 추천 서비스 목업"></iframe>
-    <a class="open" href="https://jimena1lee.github.io/miniproject-recommendation-runningshoe/mockup.html"
-       target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-  </div>
-
-  <!-- 9. AI 역량 증거 ② -->
-  <h2>AI 역량 증거 ② — 신규 고객 유입 광고 콘텐츠</h2>
-  <p>신규 고객 유입을 위해 제작했던 광고 콘텐츠입니다. AI를 활용해 룩북에 역동성을 부여했습니다.</p>
-  <video src="../04_fashion_crawling/brand-video.mp4"
-         autoplay muted loop playsinline controls preload="metadata"></video>
-
-  <!-- 10. 마무리 -->
-  <h2>왜 컬리 패션 MD인가</h2>
-  <p><strong>신규 카테고리를 0에서 세팅해 본 실행력</strong>, <strong>단독 상품으로 차별화한 세일즈 리드</strong>, <strong>패션 브랜드를 전과정 운영한 경험</strong>, 그리고 데이터 분석 역량이 있습니다.</p>
-  <p>무신사는 고객의 옷장을 알지만, 컬리는 고객의 냉장고를 압니다. 그 데이터로 장보기 고객을 패션 고객으로 전환시키는 — <strong>컬리 안에서 패션이 돈 버는 구조를 만드는 MD</strong>가 되겠습니다.</p>
-
-  <footer>
-    이지원 · <a href="mailto:daemie@naver.com">daemie@naver.com</a> ·
-    <a href="https://github.com/jimena1lee" target="_blank" rel="noopener">github.com/jimena1lee</a>
-  </footer>
+  <!-- 마무리 -->
+  <section id="why">
+    <span class="sec-eyebrow reveal">Why Kurly</span>
+    <h2 class="reveal">왜 컬리 패션 MD인가</h2>
+    <p class="reveal"><strong>신규 카테고리를 0에서 세팅해 본 실행력</strong>, <strong>단독 상품으로 차별화한 세일즈 리드</strong>, <strong>패션 브랜드를 전과정 운영한 경험</strong>, 그리고 데이터 분석 역량이 있습니다.</p>
+    <p class="reveal" style="font-size:1.1rem;">무신사는 고객의 옷장을 알지만, <span class="bw" style="color:var(--kurly); font-weight:800;">컬리는 고객의 냉장고를 압니다.</span><br>
+    그 데이터로 장보기 고객을 패션 고객으로 전환시키는 — <strong>컬리 안에서 패션이 돈 버는 구조를 만드는 MD</strong>가 되겠습니다.</p>
+  </section>
 
 </main>
+
+<footer>
+  이지원 · <a href="mailto:daemie@naver.com">daemie@naver.com</a> ·
+  <a href="https://www.linkedin.com/in/jiwon-lee-5760673ba/" target="_blank" rel="noopener">LinkedIn</a> ·
+  <a href="https://github.com/jimena1lee" target="_blank" rel="noopener">github.com/jimena1lee</a>
+</footer>
+
+<script>
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal, .bw').forEach(el => {
+  if (el.getBoundingClientRect().top < innerHeight) el.classList.add('in');
+  else io.observe(el);
+});
+</script>
+
 </body>
 </html>

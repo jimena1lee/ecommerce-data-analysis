@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Instagram Feed</title>
+<style>
+  :root { --gap: 10px; --radius: 14px; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 18px; background: #fafafa;
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  }
+  .header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding: 0 2px; }
+  .header .logo {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .header .logo svg { width: 16px; height: 16px; }
+  .header h1 { font-size: 15px; font-weight: 700; color: #111; margin: 0; letter-spacing: -0.2px; }
+  .header span { font-size: 12px; color: #9a9a9a; margin-left: auto; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); max-width: 640px; margin: 0 auto; }
+  .card {
+    position: relative; display: block; aspect-ratio: 4 / 5;
+    border-radius: var(--radius); overflow: hidden; text-decoration: none;
+    background: #eee; box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover { transform: translateY(-3px) scale(1.015); box-shadow: 0 10px 24px rgba(0,0,0,0.14); }
+  .slides { position: absolute; inset: 0; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease; }
+  .slide.active { opacity: 1; }
+  .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .badge {
+    position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+    background: rgba(0,0,0,0.35); border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);
+  }
+  .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: background .2s ease, transform .2s ease; }
+  .dot.active { background: #fff; transform: scale(1.25); }
+  .card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 72%, rgba(0,0,0,0.22) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+    </div>
+    <h1>큐레이션 콘텐츠</h1>
+    <span>클릭하면 게시물로 이동</span>
+  </div>
+  <div class="grid">
+    
+<a class="card" href="https://www.instagram.com/p/DQ8r4rmE1YK/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1HI-QYsQjnzGZNVYJxU0HndLuKPW0YvqT=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1_50S9ZuvmDzWCctJJjaFKKWwUHcKAVWq=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1LSamJ98LBLnk9zF2WTtPcIM4fFDkRLma=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/14GS_8kLqa76lJhikv5V2Zp3_BstHo729=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DSmTp06E4DB/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1-oYxW3du6xFKpUWYmZQW9lsfi3hmmXJp=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1YCk7PfCqs2igQZRUrb_B__P1JdCVv55u=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1iaJQ8RGIK6ZubGI6wWd9dTBF40LOkEYF=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1-5MQCGeYrgz9j2HxRHRS6BnORBGFAfHR=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQlqfN7Deae/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1TSag1To4lyr61Ht_0ih4-M_1kavkj6d_=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1xcW7XnvApVZnbOrECQYHkAnrZrea4gO-=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/15E8bUgqFAXDz3PXCAc2xtSz-guRRJ_Gf=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1l3C9c9y5OiNzTBlKszZA_hXwwrx-SJwz=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DRd5pN-ESHA/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1e3KfymluX-n8qU6RHrLa7tsSuoRE5KI-=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1q5PFAsGpUNUF2dIBGTN08GFhSFkcAWyK=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/171vAgFrCatFxblYwsP2qTbRPbO1FZMYd=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1IYoTj8x3nVBlxmQbhF5hzDp1d8sKVaj5=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQYwz7FCuer" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1okDPnGf7J83W7Zlk1Xhw6DJ7I9IcYiLJ=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1IFCQmUUHtHg7qAyogQ2k2Yb7dw0rd2jp=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1uvx4yuv3BZFwI05YcWuGuzdIZqzPGQx_=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1zwTRtkMjZKqiSy_vOate9LovxAK3rXoh=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQGuZC1k2RU/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1tRwmGnO3yU8wGFp35BKk5PxVC2Nhpn75=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1Alpeakz6hySnJUfJ17Bp6jTyb_ezL82M=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/12oYdJX9iG6PqmRfIP9nVqMqijJKVr8LE=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1pQkN1JeGPjcXinsLLT43tl3s5t6-InD4=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQGvDcFAG1-/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1VwiibzqHUVwnQ7YJx_mTW0Na2EBqG4T6=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1R7SIhXxHlSnlRZt-tA9qqzbxxncspVda=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1uLq-6RJit2paovFouONOhfijFayY7kwH=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1_as1S3XFges6SQJtq_E7SFksa7DHNVci=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQL6mOED01r/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1IMTgg2Y7KiUKbkcwP0wTnDgZalo9rRAf=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1smHiHKbXwKwW_yJIaqEGjcUp2HiVaY4j=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1qaRnaNnrgvfd9x802ULwtK7OzreFQZuZ=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1jFqvSM03pMqs8zTgfEXhOmg_UkzfP-SA=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+<a class="card" href="https://www.instagram.com/p/DQWHRstE3l9/" target="_blank" rel="noopener" data-count="4">
+  <div class="slides"><div class="slide active"><img src="https://lh3.googleusercontent.com/d/1VlcZiAWdeoSRYwLzEiG6o2vzihB7j2Wa=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1ogYb3M4jmMrV_SK3Zf2hQGG3FvLY-NsO=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1JVS76kKw76GTLl4tbMCZGrXe6lQSPjMR=w640" loading="lazy" alt=""></div><div class="slide"><img src="https://lh3.googleusercontent.com/d/1BXbXH9JMN4B_ugn5tBYqTd0V2cFy1lQ5=w640" loading="lazy" alt=""></div></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="white" stroke="none"/></svg>
+  </div>
+  <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</a>
+  </div>
+<script>
+  document.querySelectorAll('.card').forEach(function(card, ci) {
+    var count = parseInt(card.dataset.count, 10);
+    if (count <= 1) return;
+    var slides = card.querySelectorAll('.slide');
+    var dots = card.querySelectorAll('.dot');
+    var cur = 0;
+    function showSlide(next) {
+      if (next === cur) return;
+      slides[cur].classList.remove('active');
+      dots[cur].classList.remove('active');
+      cur = next;
+      slides[cur].classList.add('active');
+      dots[cur].classList.add('active');
+    }
+    setInterval(function() {
+      showSlide((cur + 1) % count);
+    }, 4200 + ci * 450);
+    card.addEventListener('mouseenter', function() {
+      showSlide(0);
+    });
+  });
+</script>
+</body>
+</html>

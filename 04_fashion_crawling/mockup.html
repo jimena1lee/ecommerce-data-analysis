@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 러닝화 큐레이터 — 데모 목업</title>
+<style>
+  :root {
+    --bg: #f6f6fb;
+    --surface: #ffffff;
+    --surface-2: #f1f1f9;
+    --ink: #22243a;
+    --muted: #6b6e85;
+    --line: #e4e4f0;
+    --accent: #6c63f2;
+    --accent-ink: #4f46d6;
+    --accent-soft: #eceafd;
+    --accent-soft-ink: #4a44b8;
+    --user-bubble: #6c63f2;
+    --user-bubble-ink: #ffffff;
+    --trace-bg: #f4f3fd;
+    --shadow: 0 1px 2px rgba(34, 36, 58, .05), 0 6px 24px rgba(34, 36, 58, .06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14141b;
+      --surface: #1d1d27;
+      --surface-2: #262633;
+      --ink: #e9e9f2;
+      --muted: #9a9db4;
+      --line: #32323f;
+      --accent: #8d86f7;
+      --accent-ink: #a7a1fa;
+      --accent-soft: #2b2a45;
+      --accent-soft-ink: #b9b4fb;
+      --user-bubble: #5b53e0;
+      --user-bubble-ink: #f2f1ff;
+      --trace-bg: #23233a;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 24px rgba(0, 0, 0, .25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14141b;
+    --surface: #1d1d27;
+    --surface-2: #262633;
+    --ink: #e9e9f2;
+    --muted: #9a9db4;
+    --line: #32323f;
+    --accent: #8d86f7;
+    --accent-ink: #a7a1fa;
+    --accent-soft: #2b2a45;
+    --accent-soft-ink: #b9b4fb;
+    --user-bubble: #5b53e0;
+    --user-bubble-ink: #f2f1ff;
+    --trace-bg: #23233a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 24px rgba(0, 0, 0, .25);
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f6fb;
+    --surface: #ffffff;
+    --surface-2: #f1f1f9;
+    --ink: #22243a;
+    --muted: #6b6e85;
+    --line: #e4e4f0;
+    --accent: #6c63f2;
+    --accent-ink: #4f46d6;
+    --accent-soft: #eceafd;
+    --accent-soft-ink: #4a44b8;
+    --user-bubble: #6c63f2;
+    --user-bubble-ink: #ffffff;
+    --trace-bg: #f4f3fd;
+    --shadow: 0 1px 2px rgba(34, 36, 58, .05), 0 6px 24px rgba(34, 36, 58, .06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 48px; }
+
+  /* ── 헤더 ── */
+  header.app-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 6px; }
+  header.app-header h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+  .badge {
+    font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+    color: var(--accent-soft-ink); background: var(--accent-soft);
+    border-radius: 999px; padding: 3px 10px; white-space: nowrap;
+  }
+  p.tagline { margin: 0 0 18px; color: var(--muted); font-size: .95rem; }
+
+  /* ── 파이프라인 스트립 ── */
+  .pipeline {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 20px; font-size: .78rem; color: var(--muted);
+  }
+  .pipeline .step {
+    background: var(--surface-2); border-radius: 8px; padding: 3px 9px;
+    font-weight: 600; color: var(--ink); white-space: nowrap;
+  }
+  .pipeline .step.hl { background: var(--accent-soft); color: var(--accent-soft-ink); }
+  .pipeline .arrow { color: var(--muted); opacity: .7; }
+
+  /* ── 레이아웃 ── */
+  .layout { display: grid; grid-template-columns: 280px 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 780px) { .layout { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+
+  /* ── 필터 패널 ── */
+  .filters { padding: 18px 18px 20px; position: sticky; top: 16px; }
+  @media (max-width: 780px) { .filters { position: static; } }
+  .filters h2 { font-size: .95rem; font-weight: 700; margin: 0 0 14px; }
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label { display: block; font-size: .74rem; font-weight: 700; letter-spacing: .05em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+    border-radius: 10px; padding: 6px 13px; font-size: .87rem; font-weight: 500;
+    cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+    font-family: inherit;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .chip:focus-visible, .example:focus-visible, .send-btn:focus-visible, .msg-input:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  .price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .price-value { font-weight: 700; font-variant-numeric: tabular-nums; font-size: .95rem; color: var(--accent-ink); }
+  input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .price-scale { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .filter-note { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: .76rem; color: var(--muted); }
+
+  /* ── 채팅 패널 ── */
+  .chat { display: flex; flex-direction: column; min-height: 640px; }
+  .chat-head { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: .95rem; }
+  .chat-head .dot { width: 8px; height: 8px; border-radius: 50%; background: #3fb56f; }
+  .chat-log { flex: 1; overflow-y: auto; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px; }
+
+  .msg { max-width: 82%; }
+  .msg.user { align-self: flex-end; }
+  .msg.bot  { align-self: flex-start; max-width: 92%; }
+  .bubble { padding: 11px 15px; border-radius: 14px; font-size: .93rem; }
+  .msg.user .bubble { background: var(--user-bubble); color: var(--user-bubble-ink); border-bottom-right-radius: 4px; }
+  .msg.bot .bubble { background: var(--surface-2); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .msg.bot .bubble p { margin: 0 0 10px; }
+  .msg.bot .bubble p:last-child { margin-bottom: 0; }
+
+  /* 파이프라인 트레이스 */
+  .trace {
+    display: flex; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 8px;
+    background: var(--trace-bg); border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 12px; font-size: .74rem; color: var(--muted);
+  }
+  .trace b { color: var(--accent-soft-ink); font-weight: 700; }
+  .trace code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .72rem; color: var(--ink); background: none; }
+
+  /* 제품 카드 */
+  .shoe-card {
+    display: flex; justify-content: space-between; gap: 14px; align-items: baseline;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 13px; margin: 8px 0;
+  }
+  .shoe-card .shoe-name { font-weight: 700; font-size: .92rem; }
+  .shoe-card .shoe-desc { font-size: .82rem; color: var(--muted); margin-top: 2px; }
+  .shoe-card .shoe-price { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent-ink); white-space: nowrap; font-size: .92rem; }
+
+  /* 타이핑 인디케이터 */
+  .typing { display: inline-flex; gap: 5px; padding: 14px 16px; }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite ease-in-out; }
+  .typing span:nth-child(2) { animation-delay: .18s; }
+  .typing span:nth-child(3) { animation-delay: .36s; }
+  @keyframes blink { 0%, 70%, 100% { opacity: .25; } 35% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .typing span { animation: none; opacity: .6; }
+    .chat-log { scroll-behavior: auto; }
+  }
+
+  /* 예시 질문 */
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 18px 12px; }
+  .example {
+    border: 1px dashed var(--line); background: none; color: var(--muted);
+    border-radius: 999px; padding: 5px 13px; font-size: .8rem; cursor: pointer;
+    font-family: inherit; transition: color .15s, border-color .15s;
+  }
+  .example:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+  /* 입력줄 */
+  .composer { display: flex; gap: 10px; padding: 14px 18px 16px; border-top: 1px solid var(--line); }
+  .msg-input {
+    flex: 1; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+    border-radius: 12px; padding: 11px 15px; font-size: .93rem; font-family: inherit;
+  }
+  .msg-input::placeholder { color: var(--muted); }
+  .send-btn {
+    background: var(--accent); color: #fff; border: none; border-radius: 12px;
+    padding: 11px 26px; font-size: .93rem; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: filter .15s;
+  }
+  .send-btn:hover { filter: brightness(1.08); }
+
+  footer.foot { margin-top: 22px; font-size: .76rem; color: var(--muted); text-align: center; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <h1>🏃‍♂️ AI 러닝화 큐레이터</h1>
+    <span class="badge">HTML 목업 · 데모 데이터</span>
+  </header>
+  <p class="tagline">발 타입 · 용도 · 예산을 기반으로 GPT + Azure AI Search가 러닝화를 추천합니다. 이 페이지는 실제 서비스 흐름을 재현한 데모입니다.</p>
+
+  <div class="pipeline" aria-label="시스템 파이프라인">
+    <span class="step">사용자 입력 (한국어)</span><span class="arrow">→</span>
+    <span class="step">GPT 키워드 번역</span><span class="arrow">→</span>
+    <span class="step">OData 필터 생성</span><span class="arrow">→</span>
+    <span class="step hl">Azure AI Search (Hybrid)</span><span class="arrow">→</span>
+    <span class="step">GPT 추천 설명 생성</span>
+  </div>
+
+  <div class="layout">
+    <!-- 필터 -->
+    <aside class="panel filters" aria-label="검색 필터">
+      <h2>🔍 필터</h2>
+
+      <div class="field">
+        <span class="field-label">발 타입</span>
+        <div class="chip-group" id="footGroup" role="group" aria-label="발 타입 (하나만 선택)">
+          <button class="chip" type="button" data-value="중립" aria-pressed="false">중립</button>
+          <button class="chip" type="button" data-value="과내전" aria-pressed="false">과내전</button>
+          <button class="chip" type="button" data-value="모름" aria-pressed="false">모름</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field-label">사용 용도</span>
+        <div class="chip-group" id="usageGroup" role="group" aria-label="사용 용도 (복수 선택)">
+          <button class="chip" type="button" data-value="데일리런" aria-pressed="false">데일리런</button>
+          <button class="chip" type="button" data-value="레이스" aria-pressed="false">레이스</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="price-row">
+          <span class="field-label" style="margin:0">최대 예산 (원)</span>
+          <span class="price-value" id="priceValue">540,000</span>
+        </div>
+        <input type="range" id="priceSlider" min="0" max="540000" step="10000" value="540000" aria-label="최대 예산" />
+        <div class="price-scale"><span>0</span><span>540,000</span></div>
+      </div>
+
+      <p class="filter-note">필터는 실제 서비스의 OData 필터 생성 로직과 동일하게 동작하며, 답변 위 트레이스에서 생성된 필터를 확인할 수 있습니다.</p>
+    </aside>
+
+    <!-- 채팅 -->
+    <section class="panel chat" aria-label="상담 채팅">
+      <div class="chat-head"><span class="dot" aria-hidden="true"></span>💬 상담</div>
+
+      <div class="chat-log" id="chatLog" aria-live="polite">
+        <div class="msg bot">
+          <div class="bubble">
+            <p>안녕하세요! <strong>AI 러닝화 큐레이터</strong>입니다. 🏃</p>
+            <p>발 타입과 용도, 예산을 왼쪽에서 설정하고 원하시는 러닝화를 자유롭게 말씀해 주세요. 예를 들어 <em>"무릎 안 아픈 러닝화 추천"</em>처럼 물어보셔도 좋아요.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="examples" id="examples" aria-label="예시 질문">
+        <button class="example" type="button">25만원 이하 러닝화 추천해줘</button>
+        <button class="example" type="button">무릎 안 아픈 쿠션 좋은 신발</button>
+        <button class="example" type="button">대회용 카본화 추천해줘</button>
+        <button class="example" type="button">30대 여성 입문 러닝화 추천</button>
+        <button class="example" type="button">가볍고 빠른 템포런용 신발</button>
+      </div>
+
+<!-- form 제출은 Notion 등 샌드박스 iframe(allow-forms 미허용)에서 차단되므로 사용하지 않는다 -->
+      <div class="composer">
+        <input class="msg-input" id="msgInput" type="text" placeholder="예: 무릎 안 아픈 러닝화 추천" autocomplete="off" aria-label="메시지 입력" />
+        <button class="send-btn" id="sendBtn" type="button">전송</button>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    이지원 · RunRepeat 데이터 30종 기반 데모 — 실제 서비스는 Azure OpenAI(GPT-4o-mini) + Azure AI Search Hybrid 검색으로 동작합니다.
+  </footer>
+</div>
+
+<script>
+/* ──────────────────────────────────────────────
+   데모 데이터: data/processed/shoes_upload.json의
+   실제 30개 제품 (이름·브랜드·가격은 실데이터,
+   태그·설명은 데모용으로 보강)
+────────────────────────────────────────────── */
+const SHOES = [
+  { name: "Nike Vomero Plus", brand: "Nike", price: 234000, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long", "recovery"], desc: "풀레인지 ZoomX 미드솔로 쿠셔닝과 반발력이 뛰어나 장시간 달리기에 적합합니다." },
+  { name: "Hoka Bondi 9", brand: "Hoka", price: 308340, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "recovery", "long"], desc: "호카 최고 수준의 맥시멀 쿠션으로 무릎 부담을 줄여주는 리커버리 대표 모델입니다." },
+  { name: "Adidas Adizero EVO SL", brand: "Adidas", price: 256950, usage: ["daily_run"], foot: ["neutral"], tags: ["light", "tempo", "daily"], desc: "Lightstrike Pro 폼을 아낌없이 넣은 경량 데일리 트레이너로, 빠른 페이스에도 대응합니다." },
+  { name: "ASICS Novablast 5", brand: "ASICS", price: 257060, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "beginner", "tempo"], desc: "통통 튀는 FF Blast Max 쿠션으로 데일리런부터 템포런까지 두루 소화하는 만능화입니다." },
+  { name: "Nike Vomero 18", brand: "Nike", price: 257060, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "long"], desc: "ZoomX + ReactX 이중 미드솔로 부드러운 착지감을 주는 맥스 쿠션 데일리화입니다." },
+  { name: "Hoka Clifton 10", brand: "Hoka", price: 195000, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "beginner", "budget"], desc: "가볍고 부드러운 쿠션의 스테디셀러로, 입문자 데일리런에 가장 무난한 선택입니다." },
+  { name: "New Balance Fresh Foam X More v6", brand: "New Balance", price: 291330, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long", "recovery"], desc: "두툼한 Fresh Foam X 스택으로 장거리에서도 발을 편안하게 지켜줍니다." },
+  { name: "Nike Vomero Premium", brand: "Nike", price: 394160, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long"], desc: "보메로 라인의 최상위 모델로, 프리미엄 쿠션 소재를 아낌없이 사용했습니다." },
+  { name: "Brooks Glycerin Max", brand: "Brooks", price: 342600, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "recovery", "long"], desc: "DNA Tuned 질소 쿠션을 탑재한 브룩스의 맥시멀 쿠션 플래그십입니다." },
+  { name: "Nike Pegasus 41", brand: "Nike", price: 239920, usage: ["daily_run"], foot: ["neutral"], tags: ["daily", "beginner"], desc: "수십 년간 검증된 국민 데일리 트레이너로, 어떤 훈련에도 무난히 대응합니다." },
+  { name: "New Balance Fresh Foam X More v5", brand: "New Balance", price: 201500, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long", "budget"], desc: "풍부한 쿠션에 합리적인 가격까지 갖춘 장거리 러닝용 모델입니다." },
+  { name: "Brooks Ghost Max", brand: "Brooks", price: 274200, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "beginner"], desc: "부드러운 착지 전환을 돕는 글라이드롤 락커로 초보 러너에게도 편안합니다." },
+  { name: "Hoka Clifton 9", brand: "Hoka", price: 257060, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "beginner"], desc: "클리프턴 특유의 가볍고 푹신한 착화감을 그대로 담은 검증된 데일리화입니다." },
+  { name: "New Balance Fresh Foam X 1080 v14", brand: "New Balance", price: 325610, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long", "recovery"], desc: "뉴발란스 쿠션 라인의 기함으로, 편안함 하나만큼은 최고 수준입니다." },
+  { name: "Nike Vaporfly 4", brand: "Nike", price: 445570, usage: ["race"], foot: ["neutral"], tags: ["race", "carbon", "light"], desc: "풀 카본 플레이트와 ZoomX 폼으로 기록 단축을 노리는 대표적인 레이스화입니다." },
+  { name: "Brooks Adrenaline GTS 24", brand: "Brooks", price: 182000, usage: ["daily_run"], foot: ["overpronation"], tags: ["stability", "daily", "budget", "beginner"], desc: "가이드레일 지지 구조로 과내전 러너의 발목과 무릎을 안정적으로 잡아줍니다." },
+  { name: "Brooks Glycerin 22", brand: "Brooks", price: 308470, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long"], desc: "부드러움과 반발력의 균형이 좋은 프리미엄 쿠션 데일리화입니다." },
+  { name: "Nike Zoom Fly 6", brand: "Nike", price: 291330, usage: ["daily_run", "race"], foot: ["neutral"], tags: ["carbon", "tempo", "race"], desc: "카본 플레이트를 넣은 훈련용 슈퍼 트레이너로, 대회 연습에 제격입니다." },
+  { name: "ASICS Superblast 2", brand: "ASICS", price: 376860, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "tempo", "long", "light"], desc: "레이스화급 폼을 데일리에 쓰는 슈퍼 트레이너로, 장거리 훈련의 최강자입니다." },
+  { name: "Hoka Mach 6", brand: "Hoka", price: 274200, usage: ["daily_run"], foot: ["neutral"], tags: ["light", "tempo", "daily"], desc: "가벼운 무게와 경쾌한 반발력으로 템포런에 잘 맞는 모델입니다." },
+  { name: "On Cloudmonster", brand: "On", price: 221000, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily"], desc: "큼직한 클라우드텍 쿠션이 만드는 독특한 롤링감이 매력적인 데일리화입니다." },
+  { name: "ASICS Gel Nimbus 27", brand: "ASICS", price: 342750, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "recovery", "long"], desc: "아식스 최상급 젤 쿠션으로 무릎 부담이 걱정되는 러너에게 인기가 많습니다." },
+  { name: "Adidas Adizero Adios Pro 4", brand: "Adidas", price: 428430, usage: ["race"], foot: ["neutral"], tags: ["race", "carbon", "light"], desc: "에너지로드 카본 구조와 Lightstrike Pro 폼을 갖춘 마라톤 레이스화입니다." },
+  { name: "Nike Alphafly 3", brand: "Nike", price: 531250, usage: ["race"], foot: ["neutral"], tags: ["race", "carbon"], desc: "에어팟 + 카본 + ZoomX 조합의 끝판왕 레이스화로, 풀코스 기록용입니다." },
+  { name: "Hoka Bondi 8", brand: "Hoka", price: 214500, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "recovery", "budget"], desc: "본디 9 이전 세대로, 맥시멀 쿠션을 합리적 가격에 누릴 수 있습니다." },
+  { name: "New Balance FuelCell Rebel v5", brand: "New Balance", price: 274200, usage: ["daily_run"], foot: ["neutral"], tags: ["light", "tempo", "daily"], desc: "가볍고 탄성 좋은 FuelCell 폼으로 빠른 데일리런에 어울립니다." },
+  { name: "New Balance FuelCell SuperComp Elite v5", brand: "New Balance", price: 479840, usage: ["race"], foot: ["neutral"], tags: ["race", "carbon", "cushion"], desc: "높은 스택의 FuelCell 폼과 카본 플레이트를 결합한 뉴발란스 레이스 기함입니다." },
+  { name: "On Cloudmonster 2", brand: "On", price: 325610, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "long"], desc: "몬스터 쿠션이 한층 커져 장거리 편안함이 좋아진 2세대 모델입니다." },
+  { name: "PUMA Velocity Nitro 4", brand: "PUMA", price: 182000, usage: ["daily_run"], foot: ["neutral"], tags: ["daily", "budget", "beginner", "light"], desc: "질소 발포 쿠션에 뛰어난 가성비까지, 입문용으로 손꼽히는 모델입니다." },
+  { name: "Brooks Ghost Max 2", brand: "Brooks", price: 274200, usage: ["daily_run"], foot: ["neutral"], tags: ["cushion", "daily", "beginner"], desc: "고스트 맥스의 편안함을 이어받아 부드럽고 안정적인 착지를 제공합니다." },
+];
+
+/* ── recommender.py의 로직을 데모용으로 재현 ── */
+const FOOT_MAP = { "중립": "neutral", "과내전": "overpronation", "모름": null };
+const USAGE_MAP = { "데일리런": "daily_run", "레이스": "race" };
+const MAX_PRICE = 540000;
+
+const KEYWORD_RULES = [
+  { re: /무릎|충격|쿠션|푹신|편안|발.?아프/, tag: "cushion", en: "cushioning knee-friendly" },
+  { re: /가볍|경량|라이트/, tag: "light", en: "lightweight" },
+  { re: /템포|속도|빠(른|르)/, tag: "tempo", en: "tempo fast" },
+  { re: /대회|레이스|마라톤|카본|기록|풀코스|하프/, tag: "race", en: "race carbon-plate" },
+  { re: /안정|과내전|평발|발목/, tag: "stability", en: "stability overpronation" },
+  { re: /입문|처음|초보|시작/, tag: "beginner", en: "beginner-friendly" },
+  { re: /여성|우먼|woman|women/i, tag: null, en: "women's" },
+  { re: /데일리|매일|조깅|출퇴근/, tag: "daily", en: "daily trainer" },
+  { re: /장거리|롱런|LSD/i, tag: "long", en: "long-distance" },
+  { re: /회복|리커버리/, tag: "recovery", en: "recovery" },
+  { re: /가성비|저렴|싸|만원|만 원/, tag: "budget", en: "budget" },
+];
+
+function mockTranslate(query) {
+  const hits = KEYWORD_RULES.filter(r => r.re.test(query));
+  if (!hits.length) return "running shoes recommendation";
+  return hits.map(h => h.en).join(", ");
+}
+
+function extractBudget(query) {
+  const m = query.match(/(\d+)\s*만\s*원?/);
+  return m ? parseInt(m[1], 10) * 10000 : null;
+}
+
+function buildFilter(foot, usage, priceVal) {
+  const filters = [];
+  const mapped = foot.map(f => FOOT_MAP[f]).filter(Boolean);
+  if (mapped.length) filters.push(`foot_type/any(f: f eq '${mapped[0]}')`);
+  const uf = usage.filter(u => USAGE_MAP[u]).map(u => `usage/any(u: u eq '${USAGE_MAP[u]}')`);
+  if (uf.length) filters.push(uf.length > 1 ? `(${uf.join(" or ")})` : uf[0]);
+  if (priceVal && priceVal < MAX_PRICE) filters.push(`price le ${priceVal}`);
+  return filters.length ? filters.join(" and ") : null;
+}
+
+function mockSearch(query, foot, usage, priceVal) {
+  const tags = KEYWORD_RULES.filter(r => r.re.test(query)).map(r => r.tag).filter(Boolean);
+  const budget = extractBudget(query);
+  const maxPrice = Math.min(priceVal, budget || Infinity);
+  const mappedFoot = foot.map(f => FOOT_MAP[f]).filter(Boolean);
+  const mappedUsage = usage.filter(u => USAGE_MAP[u]).map(u => USAGE_MAP[u]);
+
+  let pool = SHOES.filter(s => {
+    if (mappedFoot.length && !s.foot.includes(mappedFoot[0])) return false;
+    if (mappedUsage.length && !mappedUsage.some(u => s.usage.includes(u))) return false;
+    if (s.price > maxPrice) return false;
+    if (tags.includes("budget") && s.price > 230000) return false;
+    return true;
+  });
+
+  pool = pool.map(s => {
+    let score = tags.reduce((acc, t) => acc + (s.tags.includes(t) ? 2 : 0), 0);
+    if (tags.includes("race") && s.usage.includes("race")) score += 1;
+    return { ...s, score };
+  }).sort((a, b) => b.score - a.score || a.price - b.price);
+
+  if (tags.length) pool = pool.filter(s => s.score > 0).length >= 2
+    ? pool.filter(s => s.score > 0)
+    : pool;
+
+  return pool.slice(0, 3);
+}
+
+const OPENINGS = [
+  "안녕하세요! 조건에 맞는 러닝화를 찾아봤어요. 다음 제품들을 추천드립니다.",
+  "말씀하신 조건으로 검색해 보니, 이런 제품들이 잘 맞을 것 같아요.",
+  "좋은 질문이에요! 조건에 맞춰 아래 러닝화들을 추천드립니다.",
+];
+const CLOSINGS = [
+  "모두 검증된 인기 모델이니, 러닝 스타일에 맞춰 골라보시면 좋겠습니다. 추가 질문도 언제든 환영이에요!",
+  "매장에서 직접 신어보시면 발볼 핏까지 확인할 수 있어요. 더 궁금한 점 있으시면 말씀해 주세요!",
+  "예산이나 용도를 조정하시면 다른 후보도 찾아드릴 수 있어요. 편하게 물어봐 주세요!",
+];
+let replyCount = 0;
+
+function esc(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function renderAnswer(query, docs) {
+  if (!docs.length) {
+    return "<p>죄송합니다. 현재 필터 조건에 맞는 제품을 찾을 수 없습니다. 예산을 높이거나 필터를 해제해 보시겠어요?</p>";
+  }
+  const i = replyCount++ % OPENINGS.length;
+  const cards = docs.map(d => `
+    <div class="shoe-card">
+      <div>
+        <div class="shoe-name">${esc(d.name)}</div>
+        <div class="shoe-desc">${esc(d.desc)}</div>
+      </div>
+      <div class="shoe-price">${d.price.toLocaleString("ko-KR")}원</div>
+    </div>`).join("");
+  return `<p>${OPENINGS[i]}</p>${cards}<p>${CLOSINGS[i]}</p>`;
+}
+
+/* ── UI 배선 ── */
+const chatLog = document.getElementById("chatLog");
+const sendBtn = document.getElementById("sendBtn");
+const msgInput = document.getElementById("msgInput");
+const priceSlider = document.getElementById("priceSlider");
+const priceValue = document.getElementById("priceValue");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function setupChips(groupId, single) {
+  const group = document.getElementById(groupId);
+  group.addEventListener("click", e => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    const pressed = btn.getAttribute("aria-pressed") === "true";
+    if (single) group.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", "false"));
+    btn.setAttribute("aria-pressed", String(!pressed));
+  });
+}
+setupChips("footGroup", true);   // 발 타입은 하나만 (app.py의 enforce_single_foot)
+setupChips("usageGroup", false); // 용도는 복수 선택
+
+function selectedValues(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .chip[aria-pressed="true"]`)].map(c => c.dataset.value);
+}
+
+priceSlider.addEventListener("input", () => {
+  priceValue.textContent = parseInt(priceSlider.value, 10).toLocaleString("ko-KR");
+});
+
+function appendMsg(role, html) {
+  const div = document.createElement("div");
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="bubble">${html}</div>`;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  return div;
+}
+
+function handleSend(text) {
+  const query = text.trim();
+  if (!query) return;
+  appendMsg("user", esc(query));
+  msgInput.value = "";
+
+  const typing = document.createElement("div");
+  typing.className = "msg bot";
+  typing.innerHTML = `<div class="bubble typing" aria-label="답변 생성 중"><span></span><span></span><span></span></div>`;
+  chatLog.appendChild(typing);
+  chatLog.scrollTop = chatLog.scrollHeight;
+
+  const foot = selectedValues("footGroup");
+  const usage = selectedValues("usageGroup");
+  const priceVal = parseInt(priceSlider.value, 10);
+
+  setTimeout(() => {
+    typing.remove();
+    const keywords = mockTranslate(query);
+    const filter = buildFilter(foot, usage, priceVal);
+    const docs = mockSearch(query, foot, usage, priceVal);
+
+    const wrap = document.createElement("div");
+    wrap.className = "msg bot";
+    wrap.innerHTML = `
+      <div class="trace">
+        <span><b>🔤 번역 키워드</b> <code>${esc(keywords)}</code></span>
+        <span><b>🧩 OData 필터</b> <code>${filter ? esc(filter) : "없음"}</code></span>
+        <span><b>🔎 검색 결과</b> <code>${docs.length}건</code></span>
+      </div>
+      <div class="bubble">${renderAnswer(query, docs)}</div>`;
+    chatLog.appendChild(wrap);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }, reduceMotion ? 80 : 850);
+}
+
+sendBtn.addEventListener("click", () => handleSend(msgInput.value));
+msgInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.isComposing) {
+    e.preventDefault();
+    handleSend(msgInput.value);
+  }
+});
+
+document.getElementById("examples").addEventListener("click", e => {
+  const btn = e.target.closest(".example");
+  if (btn) handleSend(btn.textContent);
+});
+</script>
+
+</body>
+</html>

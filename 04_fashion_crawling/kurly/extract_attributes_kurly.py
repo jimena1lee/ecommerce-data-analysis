@@ -15,6 +15,7 @@ JSON으로 구조화해 추출합니다. 컬리 리뷰에는 별점이 없기 �
 """
 
 import argparse
+import glob
 import json
 import os
 import re
@@ -87,7 +88,11 @@ def load_reviews() -> pd.DataFrame:
     review_id는 '카테고리코드-행번호' 형태로 만들어 이어하기에 사용."""
     frames = []
     for code in CATEGORIES:
-        df = pd.read_csv(os.path.join(DATA_DIR, f"kurly_reviews_{code}_20260709.csv"))
+        # 날짜가 붙은 리뷰 파일 중 가장 최신본을 자동 선택 (재수집 시 자동 반영)
+        matches = sorted(glob.glob(os.path.join(DATA_DIR, f"kurly_reviews_{code}_*.csv")))
+        if not matches:
+            raise FileNotFoundError(f"리뷰 파일 없음: kurly_reviews_{code}_*.csv")
+        df = pd.read_csv(matches[-1])
         df["category"] = code
         df["review_id"] = [f"{code}-{i}" for i in range(len(df))]
         frames.append(df)

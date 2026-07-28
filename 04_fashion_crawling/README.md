@@ -20,8 +20,10 @@
 ├── requirements.txt
 ├── app.py                  # 공용 대시보드 (Gradio) — 두 채널 data/를 자동 인식
 ├── inspect_raw.py          # 공용 진단 도구 (--dump-raw 원본 구조 요약)
+├── build_portfolio_combined.py  # 통합 포트폴리오(output/portfolio.html) 재생성 — 차트 12종 임베드
+├── build_portfolio_combined_html.py  # 위 빌더의 HTML 템플릿
 ├── output/
-│   └── portfolio.html      # 무신사 × 컬리 통합 포트폴리오 (정적 HTML)
+│   └── portfolio.html      # 무신사 × 컬리 통합 포트폴리오 (정적 HTML, 빌더 생성)
 ├── musinsa/
 │   ├── musinsa_crawler.py
 │   ├── analysis.ipynb      # 속옷/홈웨어(026) EDA
@@ -164,9 +166,16 @@ python kurly_crawler.py reviews --from-products data/kurly_products_165_20260709
 - `app.py` — 수집 데이터 대시보드 (Gradio).
   `musinsa/data/`·`kurly/data/`의 products/reviews 파일을 채널·카테고리별로
   자동 인식해 가격 분포 · 할인 구조 · 브랜드 구도 · 리뷰 키워드를 한 화면에서 비교한다.
-- `output/portfolio.html` — 포트폴리오용 원페이지 리포트 (정적 HTML, 차트 임베드).
+- `output/portfolio.html` — 포트폴리오용 원페이지 리포트 (정적 HTML, 차트 12종 임베드).
+  `build_portfolio_combined.py`로 재생성한다 — kurly/data·musinsa/data의 최신 수집본에서
+  통계를 계산하고 matplotlib 차트를 base64로 인라인 임베드한다(분석 로직은 각 채널 노트북과 동일).
   브라우저로 바로 열리며, 호스팅(GitHub Pages 등) 후 노션 `/embed`로 넣을 수 있다.
   공개 산출물 원칙에 따라 집계 통계·시각화만 포함.
+
+  ```
+  cd 04_fashion_crawling
+  python build_portfolio_combined.py   # → output/portfolio.html
+  ```
 - `kurly/output/kurly_semantic_id.html` — 컬리 리뷰 마이닝 → Semantic ID
   프로젝트 원페이지. `kurly/output/report/`에 근거 차트와 MD 리포트가 있다.
 

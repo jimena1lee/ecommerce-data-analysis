@@ -11,12 +11,12 @@ def payload():
 
 
 def test_meta_counts(payload):
-    assert payload["meta"]["n_products"] == 199
-    assert payload["meta"]["n_reviews"] == 1543
+    assert payload["meta"]["n_products"] == 196
+    assert payload["meta"]["n_reviews"] == 1550
 
 
 def test_products_complete(payload):
-    assert len(payload["products"]) == 199
+    assert len(payload["products"]) == 196
     for p in payload["products"]:
         assert p["cat"] in ("165", "166", "169")
         assert p["brand"]                      # join 누락 없음 (사전 검증됨)
@@ -25,15 +25,15 @@ def test_products_complete(payload):
 
 
 def test_underwear_size_matches_report(payload):
-    # 기존 리포트: 언더웨어·홈웨어(169) '작게 나옴' 27% (±3%p 허용)
+    # 2026-07-28 스냅샷: 언더웨어·홈웨어(169) '작게 나옴' 22.5% (±3%p 허용)
     size = payload["cat_stats"]["169"]["size"]
     total = sum(size.values())
-    assert abs(size.get("작게 나옴", 0) / total - 0.27) < 0.03
+    assert abs(size.get("작게 나옴", 0) / total - 0.225) < 0.03
 
 
 def test_brands_min_products(payload):
     assert all(b["n_products"] >= 3 for b in payload["brands"])
-    assert 25 <= len(payload["brands"]) <= 33  # 사전 확인값 29 근방
+    assert 30 <= len(payload["brands"]) <= 40  # 2026-07-28 스냅샷 확인값 35 근방
 
 
 def test_top_complaint_reason(payload):

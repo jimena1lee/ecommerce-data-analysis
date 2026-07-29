@@ -8,6 +8,8 @@ import os
 
 import pandas as pd
 
+from svg_charts import heatmap_2x2, mirror_bars, pareto_curve, slope
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(BASE, "data")
 OUT = os.path.join(BASE, "output", "kidswear_diagnosis.html")
@@ -242,9 +244,89 @@ def render_poster(p):
 """
 
 
+def render_act1(p):
+    m = p["meta"]
+    cat = {c["item"]: c for c in p["category"]}
+    apparel_sku = round(sum(cat[i]["sku_share"] for i in ("상의", "하의", "아우터")), 1)
+    apparel_rv = round(sum(cat[i]["review_share"] for i in ("상의", "하의", "아우터")), 1)
+    quick_sku = round(sum(cat[i]["sku_share"] for i in ("실내화", "학용품")), 1)
+    quick_rv = round(sum(cat[i]["review_share"] for i in ("실내화", "학용품")), 1)
+    return f"""<section class="act">
+<h2>1막 · 무엇이 안 팔리는가</h2>
+<div class="prose">
+<p>리뷰 상위 1%인 {p['pareto'][0]['sku']}개 상품이 전체 리뷰의
+{p['pareto'][0]['share']}%를 가져간다. 상위 5%면 {p['pareto'][1]['share']}%다.
+통상적인 파레토(상위 20%가 80%)보다 훨씬 가파르다 — 지니계수 {m['gini']:.3f}.</p>
+</div>
+<figure class="figure">{pareto_curve(p['pareto'][:4])}
+<figcaption>리뷰수 내림차순 상위 n% 상품이 차지하는 누적 리뷰 점유율.
+20% 지점에서 이미 100%다 — 나머지 80%는 리뷰가 0이다.</figcaption></figure>
+<div class="prose">
+<p>어디에 몰려 있는지를 보면 배분 문제가 드러난다. 의류(상의·하의·아우터)는
+SKU 의 {apparel_sku}%를 쓰면서 리뷰는 {apparel_rv}%다. 반대로 실내화·학용품은
+SKU {quick_sku}%로 리뷰의 {quick_rv}%를 만든다.</p>
+</div>
+<figure class="figure"><div class="scroller">{mirror_bars(p['category'])}</div>
+<figcaption>품목별 SKU 비중(좌)과 리뷰 비중(우). 두 막대의 길이가 어긋난 정도가
+카탈로그 배분과 실수요의 간극이다.</figcaption></figure>
+</section>
+"""
+
+
+def render_act2(p):
+    lift = {d["item"]: d for d in p["derived"]["dawn_lift"]}
+    cells = {(c["price"], c["delivery"]): c for c in p["price_delivery"]}
+    lo_dawn = cells[("2만원 미만", "샛별배송")]["density"]
+    lo_sell = cells[("2만원 미만", "판매자배송")]["density"]
+    hi_dawn = cells[("2만원 이상", "샛별배송")]["density"]
+    hi_sell = cells[("2만원 이상", "판매자배송")]["density"]
+    cd = {c["item"]: c for c in p["category_delivery"]}
+    hkp = next(b for b in p["brand_delivery"] if b["brand"] == "하우키즈풀")
+    return f"""<section class="act">
+<h2>2막 · 무엇이 변수인가</h2>
+<div class="prose">
+<p>품목이 아니라 <strong>어떻게 파느냐</strong>가 갈랐다. 가격대와 배송타입으로
+카탈로그를 네 칸으로 나누면 순서가 깨끗하게 정렬된다.</p>
+</div>
+<figure class="figure"><div class="scroller">{heatmap_2x2(p['price_delivery'])}</div>
+<figcaption>2만원을 기준으로 나눈 가격대 × 배송타입. 역전 없이 단조 감소한다.</figcaption>
+</figure>
+<div class="prose">
+<p>두 변수 모두 유효하지만 크기가 다르다. 배송타입을 바꿨을 때가
+{round(lo_dawn / lo_sell)}배(저가) · {round(hi_dawn / hi_sell)}배(고가),
+가격대를 바꿨을 때가 {round(lo_dawn / hi_dawn, 1)}배(샛별) ·
+{round(lo_sell / hi_sell, 1)}배(판매자)다. <strong>배송타입이 1차 변수</strong>다.</p>
+<h3>같은 품목, 다른 배송타입</h3>
+<p>"그 품목이 원래 잘 팔려서"라는 설명은 성립하지 않는다. 같은 품목 안에서
+배송타입만 다른 쌍이 있기 때문이다. 특히 학용품은 SKU 수가
+{cd['학용품']['seller_sku']}개 대 {cd['학용품']['dawn_sku']}개로 거의 같은데
+리뷰밀도가 {round(lift['학용품']['multiple'])}배 차이난다.</p>
+</div>
+<figure class="figure">{slope(p['derived']['dawn_lift'])}
+<figcaption>판매자배송과 샛별배송에 같은 품목이 동시에 있는 두 사례.
+선의 기울기가 배송타입 효과다.</figcaption></figure>
+<div class="prose">
+<h3>같은 브랜드, 다른 배송타입</h3>
+<p>브랜드도 변수가 아니다. 하우키즈풀 한 브랜드 안에서 갈린다.</p>
+</div>
+<div class="scroller"><table>
+<thead><tr><th>하우키즈풀</th><th>SKU</th><th>리뷰</th><th>SKU당</th><th>평균가</th></tr></thead>
+<tbody>
+<tr><td>샛별배송</td><td>{hkp['dawn_sku']}</td><td>{hkp['dawn_reviews']}</td>
+<td>{hkp['dawn_density']:g}</td><td>{hkp['dawn_price']:,}원</td></tr>
+<tr><td>판매자배송</td><td>{hkp['seller_sku']}</td><td>{hkp['seller_reviews']}</td>
+<td>{hkp['seller_density']:g}</td><td>{hkp['seller_price']:,}원</td></tr>
+</tbody></table></div>
+<div class="note"><b>정리.</b> 팔리는 조합은 <b>저가 × 샛별배송</b> 하나다.
+나머지 세 칸은 SKU 를 아무리 늘려도 리뷰가 붙지 않는다.
+카탈로그 크기가 아니라 조합이 문제다.</div>
+</section>
+"""
+
+
 def render_html(payload):
-    parts = [render_head(payload), render_poster(payload)]
-    # Task 4 가 1막·2막을, Task 5 가 3막·부록을 여기에 추가한다
+    parts = [render_head(payload), render_poster(payload),
+             render_act1(payload), render_act2(payload)]
     parts.append("</div>\n</body>\n</html>\n")
     return "".join(parts)
 

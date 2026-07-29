@@ -71,3 +71,50 @@ def test_no_uncorrected_values(payload):
     assert brands["하우키즈풀"]["reviews"] == 661
     bd = {b["brand"]: b for b in payload["brand_delivery"]}
     assert bd["하우키즈풀"]["seller_reviews"] == 79   # 보정 전 오류값은 0
+
+
+from svg_charts import heatmap_2x2, mirror_bars, pareto_curve, slope
+
+
+def test_pareto_curve_renders_all_points(payload):
+    svg = pareto_curve(payload["pareto"][:4])       # 50% 구간은 그리지 않는다
+    assert svg.startswith("<svg")
+    assert svg.count("<circle") == 4
+    for label in ("1%", "5%", "10%", "20%"):
+        assert f">{label}<" in svg
+
+
+def test_heatmap_has_four_cells_with_values(payload):
+    svg = heatmap_2x2(payload["price_delivery"])
+    assert svg.count("<rect") >= 4
+    for v in ("33.0", "4.41", "0.86", "0.24"):
+        assert v in svg
+
+
+def test_slope_shows_both_items(payload):
+    svg = slope(payload["derived"]["dawn_lift"])
+    assert "실내화" in svg and "학용품" in svg
+    assert "26" in svg and "31" in svg          # 배율 라벨
+
+
+def test_mirror_bars_covers_all_categories(payload):
+    svg = mirror_bars(payload["category"])
+    for item in ("상의", "하의", "아우터", "실내화", "학용품"):
+        assert item in svg
+
+
+def test_charts_have_no_hardcoded_colors(payload):
+    """색은 CSS 변수로만 참조해야 다크모드에서 깨지지 않는다.
+
+    '#' 전체를 금지하면 html.escape 가 만드는 &#x27; 같은 엔티티에 오탐이 난다.
+    hex 색상 리터럴만 잡는다.
+    """
+    import re
+    hex_color = re.compile(r"#[0-9a-fA-F]{3,8}\b")
+    svgs = {"pareto": pareto_curve(payload["pareto"][:4]),
+            "heatmap": heatmap_2x2(payload["price_delivery"]),
+            "slope": slope(payload["derived"]["dawn_lift"]),
+            "mirror": mirror_bars(payload["category"])}
+    for name, svg in svgs.items():
+        found = hex_color.findall(svg)
+        assert not found, f"{name} 에 hex 색상 {found} — 다크모드에서 대비가 깨진다"

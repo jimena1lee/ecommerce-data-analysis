@@ -203,22 +203,32 @@ def _esc(s):
     return _html.escape(str(s))
 
 
-def render_head():
+def _snapshot_label(snapshot):
+    """'20260728_161036' -> '2026.07'. 재수집하면 라벨이 자동으로 따라간다."""
+    return f"{snapshot[:4]}.{snapshot[4:6]}"
+
+
+def render_head(p):
     css = CSS.replace("FONT_STACK", FONT)
+    n = p["meta"]["n_sku"]
     return (
         '<!doctype html>\n<html lang="ko">\n<head>\n'
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        "<title>컬리 키즈웨어 카탈로그 진단 — 3,640 SKU 전수 분석</title>\n"
+        f"<title>컬리 키즈웨어 카탈로그 진단 — {n:,} SKU 전수 분석</title>\n"
         f"<style>{css}</style>\n</head>\n<body>\n"
     )
 
 
 def render_poster(p):
-    """iframe 640px 안에 들어가는 영역. 결론을 여기 둔다."""
+    """iframe 640px 안에 들어가는 영역. 결론을 여기 둔다.
+
+    `<div class="page">` 를 여기서 열고, `render_html` 이 닫는다 —
+    Task 4·5 가 그 사이에 자기 섹션을 끼워 넣는다.
+    """
     m = p["meta"]
     return f"""<div class="page">
-<p class="eyebrow">Kurly Kidswear · 2026.07 · {m['n_sku']:,} SKU 전수</p>
+<p class="eyebrow">Kurly Kidswear · {_snapshot_label(m['snapshot'])} · {m['n_sku']:,} SKU 전수</p>
 <h1>{m['n_sku']:,}개의 카탈로그, 수요는 상위 1%에 몰려 있다</h1>
 <p class="thesis">리뷰가 붙은 상품은 {m['n_reviewed_sku']}개({m['reviewed_share']}%).
 남은 {m['n_zero_sku']:,}개가 나쁜 상품이라는 뜻은 아니다 —
@@ -233,7 +243,7 @@ def render_poster(p):
 
 
 def render_html(payload):
-    parts = [render_head(), render_poster(payload)]
+    parts = [render_head(payload), render_poster(payload)]
     # Task 4 가 1막·2막을, Task 5 가 3막·부록을 여기에 추가한다
     parts.append("</div>\n</body>\n</html>\n")
     return "".join(parts)

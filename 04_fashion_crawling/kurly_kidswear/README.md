@@ -18,7 +18,7 @@
 python collect_kurly.py                  # 목록 API 수집 → kurly_kidswear_<ts>.csv
 python enrich_reviews.py                 # 상세 API 리뷰수 재확인 → review_counts_<ts>.jsonl
 python analyze_kurly.py                  # A~F 분석 → 분석리포트_<ts>.md
-python make_aggregates.py --src <원본폴더>  # → data/*.csv 8개
+python make_aggregates.py --src <원본폴더>  # → data/*.csv 9개
 ```
 
 **2단계 — 저장소만으로 실행 가능**

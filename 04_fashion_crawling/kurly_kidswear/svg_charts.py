@@ -66,7 +66,7 @@ def pareto_curve(rows):
                  'stroke-linejoin="round"/>')
     for x, y, r in pts:
         out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{ACCENT}"/>')
-        out.append(_text(x, y - 12, f"{r['share']}%", 12, INK, "middle", "700"))
+        out.append(_text(x, y - 12, f"{r['share']:g}%", 12, INK, "middle", "700"))
         out.append(_text(x, h - 20, r["label"], 12, MUTED, "middle"))
         out.append(_text(x, h - 6, f"{r['sku']:,} SKU", 11, MUTED, "middle"))
     out.append("</svg>")

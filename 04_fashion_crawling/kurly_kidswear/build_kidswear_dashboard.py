@@ -3,7 +3,6 @@
 
 2단계 스크립트. 커밋된 data/ 만 읽으므로 원본 없이도 실행된다.
 """
-import html as _html
 import os
 
 import pandas as pd
@@ -201,13 +200,14 @@ li{margin:6px 0}
 """
 
 
-def _esc(s):
-    return _html.escape(str(s))
-
-
 def _snapshot_label(snapshot):
     """'20260728_161036' -> '2026.07'. 재수집하면 라벨이 자동으로 따라간다."""
     return f"{snapshot[:4]}.{snapshot[4:6]}"
+
+
+def _snapshot_date(snapshot):
+    """'20260728_161036' -> '2026-07-28'. 부록의 전체 날짜 표기용."""
+    return f"{snapshot[:4]}-{snapshot[4:6]}-{snapshot[6:8]}"
 
 
 def render_head(p):
@@ -328,7 +328,12 @@ def render_act3(p):
     s = p["derived"]["seasonal"]
     lift = {d["item"]: d for d in p["derived"]["dawn_lift"]}
     cand = p["derived"]["proposal1"]
-    cat = {c["item"]: c for c in p["category"]}
+    cd = {c["item"]: c for c in p["category_delivery"]}
+    # 판매자배송 기준 리뷰밀도. category.csv 의 전체(샛별+판매자) 리뷰밀도를 쓰면
+    # 바로 아래 표(판매자배송 전용)와 기준이 어긋난다 — 반드시 이 값을 인용한다.
+    top_density = _density(cd["상의"]["seller_reviews"], cd["상의"]["seller_sku"])
+    bottom_density = _density(cd["하의"]["seller_reviews"], cd["하의"]["seller_sku"])
+    outer_density = _density(cd["아우터"]["seller_reviews"], cd["아우터"]["seller_sku"])
 
     rows1 = "".join(
         f"<tr><td>{c['item']}</td><td>{c['seller_sku']}</td>"
@@ -347,17 +352,17 @@ def render_act3(p):
 
 <h3>① 샛별 확대 — 증명된 조합을 인접 품목으로</h3>
 <p>후보는 이미 정해져 있다. 판매자배송 안에서 리뷰밀도가 상위인데
-샛별 SKU 가 0개인 품목이다. 비교하자면 상의 {cat['상의']['density']:g} ·
-하의 {cat['하의']['density']:g} · 아우터 {cat['아우터']['density']:g}다.</p>
+샛별 SKU 가 0개인 품목이다. 비교하자면 판매자배송 기준으로 상의 {top_density:g} ·
+하의 {bottom_density:g} · 아우터 {outer_density:g}다.</p>
 </div>
 <div class="scroller"><table>
 <thead><tr><th>품목</th><th>판매자 SKU</th><th>SKU당 리뷰</th><th>샛별 SKU</th></tr></thead>
 <tbody>{rows1}</tbody></table></div>
 <div class="prose">
 <p>이 이동의 결과는 이미 관측됐다. 실내화는 {lift['실내화']['seller_density']:g}에서
-{lift['실내화']['dawn_density']:g}으로({round(lift['실내화']['multiple'])}배),
+{lift['실내화']['dawn_density']:g}까지({round(lift['실내화']['multiple'])}배),
 학용품은 {lift['학용품']['seller_density']:g}에서
-{lift['학용품']['dawn_density']:g}으로({round(lift['학용품']['multiple'])}배) 올랐다.
+{lift['학용품']['dawn_density']:g}까지({round(lift['학용품']['multiple'])}배) 올랐다.
 추측이 아니라 같은 카탈로그 안에서 확인된 패턴의 복제다.</p>
 
 <h3>② 시즌·이벤트 기획전 — 진열은 그대로, 타이밍을 만든다</h3>
@@ -389,7 +394,7 @@ def render_appendix(p):
 <h2>부록 · 방법론과 한계</h2>
 <div class="prose">
 <p>카테고리 172(키즈웨어)와 919017(유아동패션)의 전 상품을 목록 API 로 수집한 뒤
-상세 API 로 리뷰수를 재확인했다. 스냅샷은 2026-07-28이며 {m['n_sku']:,} SKU 다.</p>
+상세 API 로 리뷰수를 재확인했다. 스냅샷은 {_snapshot_date(m['snapshot'])}이며 {m['n_sku']:,} SKU 다.</p>
 <ul>
 <li><b>리뷰수는 판매량의 대리지표다.</b> 노출기간·판매기간을 보정하지 않아
 신상품에 불리하다. 순위를 판매량 순위로 읽으면 안 된다.</li>

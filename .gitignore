@@ -28,3 +28,12 @@ Thumbs.db
 04_fashion_crawling/kurly_kidswear/raw/
 04_fashion_crawling/kurly_kidswear/kurly_kidswear_*.csv
 04_fashion_crawling/kurly_kidswear/review_counts_*.jsonl
+
+# 키즈웨어 1단계 스크립트(analyze_kurly.py)가 자기 폴더에 남기는 산출물
+04_fashion_crawling/kurly_kidswear/A_브랜드별_*.csv
+04_fashion_crawling/kurly_kidswear/D_품목별_*.csv
+04_fashion_crawling/kurly_kidswear/E_가격분포_*.png
+04_fashion_crawling/kurly_kidswear/분석리포트_*.txt
+
+# pytest
+.pytest_cache/

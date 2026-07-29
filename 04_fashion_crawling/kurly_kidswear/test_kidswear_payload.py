@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """build_payload() 불변식 검증 (kurly_kidswear/ 에서 pytest 실행)."""
+import re
+
 import pytest
 
 from build_kidswear_dashboard import build_payload, render_html
@@ -73,7 +75,25 @@ def test_no_uncorrected_values(payload):
     assert bd["하우키즈풀"]["seller_reviews"] == 79   # 보정 전 오류값은 0
 
 
-from svg_charts import heatmap_2x2, mirror_bars, pareto_curve, slope
+def test_act3_density_comparison_uses_seller_basis(payload):
+    """3막 '① 샛별 확대' 문장은 표와 같은 기준(판매자배송)을 인용해야 한다.
+
+    category.csv 의 전체(샛별+판매자) 리뷰밀도를 쓰면 상의·하의·아우터가
+    0.17 / 0.17 / 0.13 이 되어, 바로 아래 표가 쓰는 판매자배송 전용 기준
+    (category_delivery.csv 로 계산한 0.13 / 0.11 / 0.13)과 어긋난다.
+    """
+    html = render_html(payload)
+    idx = html.find("샛별 확대")
+    assert idx != -1, "① 샛별 확대 절을 찾지 못했다"
+    end = html.find("</p>", idx)
+    sentence = html[idx:end]
+    assert "상의 0.13" in sentence
+    assert "하의 0.11" in sentence
+    assert "아우터 0.13" in sentence
+    assert "0.17" not in sentence, "전체(샛별+판매자) 기준 리뷰밀도가 되살아났다"
+
+
+from svg_charts import ACCENT, SELLER, heatmap_2x2, mirror_bars, pareto_curve, slope
 
 
 def test_pareto_curve_renders_all_points(payload):
@@ -94,13 +114,37 @@ def test_heatmap_has_four_cells_with_values(payload):
 def test_slope_shows_both_items(payload):
     svg = slope(payload["derived"]["dawn_lift"])
     assert "실내화" in svg and "학용품" in svg
-    assert "26" in svg and "31" in svg          # 배율 라벨
+    # 좌표값이 많은 SVG 라 "26"/"31" 만 찾으면 좌표 숫자에 우연히 걸릴 수 있다.
+    # 배율 라벨은 `{n}배` 텍스트로만 나오므로 태그 경계까지 포함해 특정한다.
+    assert ">26배<" in svg and ">31배<" in svg
 
 
 def test_mirror_bars_covers_all_categories(payload):
+    """이름만 있고 막대 폭이 전부 0이어도 통과하던 게 원래 테스트의 허점이었다.
+
+    실제 rect 폭을 읽어 1막의 핵심 주장 — 상의는 SKU 비중(16.8%)이 리뷰
+    비중(4.1%)보다 훨씬 크고, 실내화는 반대로 리뷰 비중(24.4%)이 SKU
+    비중(1.0%)보다 훨씬 크다 — 이 막대 길이 차이로 실제 그려지는지 확인한다.
+    """
     svg = mirror_bars(payload["category"])
     for item in ("상의", "하의", "아우터", "실내화", "학용품"):
         assert item in svg
+
+    def row_widths(item):
+        pat = re.compile(
+            r'width="([\d.]+)"[^>]*fill="' + re.escape(SELLER) + r'"[^>]*/>'
+            r'\s*<rect[^>]*width="([\d.]+)"[^>]*fill="' + re.escape(ACCENT) + r'"[^>]*/>'
+            r'\s*<text[^>]*>' + re.escape(item) + r"</text>"
+        )
+        m = pat.search(svg)
+        assert m, f"{item} 행의 막대 두 개를 찾지 못했다"
+        return float(m.group(1)), float(m.group(2))
+
+    top_sku_w, top_review_w = row_widths("상의")
+    assert top_sku_w > top_review_w * 2
+
+    quick_sku_w, quick_review_w = row_widths("실내화")
+    assert quick_review_w > quick_sku_w * 10
 
 
 def test_charts_have_no_hardcoded_colors(payload):

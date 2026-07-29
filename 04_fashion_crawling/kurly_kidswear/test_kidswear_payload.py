@@ -2,7 +2,7 @@
 """build_payload() 불변식 검증 (kurly_kidswear/ 에서 pytest 실행)."""
 import pytest
 
-from build_kidswear_dashboard import build_payload
+from build_kidswear_dashboard import build_payload, render_html
 
 
 @pytest.fixture(scope="module")
@@ -126,3 +126,17 @@ def test_chart_functions_survive_degenerate_input():
     assert mirror_bars([]).startswith("<svg")
     assert heatmap_2x2([]).startswith("<svg")
     assert slope([]).startswith("<svg")
+
+
+def test_rendered_html_has_no_forbidden_content():
+    """진열 축소 계열 제안과 보정 전 오류값이 본문에 되살아나지 않는지 지킨다.
+
+    3막 제안 방향은 포트폴리오 소유자가 명시적으로 정한 것이다 —
+    기존 진열을 걷어내는 '빼기' 제안은 넣지 않는다. 도입부의
+    "진열을 걷어내는 방향은 택하지 않았다" 는 그 방향을 거부하는 문장이라 정상이다.
+    """
+    html = render_html(build_payload())
+    for phrase in ("상시 진열에서", "진열을 내", "노출 축소", "SKU 를 정리"):
+        assert phrase not in html, f"빼기 제안 문구가 되살아났다: {phrase}"
+    # 보정 전 오류값. 1,420 은 부록의 보정 설명에 딱 한 번만 나온다.
+    assert html.count("1,420") == 1

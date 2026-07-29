@@ -413,9 +413,6 @@ def render_appendix(p):
 분류 실패가 아니다.</b> 12개 주요 분류에 속하지 않는 품목이며 한복·파티용품 등이
 여기 들어간다. 다만 '미상' 402건은 영문 모델명 위주로, 키워드 분류의 한계에 해당한다.</li>
 </ul>
-<p class="thesis" style="margin-top:28px;font-size:14px">
-수집·분석 코드와 집계 결과는 저장소
-<code>04_fashion_crawling/kurly_kidswear/</code> 에 있다.</p>
 </div>
 </section>
 """

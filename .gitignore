@@ -23,3 +23,8 @@ Thumbs.db
 
 # VSCode
 .vscode/
+
+# 키즈웨어 원본 데이터 (data/ 집계 결과만 커밋)
+04_fashion_crawling/kurly_kidswear/raw/
+04_fashion_crawling/kurly_kidswear/kurly_kidswear_*.csv
+04_fashion_crawling/kurly_kidswear/review_counts_*.jsonl

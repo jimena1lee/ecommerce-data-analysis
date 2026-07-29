@@ -353,7 +353,7 @@ def render_act3(p):
 <h3>① 샛별 확대 — 증명된 조합을 인접 품목으로</h3>
 <p>후보는 이미 정해져 있다. 판매자배송 안에서 리뷰밀도가 상위인데
 샛별 SKU 가 0개인 품목이다. 비교하자면 판매자배송 기준으로 상의 {top_density:g} ·
-하의 {bottom_density:g} · 아우터 {outer_density:g}다.</p>
+하의 {bottom_density:g} · 아우터 {outer_density:g}이다.</p>
 </div>
 <div class="scroller"><table>
 <thead><tr><th>품목</th><th>판매자 SKU</th><th>SKU당 리뷰</th><th>샛별 SKU</th></tr></thead>

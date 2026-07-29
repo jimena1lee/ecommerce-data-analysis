@@ -47,7 +47,6 @@ def pareto_curve(rows):
     """상위 n% 누적 리뷰 점유율. 상위 5%에서 80%를 넘는 것이 요점이다."""
     h, pad_l, pad_r, pad_t, pad_b = 260, 46, 20, 24, 40
     plot_w, plot_h = W - pad_l - pad_r, h - pad_t - pad_b
-    xs = [0, 1, 2, 3]
     out = [_open(h, "상위 n% 상품의 누적 리뷰 점유율")]
 
     for pct in (0, 25, 50, 75, 100):
@@ -58,7 +57,7 @@ def pareto_curve(rows):
 
     pts = []
     for i, r in enumerate(rows):
-        x = pad_l + plot_w * (i / (len(rows) - 1))
+        x = pad_l + plot_w * (i / max(len(rows) - 1, 1))
         y = pad_t + plot_h * (1 - r["share"] / 100)
         pts.append((x, y, r))
 
@@ -76,9 +75,11 @@ def pareto_curve(rows):
 
 def mirror_bars(rows):
     """품목별 SKU비중(좌) ↔ 리뷰비중(우). 두 폭이 어긋난 정도가 미스매치다."""
-    rows = sorted(rows, key=lambda r: -r["review_share"])
     row_h, pad_t = 26, 34
     h = pad_t + row_h * len(rows) + 12
+    if not rows:
+        return _open(h, "품목별 SKU 비중과 리뷰 비중 대비") + "</svg>"
+    rows = sorted(rows, key=lambda r: -r["review_share"])
     mid, gap = W / 2, 62
     half = mid - gap
     scale = max(max(r["sku_share"] for r in rows),
@@ -108,13 +109,15 @@ def mirror_bars(rows):
 
 def heatmap_2x2(cells):
     """가격대 × 배송타입 리뷰밀도. 센터피스."""
+    cw, ch, pad_l, pad_t = 300, 108, 96, 46
+    h = pad_t + ch * 2 + 26
+    if not cells:
+        return _open(h, "가격대 × 배송타입별 SKU 당 리뷰수") + "</svg>"
     prices = ["2만원 미만", "2만원 이상"]
     dvs = ["샛별배송", "판매자배송"]
     by = {(c["price"], c["delivery"]): c for c in cells}
     top = max(c["density"] for c in cells)
 
-    cw, ch, pad_l, pad_t = 300, 108, 96, 46
-    h = pad_t + ch * 2 + 26
     out = [_open(h, "가격대 × 배송타입별 SKU 당 리뷰수")]
     for j, dv in enumerate(dvs):
         out.append(_text(pad_l + cw * j + cw / 2, 22, dv, 12.5, MUTED, "middle", "600"))
@@ -146,6 +149,8 @@ def heatmap_2x2(cells):
 def slope(lift_rows):
     """같은 품목을 판매자배송 → 샛별배송으로 옮겼을 때의 리뷰밀도 변화."""
     h, pad_t, pad_b = 300, 40, 44
+    if not lift_rows:
+        return _open(h, "품목 내 배송타입 전환에 따른 리뷰밀도 변화") + "</svg>"
     plot_h = h - pad_t - pad_b
     x_left, x_right = 190, W - 190
     top = max(r["dawn_density"] for r in lift_rows) * 1.12

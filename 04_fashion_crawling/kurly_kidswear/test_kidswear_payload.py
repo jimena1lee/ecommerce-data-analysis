@@ -86,7 +86,7 @@ def test_pareto_curve_renders_all_points(payload):
 
 def test_heatmap_has_four_cells_with_values(payload):
     svg = heatmap_2x2(payload["price_delivery"])
-    assert svg.count("<rect") >= 4
+    assert svg.count("<rect") == 8      # 칸마다 배경 + 테두리 2개
     for v in ("33.0", "4.41", "0.86", "0.24"):
         assert v in svg
 
@@ -118,3 +118,11 @@ def test_charts_have_no_hardcoded_colors(payload):
     for name, svg in svgs.items():
         found = hex_color.findall(svg)
         assert not found, f"{name} 에 hex 색상 {found} — 다크모드에서 대비가 깨진다"
+
+
+def test_chart_functions_survive_degenerate_input():
+    """행이 1개(파레토) 이거나 0개(나머지) 여도 예외 없이 유효한 SVG 를 반환해야 한다."""
+    assert pareto_curve([{"label": "1%", "sku": 36, "share": 53.3}]).startswith("<svg")
+    assert mirror_bars([]).startswith("<svg")
+    assert heatmap_2x2([]).startswith("<svg")
+    assert slope([]).startswith("<svg")

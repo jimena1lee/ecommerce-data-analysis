@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qxpress 파트너 물류비 간이 계산기</title>
+<style>
+  :root{ --accent:#5f0080; --accent-deep:#43005b; --accent-tint:#f7f0fa; --accent-tint2:#efe2f5;
+         --ink:#1c1c1e; --sub:#6e6e73; --line:#e8e2ec; --bg:#fff; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); padding:18px;
+        font-family:'Apple SD Gothic Neo','Pretendard','Noto Sans KR','Malgun Gothic',sans-serif;
+        line-height:1.6; -webkit-font-smoothing:antialiased; word-break:keep-all; }
+  .wrap{ max-width:760px; margin:0 auto; }
+  .head{ margin-bottom:14px; }
+  .head .eb{ font-size:.72rem; font-weight:800; letter-spacing:.12em; color:var(--accent);
+             text-transform:uppercase; }
+  .head h1{ font-size:1.15rem; margin:4px 0 2px; letter-spacing:-.02em; }
+  .head p{ margin:2px 0 0; font-size:.85rem; color:var(--sub); }
+  .grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:16px; margin-top:6px; }
+  @media(max-width:640px){ .grid{ grid-template-columns:1fr; } }
+  .panel{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+          box-shadow:0 8px 26px rgba(95,0,128,.07); }
+  .panel h2{ font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);
+             margin:0 0 12px; font-weight:800; }
+  label{ display:block; font-size:.8rem; color:var(--sub); margin:10px 0 4px; font-weight:700; }
+  .row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  input[type=number], select{ width:100%; padding:9px 10px; border:1px solid var(--line);
+          border-radius:9px; font-size:.92rem; font-family:inherit; color:var(--ink); background:#fff; }
+  input:focus, select:focus{ outline:none; border-color:var(--accent); }
+  .check{ display:flex; align-items:center; gap:8px; margin-top:12px; font-size:.88rem; }
+  .check input{ width:16px; height:16px; accent-color:var(--accent); }
+  .hint{ font-size:.72rem; color:var(--sub); margin-top:3px; }
+
+  .out .line{ display:flex; justify-content:space-between; align-items:baseline;
+              padding:9px 0; border-top:1px solid var(--line); font-size:.9rem; }
+  .out .line:first-of-type{ border-top:none; }
+  .out .line .k{ color:var(--sub); }
+  .out .line .k small{ display:block; color:#a9a1ad; font-size:.72rem; }
+  .out .line .v{ font-weight:700; font-variant-numeric:tabular-nums; }
+  .out .total{ margin-top:6px; background:var(--accent-tint); border:1px solid var(--accent-tint2);
+               border-radius:12px; padding:12px 14px; }
+  .out .total .line{ border-top:1px dashed var(--accent-tint2); padding:6px 0; }
+  .out .total .line:first-of-type{ border-top:none; }
+  .out .grand{ display:flex; justify-content:space-between; align-items:baseline; margin-top:8px;
+               padding-top:10px; border-top:2px solid var(--accent); }
+  .out .grand .k{ font-weight:800; }
+  .out .grand .v{ font-weight:800; font-size:1.35rem; color:var(--accent); font-variant-numeric:tabular-nums; }
+  .badge{ display:inline-block; font-size:.68rem; font-weight:800; color:var(--accent);
+          background:var(--accent-tint); border:1px solid var(--accent-tint2);
+          padding:2px 7px; border-radius:999px; margin-left:6px; vertical-align:middle; }
+  .disc{ font-size:.72rem; color:var(--sub); margin-top:12px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <span class="eb">Process Automation · 파트너 온보딩</span>
+    <h1>Qxpress 파트너 물류비 간이 계산기</h1>
+    <p>실제 단가표를 그대로 반영한 재현 데모 — 상품 정보만 넣으면 자재비·입고비·배송비가 자동 계산됩니다. 파트너가 문의 없이 스스로 견적을 뽑도록 표준화한 도구입니다.</p>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>입고 상품 정보</h2>
+      <label>박스 규격 (가로 · 세로 · 높이, cm)</label>
+      <div class="row3">
+        <input id="w" type="number" min="0" step="0.1" value="25" aria-label="가로">
+        <input id="d" type="number" min="0" step="0.1" value="20" aria-label="세로">
+        <input id="h" type="number" min="0" step="0.1" value="13" aria-label="높이">
+      </div>
+      <div class="hint">길이 총합 <b id="lsum">58</b> cm · 자동계산</div>
+
+      <label>무게 (kg)</label>
+      <input id="kg" type="number" min="0" step="0.1" value="1.5">
+
+      <label>입고 수량 (SKU 기준)</label>
+      <input id="qty" type="number" min="1" step="1" value="100">
+
+      <label>포장재</label>
+      <select id="pack">
+        <option value="box">무지박스</option>
+        <option value="poly">폴리백</option>
+      </select>
+      <div class="hint" id="packhint">길이합 기준 규격 자동 매칭</div>
+
+      <label>입고 검수 단위</label>
+      <select id="insp">
+        <option value="each">낱개 (건당 50원)</option>
+        <option value="box">박스 (건당 500원)</option>
+      </select>
+
+      <div class="check"><input id="air" type="checkbox"><label for="air" style="margin:0;">에어캡 사용 (건당 80원 · 기본 2개)</label></div>
+      <div class="check"><input id="barcode" type="checkbox"><label for="barcode" style="margin:0;">바코드 작업 (건당 100원)</label></div>
+
+      <label>합포장 개수 <span class="hint" style="font-weight:400;">(3개까지 무료, 4개부터 건당 30원)</span></label>
+      <input id="bundle" type="number" min="1" step="1" value="1">
+    </div>
+
+    <div class="panel out">
+      <h2>견적 결과 <span class="badge">단위당</span></h2>
+      <div class="line"><span class="k">자재비<small id="matnote">무지박스</small></span><span class="v" id="mat">0원</span></div>
+      <div class="line"><span class="k">입고비<small id="inspnote">낱개 검수</small></span><span class="v" id="in">0원</span></div>
+      <div class="line"><span class="k">포장·가공비<small id="pcknote">—</small></span><span class="v" id="pck">0원</span></div>
+      <div class="line"><span class="k">배송비<small id="shipnote">무게·길이 구간</small></span><span class="v" id="ship">0원</span></div>
+
+      <div class="total">
+        <div class="line"><span class="k">단위당 합계 (VAT 별도)</span><span class="v" id="unit">0원</span></div>
+        <div class="line"><span class="k">× 수량 <span id="qtyecho">100</span></span><span class="v" id="sub">0원</span></div>
+        <div class="line"><span class="k">VAT (10%)</span><span class="v" id="vat">0원</span></div>
+      </div>
+      <div class="grand"><span class="k">총 물류비 (VAT 포함)</span><span class="v" id="grand">0원</span></div>
+      <p class="disc">※ 단순 견적 계산이므로 실제 정산 데이터와 다를 수 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 실제 단가표 재현 ──────────────────────────────
+// 배송비(택배비): 무게 구간 / 길이합 구간 중 상위 단가 적용
+const SHIP_KG   = [[0,1900],[2,2300],[5,2800],[10,4200],[15,4500],[20,12500],[25,12500]];
+const SHIP_LEN  = [[0,1900],[80,2300],[100,2800],[120,4200],[140,4500],[160,12500],[190,12500]];
+// 자재비: 길이합 구간별 단가
+const MAT_BOX   = [[0,180],[45,250],[58,400],[76,500],[95,700],[115,850],[137,850]];
+const MAT_POLY  = [[0,50],[44,100],[59,200]];
+const BOX_SPEC  = [[0,"~20*15*10"],[45,"20*15*10"],[58,"25*20*13"],[76,"35*25*16"],[95,"43*30*22"],[115,"50*35*30"],[137,"59*43*35"]];
+const AIRCAP=80, INSP_EACH=50, INSP_BOX=500, BARCODE=100, BUNDLE_UNIT=30;
+
+function tier(table, x){ let v=table[0][1]; for(const [t,p] of table){ if(x>=t) v=p; } return v; }
+function tierLabel(table, x){ let lab=table[0][1]; for(const [t,l] of table){ if(x>=t) lab=l; } return lab; }
+const won = n => Math.round(n).toLocaleString('ko-KR')+'원';
+
+function calc(){
+  const w=+val('w'), d=+val('d'), h=+val('h'), kg=+val('kg'), qty=Math.max(1,+val('qty')||1);
+  const lsum=w+d+h;
+  document.getElementById('lsum').textContent=lsum.toFixed(1).replace(/\.0$/,'');
+
+  // 자재비
+  const isBox=val('pack')==='box';
+  let mat=isBox? tier(MAT_BOX,lsum) : tier(MAT_POLY,lsum);
+  const matName=isBox? ('무지박스 '+tierLabel(BOX_SPEC,lsum)) : '폴리백';
+  const air=document.getElementById('air').checked;
+  if(air) mat += AIRCAP*2;
+
+  // 입고비 (검수)
+  const each=val('insp')==='each';
+  const inbound = each? INSP_EACH : INSP_BOX;
+
+  // 포장·가공비
+  const bc=document.getElementById('barcode').checked;
+  const bundle=Math.max(1,+val('bundle')||1);
+  const bundleFee = bundle>3 ? (bundle-3)*BUNDLE_UNIT : 0;
+  const pack = (bc?BARCODE:0) + bundleFee;
+
+  // 배송비
+  const ship = Math.max(tier(SHIP_KG,kg), tier(SHIP_LEN,lsum));
+
+  const unit = mat+inbound+pack+ship;
+  const sub  = unit*qty;
+  const vat  = sub*0.1;
+  const grand= sub+vat;
+
+  set('mat',won(mat)); set('in',won(inbound)); set('pck',won(pack)); set('ship',won(ship));
+  set('unit',won(unit)); set('sub',won(sub)); set('vat',won(vat)); set('grand',won(grand));
+  set('qtyecho',qty.toLocaleString('ko-KR')); set('qty2',qty);
+  document.getElementById('matnote').textContent = matName + (air?' + 에어캡×2':'');
+  document.getElementById('inspnote').textContent = each?'낱개 검수':'박스 검수';
+  document.getElementById('pcknote').textContent = [(bc?'바코드':''),(bundleFee?('합포장 '+bundle+'개'):'')].filter(Boolean).join(' · ')||'없음';
+  document.getElementById('shipnote').textContent = '무게 '+kg+'kg · 길이합 '+lsum.toFixed(0)+'cm';
+  document.getElementById('packhint').textContent = isBox? ('추천 규격: '+tierLabel(BOX_SPEC,lsum)) : '폴리백 규격 자동 매칭';
+}
+function val(id){ return document.getElementById(id).value; }
+function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>

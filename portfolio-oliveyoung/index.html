@@ -20,7 +20,7 @@
 <style>
   :root {
     /* 올리브영 키 컬러 — 그린 #82DC28 / 코랄 #FF7878 를 포인트로만 사용 */
-    --green:#82DC28; --coral:#FF7878;
+    --green:#82DC28; --coral:#FF7878; --coral-ink:#e2574f; --coral-tint:#fff1f0;
     --accent:#4f8a00; --accent-deep:#356200;      /* 가독성을 위한 딥그린 (키 컬러의 어두운 값) */
     --accent-tint:#f2fbe8; --accent-tint2:#dcefc4;
     --ink:#1c1c1e; --sub:#6e6e73; --line:#e8e6df; --bg:#fff;
@@ -64,7 +64,7 @@
         border-bottom:1px solid rgba(90,150,20,.09); }
   nav .brand { font-weight:800; font-size:.98rem; letter-spacing:-.01em; text-decoration:none;
                white-space:nowrap; flex-shrink:0; }
-  nav .brand em { font-style:normal; color:var(--accent); }
+  nav .brand em { font-style:normal; color:var(--coral); }
   nav .menu { display:flex; gap:20px; overflow-x:auto; white-space:nowrap;
               font-size:.88rem; scrollbar-width:none; }
   nav .menu::-webkit-scrollbar { display:none; }
@@ -116,9 +116,9 @@
   .card b.title { display:block; font-size:1rem; margin-bottom:6px; }
   .card ul { margin:8px 0 0; font-size:.94rem; color:#3a3a3c; }
   .callout { border-radius:14px; padding:16px 20px; margin:16px 0; font-size:.96rem; }
-  .callout-problem { background:#fdf3f3; border-left:3px solid var(--coral); }
+  .callout-problem { background:var(--coral-tint); border-left:3px solid var(--coral); }
   .callout-result { background:var(--accent-tint); border-left:3px solid var(--green); }
-  .quote { border-left:3px solid var(--accent); padding-left:16px; color:var(--sub);
+  .quote { border-left:3px solid var(--coral); padding-left:16px; color:var(--sub);
            margin:20px 0; font-size:.95rem; }
 
   /* ── 표 ───────────────────────────────── */
@@ -154,8 +154,8 @@
   .spec .spec-head { display:flex; align-items:center; justify-content:space-between;
                      gap:12px; flex-wrap:wrap; padding:18px 0 12px; border-bottom:1px solid var(--line); }
   .spec .spec-head .t { font-weight:800; font-size:1.02rem; }
-  .spec .tag { font-size:.72rem; font-weight:800; color:var(--accent); background:var(--accent-tint);
-               border:1px solid var(--accent-tint2); padding:4px 10px; border-radius:999px; }
+  .spec .tag { font-size:.72rem; font-weight:800; color:var(--coral-ink); background:var(--coral-tint);
+               border:1px solid #ffd9d6; padding:4px 10px; border-radius:999px; }
   .spec dl { display:grid; grid-template-columns:120px 1fr; gap:0; margin:0; }
   .spec dt { font-weight:800; font-size:.86rem; color:var(--accent-deep);
              padding:12px 0; border-top:1px solid var(--line); }

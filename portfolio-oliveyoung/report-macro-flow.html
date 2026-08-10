@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>일일 실적 집계 자동화 매크로 — 동작 흐름</title>
 <style>
-  :root{ --accent:#4f8a00; --accent-deep:#356200; --accent-tint:#f2fbe8; --accent-tint2:#dcefc4; --green:#82DC28;
+  :root{ --accent:#4f8a00; --accent-deep:#356200; --accent-tint:#f2fbe8; --accent-tint2:#dcefc4; --green:#82DC28; --coral:#FF7878; --coral-ink:#e2574f; --coral-tint:#fff1f0;
          --ink:#1c1c1e; --sub:#6e6e73; --line:#e8e2ec; --bg:#fff; --ok:#1a7f43; }
   *{ box-sizing:border-box; }
   body{ margin:0; background:var(--bg); color:var(--ink); padding:18px;
@@ -30,13 +30,13 @@
         box-shadow:0 8px 24px rgba(90,150,20,.08); }
   .box .cap{ font-size:.74rem; font-weight:800; padding:8px 12px; border-bottom:1px solid var(--line);
              display:flex; justify-content:space-between; align-items:center; }
-  .box.raw .cap{ background:#f5f5f7; color:var(--sub); }
+  .box.raw .cap{ background:var(--coral-tint); color:var(--coral-ink); }
   .box.res .cap{ background:var(--accent-tint); color:var(--accent-deep); }
   .scroll{ overflow-x:auto; }
   table{ border-collapse:collapse; width:100%; font-size:.72rem; font-variant-numeric:tabular-nums; }
   th,td{ padding:5px 8px; border-top:1px solid var(--line); white-space:nowrap; text-align:right; }
   th:first-child, td:first-child{ text-align:left; }
-  thead th{ background:#fbf7fd; color:var(--accent-deep); font-weight:800; border-top:none; }
+  thead th{ background:#fbfdf5; color:var(--accent-deep); font-weight:800; border-top:none; }
   .raw td{ color:#8a8a8e; }
   .mid{ display:flex; flex-direction:column; align-items:center; gap:8px; }
   .btn{ appearance:none; border:none; cursor:pointer; font-family:inherit; font-weight:800;
@@ -53,7 +53,7 @@
   .res .body{ position:relative; }
   .res.empty .body::after{ content:'\2190 \00a0 raw 붙여넣고 [추출하기]를 누르면 집계됩니다';
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:.78rem; color:#b7aebc; background:#fff; text-align:center; padding:20px; }
+    font-size:.78rem; color:#b3b0aa; background:#fff; text-align:center; padding:20px; }
   .res.empty table{ visibility:hidden; }
   .metrics{ display:flex; gap:6px; flex-wrap:wrap; margin-top:14px; }
   .metric{ background:var(--accent-tint); border:1px solid var(--accent-tint2); border-radius:10px;
@@ -77,7 +77,7 @@
 
   <div class="demo">
     <div class="box raw">
-      <div class="cap"><span>📥 IRS로우 (원본 · 예시)</span><span style="color:#b7aebc;">27,000+ 셀</span></div>
+      <div class="cap"><span>📥 IRS로우 (원본 · 예시)</span><span style="color:#b3b0aa;">27,000+ 셀</span></div>
       <div class="scroll"><table>
         <thead><tr><th>상품명</th><th>거래액</th><th>공헌이익</th><th>물류비</th><th>쿠폰할인</th><th>광고비</th></tr></thead>
         <tbody>

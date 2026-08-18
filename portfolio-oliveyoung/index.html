@@ -141,12 +141,14 @@
   /* ── QuoPilot 파이프라인 다이어그램 ─────── */
   .flow { display:grid; grid-template-columns:1fr; gap:12px; margin:24px 0; }
   .flow-row { display:flex; align-items:stretch; gap:10px; flex-wrap:wrap; }
-  .flow-node { flex:1 1 0; min-width:150px; background:#fff; border:1px solid var(--line);
+  .flow-node { flex:1 1 200px; min-width:180px; display:flex; flex-direction:column;
+               background:#fff; border:1px solid var(--line);
                border-radius:14px; padding:16px 18px; box-shadow:var(--card-shadow); }
   .flow-node.io { background:#f5f5f7; box-shadow:none; }
-  .flow-node.stage { border:1.5px solid var(--accent-tint2); position:relative; }
-  .flow-node .step { display:inline-block; font-size:.72rem; font-weight:800; letter-spacing:.08em;
-                     color:#fff; background:var(--accent); padding:3px 9px; border-radius:999px;
+  .flow-node.stage { border:1.5px solid var(--accent-tint2); }
+  .flow-node .step { align-self:flex-start; white-space:nowrap;
+                     font-size:.72rem; font-weight:800; letter-spacing:.05em;
+                     color:#fff; background:var(--accent); padding:3px 10px; border-radius:999px;
                      margin-bottom:8px; }
   .flow-node .nm { font-weight:800; font-size:.98rem; letter-spacing:-.01em; display:block; }
   .flow-node .ds { font-size:.86rem; color:var(--sub); margin-top:4px; }
@@ -250,6 +252,7 @@
     nav .brand { font-size:.9rem; }
     nav .brand em, nav .brand .word { display:none; }
     nav .menu { gap:14px; font-size:.84rem; }
+    .flow-row { flex-direction:column; align-items:stretch; }
     .flow-arrow { transform:rotate(90deg); align-self:center; margin:0 auto; }
   }
 </style>
@@ -510,70 +513,7 @@
       </table>
     </div>
 
-    <h3 class="reveal">01 · 브랜드 사업 전체를 단독 운영·의사결정 (P/L·채널·데이터)</h3>
-    <p class="meta reveal">브랜드 오너 담당 · 애슬레저 브랜드 '워너비즈핏' · 2024.09–2025.12</p>
-    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 자사몰 중심 애슬레저 브랜드의 손익과 채널 확장을 광고비를 늘리지 않고 성장시켜야 했습니다. 상품·채널·마케팅·데이터 의사결정을 <strong>혼자 책임</strong>지는 구조였습니다.</div>
-    <p class="reveal"><strong>핵심 액션 — "팔았다"가 아니라 "사업을 운영했다"</strong></p>
-    <ul class="reveal">
-      <li><strong>P/L 오너십</strong> — 매출·광고비·공헌이익을 직접 관리하며 손익 기준으로 의사결정.</li>
-      <li><strong>채널 전략</strong> — 자사몰 + 무신사·지그재그·ZVZO·29CM 멀티채널 입점·운영을 단독 설계.</li>
-      <li><strong>데이터 운영</strong> — GA4로 유입·행동·구매여정을 분석, META 퍼포먼스를 자연유입·재구매 구조 위에서 효율 집행.</li>
-      <li>상품 기획·포지셔닝·상세페이지·프로모션·SNS 런칭 콘텐츠까지 전 과정 리드.</li>
-    </ul>
-    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월평균 매출 약 <span class="num">1.2억</span>(최고 월 약 <span class="num">1.8억</span>), 최고 <span class="num">YoY 32%▲ · MoM 26%▲</span>. 광고비를 매출 대비 약 <span class="num">2.7%</span>로 억제(월매출/광고비 약 <span class="num">37배</span>)하며 자연유입·재구매 구조 위에서 성장.</div>
-    <p class="quote reveal">한 브랜드의 사업 전체를 혼자 굴려 본 경험 — 손익·채널·데이터를 동시에 책임져 봤기에, "이 기능이 사업에 어떤 임팩트를 주는가"를 오너 관점에서 판단할 수 있습니다.</p>
-    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>신규 기능·시스템을 논의할 때 <strong>"이 기능이 P/L·전환·재구매에 어떤 임팩트를 주는가"</strong>를 사업 오너 관점에서 판단할 수 있습니다. 커머스 신사업 BPO가 <strong>요구사항의 우선순위를 손익 기준으로 결정</strong>하는 일에 직결됩니다.</span></div>
-    <p class="reveal"><strong>📎 증거물 — 브랜드 컨셉·상품 소개 SNS 콘텐츠</strong><br>
-    브랜딩 및 상품 소구포인트 설득을 위해 직접 기획·제작한 SNS 콘텐츠 예시입니다.</p>
-    <div class="embed reveal">
-      <iframe src="../04_fashion_crawling/instagram-feed-v5.html" height="720"
-              loading="lazy" title="브랜드 SNS 콘텐츠"></iframe>
-      <a class="open" href="../04_fashion_crawling/instagram-feed-v5.html"
-         target="_blank" rel="noopener">브랜드 SNS 콘텐츠 보기 ↗</a>
-    </div>
-
-    <h3 class="reveal">02 · 단독(Exclusive) 상품 기획 &amp; 세일즈 리드</h3>
-    <p class="meta reveal">카테고리 MD · 인터파크 · 2022.08</p>
-    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 경쟁 채널과 동일한 상품으로는 가격 경쟁에 매몰되어 수익성 확보가 어려웠습니다. 차별화된 단독 상품이 필요했습니다.</div>
-    <p class="reveal"><strong>핵심 액션</strong></p>
-    <ul class="reveal">
-      <li>삼성도어락 인터파크 단독 상품 'SHP-DP960+' 기획</li>
-      <li>노출구좌·광고 운영으로 유입 확보, 가격비교 1위 지속 관리</li>
-    </ul>
-    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월 매출 <span class="num">5,700만원</span>, 광고비 88만원(효율 운영), 최저가 경쟁 카테고리에서 역마진 없이 공헌이익 방어, <span class="num">YoY 185%▲</span>.</div>
-    <figure class="evidence exclusive reveal">
-      <div class="exclusive-card">
-        <div class="salechart">
-          <p class="title">SHP-DP960+ 월 매출 (8월 기준)</p>
-          <div class="badge">전년 대비<b>185% 상승</b></div>
-          <svg class="arrow" viewBox="0 0 357 230" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M 88 130 C 150 116, 240 78, 305 34"/>
-            <polygon points="322,20 298,26 312,44" />
-          </svg>
-          <div class="bars" role="img" aria-label="2021년 8월 2,000만원에서 2022년 8월 5,700만원으로 YoY 185% 상승">
-            <div class="barcol">
-              <span class="val">2,000만원</span>
-              <div class="bar prev"></div>
-              <span class="yr">2021년 8월</span>
-            </div>
-            <div class="barcol big">
-              <span class="val">5,700만원</span>
-              <div class="bar curr"></div>
-              <span class="yr">2022년 8월</span>
-            </div>
-          </div>
-        </div>
-        <div class="product">
-          <img src="../portfolio/assets/doorlock-shp-dp960.jpg" alt="삼성도어락 인터파크 단독 상품 SHP-DP960+" loading="lazy">
-          <span class="pname">삼성도어락 'SHP-DP960+'</span>
-        </div>
-      </div>
-      <figcaption>📎 단독 기획 상품 세일즈 리드 — 월 매출 <strong>5,700만원 · YoY 185%▲</strong></figcaption>
-    </figure>
-    <p class="quote reveal">단독 상품(Exclusive)·차별화 상품 개발과 적절한 구좌 노출을 통해 성과를 이뤄냈습니다.</p>
-    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>단독 상품을 0에서 <strong>기획→출시→지표 검증</strong>한 사이클은, 신규 커머스 기능을 <strong>스펙으로 정의하고 출시 후 데이터로 검증</strong>하는 프로덕트 오너십과 동일합니다. "무엇을 왜 만들지"를 정의해 본 경험입니다.</span></div>
-
-    <h3 class="reveal">03 · 전사 프로모션 런칭 : 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>
+    <h3 class="reveal">01 · 전사 프로모션 런칭 : 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>
     <p class="meta reveal">프로모션 매니저 · 인터파크커머스 · 2023.08–2024.08</p>
     <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 신규 사업 '아이프라임'을 사내 핵심 기획으로 정착시켜야 했습니다. (담당 월 매출 8억 / PU 5만 건)</div>
     <p class="reveal"><strong>핵심 액션</strong></p>
@@ -597,7 +537,7 @@
     <p class="quote reveal">신규 브랜드 입점 영업 → 온보딩 → 안정적 운영까지 전체 프로세스를 관리하며, 회사 공헌이익을 고려한 월별·분기별 계획을 세워 운영했습니다. 입점 필수 조건인 Q-express 물류 입고를 위해 물류센터·유관부서와 협력한 파트너 협업 경험이 있습니다.</p>
     <div class="bpo reveal"><span class="bk">BPO 적용</span><span>셀러 입점·물류 입고·프로모션을 <strong>하나의 온보딩 프로세스로 설계</strong>하고 물류센터 등 유관부서와 조율한 경험은, <strong>파트너 시스템·정산·프로모션 기능의 요구사항을 정의하고 개발·유관부서를 조율</strong>하는 BPO 업무와 직접 맞닿아 있습니다.</span></div>
 
-    <h3 class="reveal">04 · 카테고리 운영 계획 &amp; 성과(매출·이익) 관리</h3>
+    <h3 class="reveal">02 · 카테고리 운영 계획 &amp; 성과(매출·이익) 관리</h3>
     <p class="meta reveal">카테고리 MD · 인터파크 · 2021.07–2023.07</p>
     <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 생활/주방/펫 카테고리의 매출과 이익을 동시에 관리하며 카탈로그를 다양화해야 했습니다.</div>
     <p class="reveal"><strong>핵심 액션</strong></p>
@@ -615,21 +555,28 @@
     <p class="quote reveal">카테고리 운영 계획 수립 + 주간/월간 매출·이익 관리·분석 경험이 있습니다.</p>
     <div class="bpo reveal"><span class="bk">BPO 적용</span><span>분담쿠폰 협의·노출구좌·일일 집계처럼 <strong>"규칙과 지표로 돌아가는 운영"</strong>을 만든 경험은, 커머스 <strong>백오피스·리포팅 기능의 요구사항을 데이터 흐름(입력→규칙→산출)으로 정의</strong>하는 데 그대로 쓰입니다.</span></div>
 
-    <h3 class="reveal">05 · 브랜드 상품 기획 &amp; 전채널 기획전 운영</h3>
-    <p class="meta reveal">BM · 위메프 · 2020.01–2021.06</p>
-    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 신규 생활/식품 브랜드를 전채널에 런칭하고 초기 매출·수익성을 확보해야 했습니다.</div>
-    <p class="reveal"><strong>핵심 액션</strong></p>
+    <h3 class="reveal">03 · 브랜드 사업 전체를 단독 운영·의사결정 (P/L·채널·데이터)</h3>
+    <p class="meta reveal">브랜드 오너 담당 · 애슬레저 브랜드 '워너비즈핏' · 2024.09–2025.12</p>
+    <div class="callout callout-problem reveal">🎯 <strong>문제</strong> — 자사몰 중심 애슬레저 브랜드의 손익과 채널 확장을 광고비를 늘리지 않고 성장시켜야 했습니다. 상품·채널·마케팅·데이터 의사결정을 <strong>혼자 책임</strong>지는 구조였습니다.</div>
+    <p class="reveal"><strong>핵심 액션 — "팔았다"가 아니라 "사업을 운영했다"</strong></p>
     <ul class="reveal">
-      <li>브랜드 컨셉·상품 기획, 자사몰(cafe24·아임웹·스마트스토어)·재고(사방넷) 운영</li>
-      <li>지마켓·위메프 등 전채널 판매 및 기획전 운영, SNS 광고 콘텐츠 제작</li>
+      <li><strong>P/L 오너십</strong> — 매출·광고비·공헌이익을 직접 관리하며 손익 기준으로 의사결정.</li>
+      <li><strong>채널 전략</strong> — 자사몰 + 무신사·지그재그·ZVZO·29CM 멀티채널 입점·운영을 단독 설계.</li>
+      <li><strong>데이터 운영</strong> — GA4로 유입·행동·구매여정을 분석, META 퍼포먼스를 자연유입·재구매 구조 위에서 효율 집행.</li>
+      <li>상품 기획·포지셔닝·상세페이지·프로모션·SNS 런칭 콘텐츠까지 전 과정 리드.</li>
     </ul>
-    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 발효육포 '아랫목마을' <span class="num">설 기획전 1일 1,500만원</span>, 섬유탈취제 '데오퍼퓸' 와디즈 목표 <span class="num">931% 초과</span>, 비건 퍼퓸 '피토앤서' 인터파크 쎈딜 공헌이익률 <span class="num">36%</span>(목표 20%).</div>
-    <figure class="evidence solo reveal">
-      <img src="../portfolio/assets/araetmok-detail.jpg" alt="아랫목마을 발효육포 상세페이지 — 카테고리 사상 최단 기간 최다 판매, 고객 만족 후기" loading="lazy">
-      <figcaption>📎 직접 기획·제작한 아랫목마을 상세페이지 — 카테고리 최단 기간 최다 판매</figcaption>
-    </figure>
-    <p class="quote reveal">브랜드 컨셉부터 전채널 런칭·기획전 운영까지, 신규 상품을 0에서 세팅해 매출로 만든 경험이 있습니다.</p>
-    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>자사몰·오픈마켓·재고(사방넷)를 넘나들며 <strong>여러 채널 시스템을 실사용</strong>한 경험은, 채널·상품·재고가 얽힌 커머스 신사업의 기능 요구사항을 <strong>현실 제약(운영 툴의 한계)까지 감안해 정의</strong>하도록 돕습니다.</span></div>
+    <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월평균 매출 약 <span class="num">1.2억</span>(최고 월 약 <span class="num">1.8억</span>), 최고 <span class="num">YoY 32%▲ · MoM 26%▲</span>. 광고비를 매출 대비 약 <span class="num">2.7%</span>로 억제(월매출/광고비 약 <span class="num">37배</span>)하며 자연유입·재구매 구조 위에서 성장.</div>
+    <p class="quote reveal">한 브랜드의 사업 전체를 혼자 굴려 본 경험 — 손익·채널·데이터를 동시에 책임져 봤기에, "이 기능이 사업에 어떤 임팩트를 주는가"를 오너 관점에서 판단할 수 있습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>신규 기능·시스템을 논의할 때 <strong>"이 기능이 P/L·전환·재구매에 어떤 임팩트를 주는가"</strong>를 사업 오너 관점에서 판단할 수 있습니다. 커머스 신사업 BPO가 <strong>요구사항의 우선순위를 손익 기준으로 결정</strong>하는 일에 직결됩니다.</span></div>
+    <p class="reveal"><strong>📎 증거물 — 브랜드 컨셉·상품 소개 SNS 콘텐츠</strong><br>
+    브랜딩 및 상품 소구포인트 설득을 위해 직접 기획·제작한 SNS 콘텐츠 예시입니다.</p>
+    <div class="embed reveal">
+      <iframe src="../04_fashion_crawling/instagram-feed-v5.html" height="720"
+              loading="lazy" title="브랜드 SNS 콘텐츠"></iframe>
+      <a class="open" href="../04_fashion_crawling/instagram-feed-v5.html"
+         target="_blank" rel="noopener">브랜드 SNS 콘텐츠 보기 ↗</a>
+    </div>
+
   </section>
 
   <!-- 6) 데이터·툴 역량 -->

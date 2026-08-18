@@ -120,6 +120,14 @@
   .callout-result { background:var(--accent-tint); border-left:3px solid var(--green); }
   .quote { border-left:3px solid var(--coral); padding-left:16px; color:var(--sub);
            margin:20px 0; font-size:.95rem; }
+  .award { display:inline-block; font-size:.72rem; font-weight:800; color:#8a6a00;
+           background:#fff6d6; border:1px solid #efdd9c; padding:2px 9px; border-radius:999px;
+           margin-left:2px; white-space:nowrap; }
+  .bpo { display:flex; gap:10px; align-items:flex-start; margin:14px 0 4px;
+         background:var(--accent-tint); border:1px solid var(--accent-tint2);
+         border-radius:12px; padding:12px 15px; font-size:.92rem; color:#33402a; }
+  .bpo .bk { flex:0 0 auto; font-size:.7rem; font-weight:800; color:#fff; background:var(--accent);
+             border-radius:999px; padding:3px 9px; margin-top:2px; letter-spacing:.03em; white-space:nowrap; }
 
   /* ── 표 ───────────────────────────────── */
   .tablewrap { overflow-x:auto; margin:24px 0; border:1px solid var(--line);
@@ -319,8 +327,12 @@
   <!-- 3) 요구사항 → 기능명세 : AI 프로젝트 (상단 배치) -->
   <section id="spec">
     <span class="sec-eyebrow reveal">Requirements → Spec</span>
-    <h2 class="reveal">요구사항을 기능명세로 — QuoPilot</h2>
-    <p class="reveal lead">현업의 <strong>"제각각인 견적서를 비교하기가 너무 번거롭다"</strong>는 요구사항을, 개발자가 그대로 구현할 수 있는 <strong>3단계 파이프라인</strong>으로 번역했습니다. 저는 이 프로젝트의 <strong>PM/Product Owner</strong>로서 요구사항 정의·기능명세 작성·개발 파트너(HiDeeple) 협업을 맡았습니다.</p>
+    <h2 class="reveal">요구사항을 기능명세로 — MS AI School 9기 프로젝트</h2>
+    <p class="reveal lead">아래 세 프로젝트는 모두 <strong>Microsoft AI School 9기</strong>에서 진행했으며, "비즈니스 요구사항을 개발자가 이해할 <strong>논리적 언어</strong>로 전환"하는 역량을 증명합니다. <strong>QuoPilot</strong>(최종 프로젝트·심사위원 1등상)과 <strong>TerryPiQ</strong>(1등상)는 팀 프로젝트, 러닝화 챗봇은 수업 중 진행한 개인 미니 프로젝트입니다.</p>
+
+    <h3 class="reveal">01 · QuoPilot — 파트너 견적 자동 비교</h3>
+    <p class="meta reveal">최종 프로젝트 · 2026.06 · 팀 PM / Product Owner · <span class="award">🏆 심사위원 1등상 (5팀 중)</span></p>
+    <p class="reveal">현업의 <strong>"제각각인 견적서를 비교하기가 너무 번거롭다"</strong>는 요구사항을, 개발자가 그대로 구현할 수 있는 <strong>3단계 파이프라인</strong>으로 번역했습니다. 요구사항 정의·기능명세 작성·개발 파트너(HiDeeple) 협업을 맡았습니다.</p>
 
     <h4 class="reveal">파이프라인 설계</h4>
     <div class="flow reveal">
@@ -377,7 +389,8 @@
     </div>
     <p class="quote reveal">비즈니스 요구사항을 개발자가 이해할 <strong>논리적 언어(입력→처리 단계→출력·근거)</strong>로 전환하는 것이 BPO의 핵심이라고 생각합니다. QuoPilot은 제가 그 번역을 실제로 해냈다는 증거입니다.</p>
 
-    <h3 class="reveal">TerryPiQ — AI 3D 테이핑 가이드 (Terry)</h3>
+    <h3 class="reveal">02 · TerryPiQ — AI 3D 테이핑 가이드 (Terry)</h3>
+    <p class="meta reveal">팀 프로젝트 · 2026.04 · <span class="award">🏆 1등상 (6팀 중)</span></p>
     <p class="reveal">"사용자가 통증 부위와 사진만 주면, 전문가 수준의 테이핑을 알아서 안내해 준다"는 요구를 <strong>여러 AI 단계를 잇는 파이프라인</strong>으로 구체화한 서비스형 프로토타입입니다. QuoPilot과 동일하게 <strong>요구사항 → 처리 단계 → 출력(3D 가이드)</strong> 흐름으로 설계했습니다.</p>
     <div class="flow reveal">
       <div class="flow-row">
@@ -416,7 +429,8 @@
     </div>
     <p class="meta reveal">※ 실제 동작하는 standalone 프로토타입(이미지·에셋 내장, 약 25MB) — 처음 로딩에 잠시 시간이 걸릴 수 있습니다.</p>
 
-    <h3 class="reveal">러닝화 추천 챗봇 — 대화형 큐레이션</h3>
+    <h3 class="reveal">03 · 러닝화 추천 챗봇 — 대화형 큐레이션</h3>
+    <p class="meta reveal">수업 중 진행한 개인 미니 프로젝트</p>
     <p class="reveal">"고객이 자기 상황을 말하면 알아서 골라주면 좋겠다"는 요구를, <strong>대화로 니즈를 파악해 상품을 추천하는 큐레이션 로직</strong>으로 구체화한 프로토타입입니다. <strong>요구사항 → 대화 흐름·추천 규칙 → 동작하는 화면</strong>까지 직접 설계했습니다.</p>
     <div class="embed reveal">
       <iframe src="../04_fashion_crawling/runningshoes-gpt.html" height="700"
@@ -508,6 +522,7 @@
     </ul>
     <div class="callout callout-result reveal">📈 <strong>성과</strong> — 월평균 매출 약 <span class="num">1.2억</span>(최고 월 약 <span class="num">1.8억</span>), 최고 <span class="num">YoY 32%▲ · MoM 26%▲</span>. 광고비를 매출 대비 약 <span class="num">2.7%</span>로 억제(월매출/광고비 약 <span class="num">37배</span>)하며 자연유입·재구매 구조 위에서 성장.</div>
     <p class="quote reveal">한 브랜드의 사업 전체를 혼자 굴려 본 경험 — 손익·채널·데이터를 동시에 책임져 봤기에, "이 기능이 사업에 어떤 임팩트를 주는가"를 오너 관점에서 판단할 수 있습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>신규 기능·시스템을 논의할 때 <strong>"이 기능이 P/L·전환·재구매에 어떤 임팩트를 주는가"</strong>를 사업 오너 관점에서 판단할 수 있습니다. 커머스 신사업 BPO가 <strong>요구사항의 우선순위를 손익 기준으로 결정</strong>하는 일에 직결됩니다.</span></div>
     <p class="reveal"><strong>📎 증거물 — 브랜드 컨셉·상품 소개 SNS 콘텐츠</strong><br>
     브랜딩 및 상품 소구포인트 설득을 위해 직접 기획·제작한 SNS 콘텐츠 예시입니다.</p>
     <div class="embed reveal">
@@ -556,6 +571,7 @@
       <figcaption>📎 단독 기획 상품 세일즈 리드 — 월 매출 <strong>5,700만원 · YoY 185%▲</strong></figcaption>
     </figure>
     <p class="quote reveal">단독 상품(Exclusive)·차별화 상품 개발과 적절한 구좌 노출을 통해 성과를 이뤄냈습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>단독 상품을 0에서 <strong>기획→출시→지표 검증</strong>한 사이클은, 신규 커머스 기능을 <strong>스펙으로 정의하고 출시 후 데이터로 검증</strong>하는 프로덕트 오너십과 동일합니다. "무엇을 왜 만들지"를 정의해 본 경험입니다.</span></div>
 
     <h3 class="reveal">03 · 전사 프로모션 런칭 : 신규 브랜드 입점 영업 &amp; 온보딩 → 매출 활성화</h3>
     <p class="meta reveal">프로모션 매니저 · 인터파크커머스 · 2023.08–2024.08</p>
@@ -579,6 +595,7 @@
       </figure>
     </div>
     <p class="quote reveal">신규 브랜드 입점 영업 → 온보딩 → 안정적 운영까지 전체 프로세스를 관리하며, 회사 공헌이익을 고려한 월별·분기별 계획을 세워 운영했습니다. 입점 필수 조건인 Q-express 물류 입고를 위해 물류센터·유관부서와 협력한 파트너 협업 경험이 있습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>셀러 입점·물류 입고·프로모션을 <strong>하나의 온보딩 프로세스로 설계</strong>하고 물류센터 등 유관부서와 조율한 경험은, <strong>파트너 시스템·정산·프로모션 기능의 요구사항을 정의하고 개발·유관부서를 조율</strong>하는 BPO 업무와 직접 맞닿아 있습니다.</span></div>
 
     <h3 class="reveal">04 · 카테고리 운영 계획 &amp; 성과(매출·이익) 관리</h3>
     <p class="meta reveal">카테고리 MD · 인터파크 · 2021.07–2023.07</p>
@@ -596,6 +613,7 @@
       <figcaption>📎 직접 기획한 노비타 브랜드딜 — 비데 월 <strong>1억</strong> 채널로 육성</figcaption>
     </figure>
     <p class="quote reveal">카테고리 운영 계획 수립 + 주간/월간 매출·이익 관리·분석 경험이 있습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>분담쿠폰 협의·노출구좌·일일 집계처럼 <strong>"규칙과 지표로 돌아가는 운영"</strong>을 만든 경험은, 커머스 <strong>백오피스·리포팅 기능의 요구사항을 데이터 흐름(입력→규칙→산출)으로 정의</strong>하는 데 그대로 쓰입니다.</span></div>
 
     <h3 class="reveal">05 · 브랜드 상품 기획 &amp; 전채널 기획전 운영</h3>
     <p class="meta reveal">BM · 위메프 · 2020.01–2021.06</p>
@@ -611,6 +629,7 @@
       <figcaption>📎 직접 기획·제작한 아랫목마을 상세페이지 — 카테고리 최단 기간 최다 판매</figcaption>
     </figure>
     <p class="quote reveal">브랜드 컨셉부터 전채널 런칭·기획전 운영까지, 신규 상품을 0에서 세팅해 매출로 만든 경험이 있습니다.</p>
+    <div class="bpo reveal"><span class="bk">BPO 적용</span><span>자사몰·오픈마켓·재고(사방넷)를 넘나들며 <strong>여러 채널 시스템을 실사용</strong>한 경험은, 채널·상품·재고가 얽힌 커머스 신사업의 기능 요구사항을 <strong>현실 제약(운영 툴의 한계)까지 감안해 정의</strong>하도록 돕습니다.</span></div>
   </section>
 
   <!-- 6) 데이터·툴 역량 -->

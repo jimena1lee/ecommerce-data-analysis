@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:#fffdf8; }
+  body { font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
+  .stage { position:relative; width:1200px; height:630px; overflow:hidden; color:#1c1c1e; background:#fffdf8; }
+  .bg {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(1100px 700px at 88% 8%, rgba(138,109,59,.16), transparent 62%),
+      radial-gradient(760px 620px at 2% 100%, rgba(138,109,59,.10), transparent 66%),
+      linear-gradient(160deg, #fffdf8 0%, #faf5e8 60%, #f3ead4 100%);
+  }
+  .ring { position:absolute; border-radius:50%; border:2px solid rgba(90,70,30,.14);
+          width:460px; height:460px; right:-104px; top:-84px; }
+  .ring.i { width:300px; height:300px; right:-16px; top:52px;
+            background:rgba(138,109,59,.06); border-color:rgba(138,109,59,.18); }
+  .bar { position:absolute; left:0; top:0; bottom:0; width:13px;
+         background:linear-gradient(180deg,#8a6d3b 0%,#8a6d3b 100%); }
+  .wrap { position:absolute; inset:0; padding:70px 92px 60px 104px;
+          display:flex; flex-direction:column; }
+  .pill { align-self:flex-start; display:flex; align-items:center; gap:11px;
+          padding:10px 24px; border-radius:999px;
+          background:rgba(138,109,59,.10); border:1.5px solid rgba(138,109,59,.30);
+          font-size:18px; font-weight:700; letter-spacing:.08em; color:#5c4a28; }
+  .pill .dot { width:8px; height:8px; border-radius:50%; background:#8a6d3b; }
+  h1 { margin-top:30px; font-size:66px; font-weight:900; line-height:1.22; letter-spacing:-.035em; color:#1c1c1e; }
+  h1 .accent { color:#8a6d3b; }
+  .sub { margin-top:24px; font-size:24px; font-weight:500; line-height:1.62;
+         color:rgba(28,28,30,.72); letter-spacing:-.02em; }
+  .sub b { font-weight:800; color:#1c1c1e; }
+  .meta { margin-top:auto; display:flex; align-items:center; gap:12px; }
+  .tag { padding:9px 18px; border-radius:10px; font-size:19px; font-weight:700;
+         color:#5c4a28; letter-spacing:-.015em;
+         background:rgba(138,109,59,.09); border:1px solid rgba(138,109,59,.24); }
+  .foot { margin-top:22px; font-size:19px; font-weight:800; color:#8a6d3b; }
+</style></head>
+<body><div class="stage">
+  <div class="bg"></div><div class="ring"></div><div class="ring i"></div><div class="bar"></div>
+  <div class="wrap">
+    <div class="pill"><span class="dot"></span>PORTFOLIO · 이커머스 MD</div>
+    <h1>이지원<br><span class="accent">이커머스 MD 포트폴리오</span></h1>
+    <div class="sub">플랫폼 단독 상품 기획 · <b>데이터 기반 카테고리 운영</b><br>브랜드 전과정 운영 경험 · 리뷰 데이터로 만드는 MD 업무 자동화</div>
+    <div class="meta">
+      <span class="tag">8년 MD 도메인</span>
+      <span class="tag">데이터 기반 의사결정</span>
+      <span class="tag">MD 업무 자동화 툴 제작</span>
+    </div>
+    <div class="foot">jimena1lee.github.io</div>
+  </div>
+</div></body></html>

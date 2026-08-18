@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:#0d2e05; }
+  body { font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
+  .stage { position:relative; width:1200px; height:630px; overflow:hidden; color:#fff; background:#123a06; }
+  .bg {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(1100px 700px at 88% 10%, rgba(130,220,40,.32), transparent 62%),
+      radial-gradient(760px 620px at 4% 98%, rgba(255,120,120,.18), transparent 66%),
+      linear-gradient(118deg, #0d2e05 0%, #1c4a08 46%, #2e670c 100%);
+  }
+  .ring { position:absolute; border-radius:50%; border:2px solid rgba(255,255,255,.12);
+          width:460px; height:460px; right:-104px; top:-84px; }
+  .ring.i { width:300px; height:300px; right:-16px; top:52px;
+            background:rgba(130,220,40,.10); border-color:rgba(130,220,40,.24); }
+  .bar { position:absolute; left:0; top:0; bottom:0; width:13px;
+         background:linear-gradient(180deg,#82DC28 0%,#82DC28 66%,#FF7878 66%,#FF7878 100%); }
+  .wrap { position:absolute; inset:0; padding:70px 92px 60px 104px;
+          display:flex; flex-direction:column; }
+  .pill { align-self:flex-start; display:flex; align-items:center; gap:11px;
+          padding:10px 24px; border-radius:999px;
+          background:rgba(130,220,40,.16); border:1.5px solid rgba(130,220,40,.44);
+          font-size:18px; font-weight:700; letter-spacing:.08em; color:#cbf49f; }
+  .pill .dot { width:8px; height:8px; border-radius:50%; background:#82DC28; }
+  h1 { margin-top:30px; font-size:66px; font-weight:900; line-height:1.22; letter-spacing:-.035em; }
+  h1 .accent { color:#a6ec5f; }
+  .sub { margin-top:24px; font-size:24px; font-weight:500; line-height:1.62;
+         color:rgba(255,255,255,.90); letter-spacing:-.02em; }
+  .sub b { font-weight:800; color:#fff; }
+  .meta { margin-top:auto; display:flex; align-items:center; gap:12px; }
+  .tag { padding:9px 18px; border-radius:10px; font-size:19px; font-weight:700;
+         color:rgba(255,255,255,.88); letter-spacing:-.015em;
+         background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.17); }
+  .foot { margin-top:22px; font-size:19px; font-weight:800; color:rgba(198,240,150,.95); }
+</style></head>
+<body><div class="stage">
+  <div class="bg"></div><div class="ring"></div><div class="ring i"></div><div class="bar"></div>
+  <div class="wrap">
+    <div class="pill"><span class="dot"></span>PORTFOLIO · 올리브영 커머스 신사업 BPO</div>
+    <h1>이지원<br><span class="accent">커머스 신사업 BPO 지원</span></h1>
+    <div class="sub">MD 현업을 아는 <b>Business Product Owner</b><br>현업 문제를 프로세스로 재설계하고, 시스템 기능명세로 구체화합니다.</div>
+    <div class="meta">
+      <span class="tag">8년 MD 도메인</span>
+      <span class="tag">프로세스 설계·표준화</span>
+      <span class="tag">MS AI School 9기 PM·PO</span>
+    </div>
+    <div class="foot">jimena1lee.github.io</div>
+  </div>
+</div></body></html>

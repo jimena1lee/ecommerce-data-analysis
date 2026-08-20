@@ -22,22 +22,62 @@
 <meta name="twitter:description" content="아이프라임 입점 업체 수를 50개에서 120개로 끌어올린 문제 재정의 경험과, 구좌를 배분하는 플랫폼 MD이자 어드민을 쓰는 입점 셀러였던 양쪽 시선의 기록.">
 <meta name="twitter:image" content="https://jimena1lee.github.io/ecommerce-data-analysis/portfolio-oliveyoung/assets/og-image.png">
 <style>
+  /* ══════════════════════════════════════════════════════════════
+     디자인 토큰 — 색 / 타입 / 여백 / 라운드를 여기서만 정의한다.
+     아래 규칙에서는 이 목록 밖의 값을 쓰지 않는다.
+     ══════════════════════════════════════════════════════════════ */
   :root {
-    /* 올리브영 키 컬러 — 그린 #82DC28 / 코랄 #FF7878 를 포인트로만 사용 */
-    --green:#82DC28; --coral:#FF7878; --coral-ink:#e2574f; --coral-tint:#fff1f0;
-    --accent:#4f8a00; --accent-deep:#356200;      /* 가독성을 위한 딥그린 (키 컬러의 어두운 값) */
-    --accent-tint:#f2fbe8; --accent-tint2:#dcefc4;
-    --ink:#1c1c1e; --sub:#6e6e73; --line:#e8e6df; --bg:#fff;
-    --card-shadow:0 10px 36px rgba(90,150,20,.09);
+    /* 색 : 올리브영 키 컬러(그린 #82DC28 / 코랄 #FF7878)는 포인트로만 */
+    --green:#82DC28;
+    --accent:#4f8a00; --accent-deep:#2f5900;
+    --accent-tint:#f4fbea; --accent-line:#d9edbe;
+    --coral:#FF7878; --coral-ink:#d1493f; --coral-tint:#fff4f3;
+    --ink:#1c1c1e; --ink2:#42444b; --sub:#6e6e73;
+    --line:#e8e6df; --bg:#fff; --panel:#faf9f6;
+
+    /* 타입 스케일 : 9단계 고정 */
+    --t-cap:.76rem;      /* 라벨·캡션·메타 */
+    --t-sm:.88rem;       /* 보조 본문 */
+    --t-bd:.98rem;       /* 본문 */
+    --t-lead:1.06rem;    /* 리드 문단 */
+    --t-h3:1.08rem;
+    --t-h2:clamp(1.3rem, 3.4vw, 1.62rem);
+    --t-h1:clamp(1.5rem, 4.6vw, 2.5rem);
+    --t-fig:clamp(2.4rem, 8vw, 3.6rem);      /* 성과 숫자 — 페이지에서 가장 큰 값 */
+    --t-fig-sm:clamp(1.3rem, 4vw, 1.7rem);
+
+    /* 여백 스케일 */
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px;
+    --s5:24px; --s6:32px; --s7:48px; --s8:88px;
+
+    /* 라운드 : 3단계만 */
+    --r-sm:8px; --r-md:14px; --r-pill:999px;
+
+    --shadow:0 1px 2px rgba(30,40,10,.04), 0 10px 32px rgba(90,150,20,.075);
     --ease:cubic-bezier(.28,.11,.32,1);
   }
+
   * { box-sizing:border-box; }
   html { scroll-behavior:smooth; }
   body { margin:0; background:var(--bg); color:var(--ink);
          font-family:'Apple SD Gothic Neo','Pretendard','Noto Sans KR','Malgun Gothic',sans-serif;
-         line-height:1.8; -webkit-font-smoothing:antialiased; word-break:keep-all; }
+         font-size:var(--t-bd); line-height:1.8;
+         -webkit-font-smoothing:antialiased; word-break:keep-all; }
   a { color:inherit; }
-  p { margin:14px 0; }
+  p { margin:var(--s3) 0; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:var(--r-sm); }
+
+  /* ── 강조 위계 : 두 단계뿐 ─────────────────────
+     1순위  .payoff  숫자 성과     — 페이지에서 가장 큰 타입, 먼저 읽힌다
+     2순위  .mark    문장의 핵심구 — 형광 밑줄, 문단당 1개까지
+     본문 <strong>은 쓰지 않는다. 강조가 흔해지면 강조가 아니게 된다.
+     ─────────────────────────────────────────────── */
+  .mark { font-weight:700;
+          background:linear-gradient(transparent 62%, var(--accent-line) 62%); }
+
+  /* 라벨 : 이모지 대신 쓰는 구조 표시자 */
+  .lbl { display:block; font-size:var(--t-cap); font-weight:800;
+         letter-spacing:.14em; color:var(--sub); margin:0 0 var(--s2); }
 
   /* ── 모션 ─────────────────────────────── */
   .reveal { opacity:0; transform:translateY(22px);
@@ -52,129 +92,179 @@
     .reveal, .bw { opacity:1 !important; transform:none !important;
                    filter:none !important; transition:none !important; }
     .scroll-hint { animation:none !important; }
+    .payoff .v, .payoff .arrow { opacity:1 !important; transform:none !important;
+                                 transition:none !important; }
   }
 
-  /* ── 고정 내비 ────────────────────────── */
+  /* ── 고정 내비 + 현재 위치 표시 ────────── */
   nav { position:fixed; top:0; left:0; right:0; z-index:100; height:52px;
-        display:flex; align-items:center; justify-content:space-between; gap:16px;
-        padding:0 20px; background:rgba(255,255,255,.72);
+        display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+        padding:0 var(--s5); background:rgba(255,255,255,.78);
         backdrop-filter:saturate(180%) blur(18px); -webkit-backdrop-filter:saturate(180%) blur(18px);
-        border-bottom:1px solid rgba(90,150,20,.09); }
-  nav .brand { font-weight:800; font-size:.98rem; letter-spacing:-.01em; text-decoration:none;
-               white-space:nowrap; flex-shrink:0; }
+        border-bottom:1px solid var(--line); }
+  nav .brand { font-weight:800; font-size:var(--t-bd); letter-spacing:-.01em;
+               text-decoration:none; white-space:nowrap; flex-shrink:0; }
   nav .brand em { font-style:normal; color:var(--coral); }
-  nav .menu { display:flex; gap:18px; overflow-x:auto; white-space:nowrap;
-              font-size:.86rem; scrollbar-width:none; }
+  nav .menu { display:flex; align-items:center; gap:var(--s5);
+              overflow-x:auto; white-space:nowrap; scrollbar-width:none; }
   nav .menu::-webkit-scrollbar { display:none; }
-  nav .menu a { text-decoration:none; color:var(--sub); transition:color .25s; }
+  nav .menu a { position:relative; text-decoration:none; color:var(--sub);
+                font-size:var(--t-sm); padding:15px 0; transition:color .2s; }
+  /* 볼드로 바뀔 때 글자 폭이 밀리지 않도록 볼드 상태의 폭을 미리 확보해 둔다 */
+  nav .menu a::before { content:attr(data-t); display:block; height:0;
+                        overflow:hidden; font-weight:800; visibility:hidden; }
+  nav .menu a::after { content:''; position:absolute; left:0; right:0; bottom:8px; height:2px;
+                       border-radius:var(--r-pill); background:var(--green);
+                       transform:scaleX(0); transform-origin:left;
+                       transition:transform .28s var(--ease); }
   nav .menu a:hover { color:var(--accent); }
+  nav .menu a.on { color:var(--accent-deep); font-weight:800; }
+  nav .menu a.on::after { transform:scaleX(1); }
 
   /* ── 히어로 ───────────────────────────── */
   #hero { min-height:100svh; display:flex; flex-direction:column; align-items:center;
-          justify-content:center; text-align:center; padding:92px 24px 64px;
-          position:relative;
+          justify-content:center; text-align:center;
+          padding:92px var(--s5) var(--s7); position:relative;
           background:
             radial-gradient(60% 50% at 72% 18%, rgba(130,220,40,.13) 0%, transparent 70%),
             radial-gradient(50% 42% at 18% 82%, rgba(255,120,120,.08) 0%, transparent 70%),
             linear-gradient(180deg,#f7fbef 0%,#fff 100%); }
-  #hero .eyebrow { display:inline-block; font-size:.85rem; font-weight:700; color:var(--accent);
-                   background:var(--accent-tint); border:1px solid var(--accent-tint2);
-                   padding:6px 14px; border-radius:999px; letter-spacing:.02em; }
-  #hero h1 { max-width:720px; font-size:clamp(1.5rem, 4.6vw, 2.5rem); line-height:1.4; letter-spacing:-.03em;
-             margin:24px 0 20px; font-weight:800; }
-  #hero .tagline { max-width:600px; color:var(--sub); font-size:clamp(.95rem, 2.6vw, 1.04rem); text-align:left; }
-  #hero .hero-quote { max-width:600px; text-align:left; margin-top:20px; }
-  .scroll-hint { position:absolute; bottom:26px; left:50%; margin-left:-11px;
+  #hero .eyebrow { display:inline-block; font-size:var(--t-cap); font-weight:800;
+                   color:var(--accent); background:var(--accent-tint);
+                   border:1px solid var(--accent-line);
+                   padding:var(--s1) var(--s3); border-radius:var(--r-pill);
+                   letter-spacing:.04em; }
+  #hero h1 { max-width:720px; font-size:var(--t-h1); line-height:1.4; letter-spacing:-.03em;
+             margin:var(--s5) 0; font-weight:800; }
+  #hero .tagline { max-width:600px; color:var(--sub); font-size:var(--t-lead); text-align:left; }
+  #hero .hero-quote { max-width:600px; text-align:left; margin-top:var(--s5); }
+  #hero .contact { margin-top:var(--s6); font-size:var(--t-sm); }
+  #hero .contact a { color:var(--accent-deep); text-underline-offset:3px; }
+  .scroll-hint { position:absolute; bottom:var(--s5); left:50%; margin-left:-11px;
                  color:var(--green); opacity:.85; animation:bounce 1.8s infinite; }
   @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
 
   /* ── 섹션 공통 ────────────────────────── */
-  main { max-width:720px; margin:0 auto; padding:0 20px 96px; }
-  section { padding-top:88px; scroll-margin-top:64px; }
-  .sec-eyebrow { font-size:.8rem; font-weight:800; color:var(--accent);
-                 letter-spacing:.14em; text-transform:uppercase; }
-  h2 { font-size:clamp(1.3rem, 3.4vw, 1.55rem); margin:6px 0 22px; letter-spacing:-.02em;
+  main { max-width:720px; margin:0 auto; padding:0 var(--s5) var(--s8); }
+  section { padding-top:var(--s8); scroll-margin-top:64px; }
+  .sec-eyebrow { display:block; font-size:var(--t-cap); font-weight:800; color:var(--accent);
+                 letter-spacing:.14em; }
+  h2 { font-size:var(--t-h2); margin:var(--s2) 0 var(--s5); letter-spacing:-.02em;
        line-height:1.4; font-weight:800; }
-  h3 { font-size:1.02rem; margin:28px 0 8px; letter-spacing:-.01em; }
-  .num { color:var(--accent); font-weight:800; }
-  .lead { font-size:1.02rem; }
+  h3 { font-size:var(--t-h3); margin:var(--s7) 0 var(--s2); letter-spacing:-.01em; font-weight:800; }
+  .meta { color:var(--sub); font-size:var(--t-cap); margin:var(--s2) 0 0; }
 
-  /* ── 인용·콜아웃 ──────────────────────── */
-  .quote { border-left:3px solid var(--coral); padding:16px 20px; color:var(--ink);
-           margin:20px 0; font-size:1rem; background:var(--coral-tint);
-           border-radius:0 14px 14px 0; }
-  .quote p { margin:6px 0; }
-  .context { border-left:3px solid var(--line); padding:14px 20px; color:var(--sub);
-             margin:20px 0; font-size:.94rem; background:#fafaf8; border-radius:0 14px 14px 0; }
-  .insight { border-left:3px solid var(--green); padding:16px 20px; margin:18px 0;
-             background:var(--accent-tint); border-radius:0 14px 14px 0; font-size:.96rem; }
-  .insight b.lbl { display:block; font-size:.78rem; font-weight:800; color:var(--accent-deep);
-                   letter-spacing:.04em; margin-bottom:6px; }
-  .callout-result { background:var(--accent-tint); border-left:3px solid var(--green);
-                     border-radius:0 14px 14px 0; padding:16px 20px; margin:16px 0; font-size:.96rem; }
+  /* ── 배경 설명 ────────────────────────── */
+  .context { border-left:3px solid var(--line); padding:var(--s3) var(--s5); color:var(--sub);
+             margin:var(--s5) 0; font-size:var(--t-sm); background:var(--panel);
+             border-radius:0 var(--r-md) var(--r-md) 0; }
 
-  /* ── 타임라인(9월·10월·11월) ─────────── */
-  .track { display:flex; flex-direction:column; gap:2px; margin:22px 0; }
-  .track .step { display:flex; gap:14px; align-items:flex-start;
-                 border-left:2px solid var(--accent-tint2); padding:0 0 22px 20px; position:relative; }
-  .track .step:last-child { border-left:2px solid transparent; padding-bottom:0; }
-  .track .step::before { content:''; position:absolute; left:-6px; top:4px; width:10px; height:10px;
-                          border-radius:50%; background:var(--accent); }
+  /* ── 인용 ─────────────────────────────── */
+  .quote { border-left:3px solid var(--coral); padding:var(--s4) var(--s5); color:var(--ink);
+           margin:var(--s5) 0; background:var(--coral-tint);
+           border-radius:0 var(--r-md) var(--r-md) 0; }
+  .quote p { margin:var(--s2) 0; }
+  .quote p:first-child { margin-top:0; }
+  .quote p:last-child { margin-bottom:0; }
+
+  /* ── 타임라인 : 9월·10월·11월 ─────────── */
+  .track { display:flex; flex-direction:column; margin:var(--s5) 0; }
+  .track .step { display:flex; gap:var(--s4); align-items:flex-start;
+                 border-left:2px solid var(--accent-line);
+                 padding:0 0 var(--s5) var(--s5); position:relative; }
+  .track .step:last-child { border-left-color:transparent; padding-bottom:0; }
+  .track .step::before { content:''; position:absolute; left:-6px; top:var(--s1);
+                         width:10px; height:10px; border-radius:var(--r-pill);
+                         background:var(--accent); }
   .track .step.fail::before { background:var(--coral); }
-  .track .mo { flex:0 0 auto; font-size:.78rem; font-weight:800; color:var(--accent-deep);
-               background:var(--accent-tint); border-radius:999px; padding:3px 11px; margin-top:1px; white-space:nowrap; }
+  .track .mo { flex:0 0 auto; font-size:var(--t-cap); font-weight:800; color:var(--accent-deep);
+               background:var(--accent-tint); border-radius:var(--r-pill);
+               padding:2px var(--s3); margin-top:2px; white-space:nowrap; }
   .track .step.fail .mo { color:var(--coral-ink); background:var(--coral-tint); }
-  .track .tx { font-size:.95rem; }
+  .track .tx { font-size:var(--t-sm); }
+  .track .tx b { display:block; font-weight:800; color:var(--ink); }
 
-  /* ── 카드 ─────────────────────────────── */
-  .card { background:#fff; border:1px solid var(--line); border-radius:16px;
-          padding:22px 24px; box-shadow:var(--card-shadow); margin:20px 0; }
+  /* ── 성과 : 이 페이지에서 가장 큰 요소 ── */
+  .payoff { margin:var(--s5) 0; padding:var(--s6) var(--s5); text-align:center;
+            background:var(--accent-tint); border:1px solid var(--accent-line);
+            border-radius:var(--r-md); }
+  .payoff .row { display:flex; align-items:center; justify-content:center;
+                 gap:var(--s5); flex-wrap:wrap; }
+  .payoff .v { display:block; font-size:var(--t-fig); font-weight:800; line-height:1;
+               letter-spacing:-.05em; font-variant-numeric:tabular-nums;
+               color:var(--sub); opacity:0; transform:translateY(10px);
+               transition:opacity .6s var(--ease), transform .6s var(--ease); }
+  .payoff .to .v { color:var(--accent-deep); transition-delay:.35s; }
+  .payoff .k { display:block; font-size:var(--t-cap); color:var(--sub); margin-top:var(--s2); }
+  .payoff .arrow { font-size:var(--t-fig-sm); color:var(--accent); font-weight:800;
+                   opacity:0; transition:opacity .5s ease .25s; }
+  .payoff.in .v, .payoff.in .arrow { opacity:1; transform:none; }
+  .payoff .cap { margin:var(--s5) 0 0; font-size:var(--t-sm); color:var(--ink2); }
 
-  .text-link { color:var(--accent-deep); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+  /* ── 규모 지표 ────────────────────────── */
+  .scale { display:flex; flex-wrap:wrap; gap:var(--s4) var(--s6); margin:var(--s5) 0; }
+  .scale .s-v { display:block; font-size:var(--t-fig-sm); font-weight:800;
+                color:var(--accent-deep); line-height:1.2; letter-spacing:-.03em;
+                font-variant-numeric:tabular-nums; }
+  .scale .s-k { display:block; font-size:var(--t-cap); color:var(--sub); margin-top:2px; }
 
-  /* ── 임베드·증거물 ────────────────────── */
-  .embed { margin:20px 0; }
-  .embed iframe { width:100%; border:1px solid var(--line); border-radius:16px;
-                  display:block; box-shadow:var(--card-shadow); background:#fff; }
-  .embed .open { display:block; text-align:right; font-size:.85rem;
-                 color:var(--sub); margin-top:8px; }
+  /* ── 배운 것 : 본문과 결이 다른 여백 노트 ── */
+  .learned { margin:var(--s6) 0; padding-top:var(--s4);
+             border-top:2px solid var(--accent); font-size:var(--t-sm); color:var(--ink2); }
+  .learned .lbl { color:var(--accent-deep); }
+  .learned p { margin:0; }
 
   /* ── 토글형 데모 ──────────────────────── */
-  .demo-toggle { margin:20px 0; }
+  .demo-toggle { margin:var(--s5) 0; }
   .demo-toggle summary { cursor:pointer; list-style:none; display:flex; align-items:center;
-                          justify-content:space-between; gap:10px; background:#fff;
-                          border:1px solid var(--line); border-radius:14px; padding:15px 20px;
-                          font-weight:700; font-size:.95rem; box-shadow:var(--card-shadow); }
+                         justify-content:space-between; gap:var(--s3); background:#fff;
+                         border:1px solid var(--line); border-radius:var(--r-md);
+                         padding:var(--s4) var(--s5); font-weight:700; font-size:var(--t-sm);
+                         box-shadow:var(--shadow); }
   .demo-toggle summary::-webkit-details-marker { display:none; }
   .demo-toggle summary::marker { content:''; }
-  .demo-toggle summary .chev { color:var(--accent); font-size:.8rem;
-                                transition:transform .25s var(--ease); flex:0 0 auto; }
+  .demo-toggle summary .chev { color:var(--accent); font-size:var(--t-cap);
+                               transition:transform .25s var(--ease); flex:0 0 auto; }
   .demo-toggle[open] summary .chev { transform:rotate(180deg); }
-  .demo-toggle[open] summary { border-radius:14px 14px 0 0; box-shadow:none; border-bottom:none; }
+  .demo-toggle[open] summary { border-radius:var(--r-md) var(--r-md) 0 0;
+                               box-shadow:none; border-bottom:none; }
   .demo-toggle .toggle-body { border:1px solid var(--line); border-top:none;
-                               border-radius:0 0 14px 14px; padding:18px 20px 20px; }
+                              border-radius:0 0 var(--r-md) var(--r-md);
+                              padding:var(--s4) var(--s5) var(--s5); }
   .demo-toggle .toggle-body .embed { margin:0; }
 
-  /* ── CTA 섹션 ─────────────────────────── */
-  #cta { text-align:center; }
-  #cta .cta-box { background:#fff; border:1px solid var(--line); border-radius:20px;
-                  box-shadow:var(--card-shadow); padding:40px 32px; margin-top:20px; }
-  #cta .big-link { display:inline-block; margin-top:18px; font-size:1.02rem; font-weight:800;
-                   color:#fff; background:var(--accent); border-radius:999px;
-                   padding:14px 30px; text-decoration:none; letter-spacing:-.01em; }
-  #cta .big-link:hover { background:var(--accent-deep); }
+  /* ── 임베드 ───────────────────────────── */
+  .embed { margin:var(--s5) 0; }
+  .embed iframe { width:100%; border:1px solid var(--line); border-radius:var(--r-md);
+                  display:block; box-shadow:var(--shadow); background:#fff; }
+  .embed .open { display:block; text-align:right; font-size:var(--t-cap);
+                 color:var(--sub); margin-top:var(--s2); }
 
-  footer { margin-top:96px; padding:32px 20px; text-align:center; font-size:.85rem;
-           color:var(--sub); background:var(--accent-tint); }
-  footer a { color:var(--accent); }
+  /* ── 맺음 ─────────────────────────────── */
+  .closing { text-align:center; margin-top:var(--s8); background:#fff;
+             border:1px solid var(--line); border-radius:var(--r-md);
+             box-shadow:var(--shadow); padding:var(--s7) var(--s5); scroll-margin-top:64px; }
+  .closing p { margin:0; color:var(--sub); font-size:var(--t-sm); }
+  .closing .big-link { display:inline-block; margin-top:var(--s4); font-size:var(--t-bd);
+                       font-weight:800; color:#fff; background:var(--accent);
+                       border-radius:var(--r-pill); padding:var(--s3) var(--s6);
+                       text-decoration:none; letter-spacing:-.01em; transition:background .2s; }
+  .closing .big-link:hover { background:var(--accent-deep); }
+
+  footer { margin-top:var(--s8); padding:var(--s6) var(--s5); text-align:center;
+           font-size:var(--t-sm); color:var(--sub); background:var(--accent-tint);
+           border-top:1px solid var(--accent-line); }
+  footer a { color:var(--accent-deep); }
 
   @media (max-width:640px) {
-    section { padding-top:64px; }
-    nav { padding:0 14px; }
-    nav .brand { font-size:.9rem; }
+    section { padding-top:var(--s7); }
+    nav { padding:0 var(--s3); }
     nav .brand em, nav .brand .word { display:none; }
-    nav .menu { gap:12px; font-size:.82rem; }
-    #cta .cta-box { padding:28px 20px; }
+    nav .menu { gap:var(--s4); }
+    .payoff { padding:var(--s5) var(--s4); }
+    .payoff .row { gap:var(--s4); }
+    .scale { gap:var(--s4) var(--s5); }
+    .closing { padding:var(--s6) var(--s4); }
   }
 </style>
 </head>
@@ -183,25 +273,28 @@
 <nav>
   <a class="brand" href="#hero">이지원 <em>·</em> <span class="word">BPO Portfolio</span></a>
   <div class="menu">
-    <a href="#reframe">문제 재정의</a>
-    <a href="#both-sides">8년의 방향</a>
-    <a href="#audit">규칙으로 고정</a>
-    <a href="#depth">깊이·실행</a>
-    <a href="#collab">협업</a>
-    <a href="#cta">경력 상세</a>
+    <a href="#reframe"    data-t="문제 재정의">문제 재정의</a>
+    <a href="#both-sides" data-t="8년의 방향">8년의 방향</a>
+    <a href="#audit"      data-t="규칙으로 고정">규칙으로 고정</a>
+    <a href="#depth"      data-t="깊이·실행">깊이·실행</a>
+    <a href="#collab"     data-t="협업">협업</a>
+    <a href="#cta"        data-t="경력 상세">경력 상세</a>
   </div>
 </nav>
 
-<!-- 1) 히어로 : 제목 + 인트로 + 정의 인용 -->
+<!-- 히어로 : 제목 + 인트로 + 정의 인용 -->
 <header id="hero">
   <span class="eyebrow reveal">지원 포지션 · 커머스 신사업 BPO · 올리브영</span>
   <h1 class="reveal">8년간 요구하던 사람이,<br><span class="bw">이제 그 요구를 시스템으로 옮깁니다</span></h1>
-  <p class="tagline reveal d1">생활·수납·주방·반려동물·패션 카테고리에서 8년간 MD로 일했습니다. 상품 기획부터 노출구좌·쿠폰·정산까지 직접 돌리면서, 현업이 무엇에서 막히는지 사용자로서 겪었습니다. 그리고 Microsoft AI School에서 PM/PO로, 그 요구를 개발자가 읽을 수 있는 기능 명세로 옮기는 일을 했습니다.</p>
+  <p class="tagline reveal d1">생활·수납·주방·반려동물·패션 카테고리에서 8년간 MD로 일했습니다.
+    상품 기획부터 노출구좌·쿠폰·정산까지 직접 돌리면서, 현업이 무엇에서 막히는지 사용자로서 겪었습니다.
+    그리고 Microsoft AI School에서 PM/PO로, 그 요구를 개발자가 읽을 수 있는 기능 명세로 옮기는 일을 했습니다.</p>
   <div class="quote hero-quote reveal d2">
     <p>BPO는 MD의 현업 언어를 시스템의 논리 언어로 번역하는 자리입니다.</p>
-    <p>저는 <strong>양쪽 언어를 모두 써 본 사람</strong>입니다. — 구좌를 배분하는 플랫폼 MD로, 그리고 어드민을 쓰는 입점 셀러로.</p>
+    <p>저는 <span class="mark">양쪽 언어를 모두 써 본 사람</span>입니다.
+      구좌를 배분하는 플랫폼 MD로, 그리고 어드민을 쓰는 입점 셀러로.</p>
   </div>
-  <p class="reveal d3" style="margin-top:28px; font-size:.92rem;">
+  <p class="contact reveal d3">
     <a href="mailto:daemie@naver.com">daemie@naver.com</a> ·
     <a href="https://www.linkedin.com/in/jiwon-lee-5760673ba/" target="_blank" rel="noopener">LinkedIn</a> ·
     <a href="https://github.com/jimena1lee" target="_blank" rel="noopener">GitHub</a>
@@ -211,33 +304,66 @@
 
 <main>
 
-  <!-- ① 문제 재정의 -->
+  <!-- 01 문제 재정의 -->
   <section id="reframe">
-    <span class="sec-eyebrow reveal">01</span>
-    <h2 class="reveal">문제 재정의 — 현업이 말하는 문제와, 진짜 문제는 다릅니다</h2>
-    <div class="context reveal">2023년 하반기, 인터파크커머스 '아이프라임'. 그룹사 풀필먼트(Qxpress)에 기존 셀러를 입점시키는 것이 MD 조직 전체의 공동 목표였습니다. 몇 달째 입점 업체 수가 늘지 않았습니다.</div>
+    <span class="sec-eyebrow reveal">01 · 문제 재정의</span>
+    <h2 class="reveal">현업이 말하는 문제와, 진짜 문제는 다릅니다</h2>
+    <div class="context reveal">2023년 하반기, 인터파크커머스 '아이프라임'.
+      그룹사 풀필먼트(Qxpress)에 기존 셀러를 입점시키는 것이 MD 조직 전체의 공동 목표였습니다.
+      몇 달째 입점 업체 수가 늘지 않았습니다.</div>
 
     <div class="track reveal">
       <div class="step fail">
         <span class="mo">9월</span>
-        <span class="tx"><strong>자료를 그대로 배포했습니다.</strong> 물류센터가 만든 안내자료를 전달했습니다. 오히려 영업이 위축됐습니다.</span>
+        <span class="tx"><b>자료를 그대로 배포했습니다.</b>
+          물류센터가 만든 안내자료를 전달했습니다. 오히려 영업이 위축됐습니다.</span>
       </div>
       <div class="step fail">
         <span class="mo">10월</span>
-        <span class="tx"><strong>자료를 MD 관점으로 다시 썼습니다.</strong> 개선은 미미했습니다. 대신 MD들에게서 같은 말이 반복해서 나왔습니다. "배송비를 어떻게 산출하는지 모르겠다." 이 한 문장이 진단을 바꿨습니다. 문제는 <strong>이해 부족이 아니라 계산 도구의 부재</strong>였습니다.</span>
+        <span class="tx"><b>자료를 MD 관점으로 다시 썼습니다.</b>
+          개선은 미미했습니다. 대신 MD들에게서 같은 말이 반복해서 나왔습니다.
+          "배송비를 어떻게 산출하는지 모르겠다."
+          이 한 문장이 진단을 바꿨습니다. 문제는
+          <span class="mark">이해 부족이 아니라 계산 도구의 부재</span>였습니다.</span>
       </div>
       <div class="step">
         <span class="mo">11월</span>
-        <span class="tx"><strong>비용을 자동 산출하는 계산기를 만들어 배포했습니다.</strong> 이후 영업에 소극적이던 팀(패션레저·디지털)을 직접 찾아가 설명회를 열었습니다. 실적은 반등했고, <strong>담당 기간 입점 업체 수는 50개에서 120개가 되었습니다.</strong></span>
+        <span class="tx"><b>비용을 자동 산출하는 계산기를 만들어 배포했습니다.</b>
+          이후 영업에 소극적이던 팀(패션레저·디지털)을 직접 찾아가 설명회를 열었습니다.
+          실적은 반등했습니다.</span>
       </div>
     </div>
 
-    <div class="insight reveal"><b class="lbl">🔍 여기서 배운 것</b>자료를 두 번 고치고 나서야, 문제가 자료에 있지 않다는 걸 알았습니다. 답은 제가 물어본 질문의 답변이 아니라, MD들이 지나가듯 반복하던 한 문장에 있었습니다. 그 뒤로 요구사항을 들을 때 <em>"무엇이 필요한가"</em>보다 <em>"무엇을 못 하고 있는가"</em>를 먼저 듣습니다. 전자는 이미 해석된 답이고, 후자가 원인에 가깝기 때문입니다.</div>
+    <div class="payoff reveal">
+      <div class="row">
+        <div class="from">
+          <span class="v">50</span>
+          <span class="k">담당 시작</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="to">
+          <span class="v">120</span>
+          <span class="k">담당 기간 종료</span>
+        </div>
+      </div>
+      <p class="cap">아이프라임 입점 업체 수 (개사)</p>
+    </div>
 
-    <h3 class="reveal">실제로 만든 도구 — Qxpress 파트너 물류비 계산기</h3>
-    <p class="reveal">파트너가 상품 정보만 넣으면 자재비·입고비·배송비가 자동 산출되도록, 실제 단가표를 그대로 반영해 만든 온보딩 도구입니다. 아래에서 값을 바꿔가며 직접 계산해 볼 수 있습니다.</p>
+    <div class="learned reveal">
+      <span class="lbl">배운 것</span>
+      <p>자료를 두 번 고치고 나서야, 문제가 자료에 있지 않다는 걸 알았습니다.
+        답은 제가 물어본 질문의 답변이 아니라, MD들이 지나가듯 반복하던 한 문장에 있었습니다.
+        그 뒤로 요구사항을 들을 때 <em>"무엇이 필요한가"</em>보다
+        <em>"무엇을 못 하고 있는가"</em>를 먼저 듣습니다.
+        전자는 이미 해석된 답이고, 후자가 원인에 가깝기 때문입니다.</p>
+    </div>
+
+    <h3 class="reveal">Qxpress 파트너 물류비 계산기</h3>
+    <p class="reveal">파트너가 상품 정보만 넣으면 자재비·입고비·배송비가 자동 산출되도록,
+      실제 단가표를 그대로 반영해 만든 온보딩 도구입니다.
+      아래에서 값을 바꿔가며 직접 계산해 볼 수 있습니다.</p>
     <details class="demo-toggle reveal">
-      <summary>🧮 계산기 열어보기 <span class="chev">▾</span></summary>
+      <summary>계산기 열어보기 <span class="chev" aria-hidden="true">▾</span></summary>
       <div class="toggle-body">
         <div class="embed">
           <iframe src="logistics-calculator.html" height="560"
@@ -249,23 +375,62 @@
     </details>
   </section>
 
-  <!-- ② 사용자였던 기획자 -->
+  <!-- 02 사용자였던 기획자 -->
   <section id="both-sides">
-    <span class="sec-eyebrow reveal">02</span>
-    <h2 class="reveal">사용자였던 기획자 — 8년이라는 숫자보다, 그 8년의 방향</h2>
-    <p class="reveal lead">생활·수납·청소·욕실(월 <span class="num">12억</span>) → 주방·수입주방(월 <span class="num">16억</span>) → 반려동물(월 <span class="num">6.5억</span>) → 애슬레저 패션(월 <span class="num">1.2억</span>). 카테고리마다 상품 속성도, 프로모션 방식도, 파트너 협업 요건도 달랐습니다.</p>
-    <p class="reveal">더 중요한 것은 <strong>양쪽을 다 해봤다는 점</strong>입니다. 인터파크에서는 구좌를 배분하는 플랫폼 MD였고, 워너비즈핏에서는 4개 플랫폼(무신사·지그재그·ZVZO·29CM) 어드민에 직접 상품을 올리고 구좌를 신청하고 정산을 확인하는 입점 셀러였습니다.</p>
-    <p class="reveal">배분하는 쪽에서 당연한 항목이, 쓰는 쪽에서는 <em>"여기에 뭘 넣으라는 거지"</em> 하고 멈추는 칸이 됩니다. 파트너오피스 요구사항의 절반은 화면 문제가 아니라 <strong>안내 문구와 기본값의 문제</strong>라는 걸 사용자로서 알게 됐습니다.</p>
+    <span class="sec-eyebrow reveal">02 · 사용자였던 기획자</span>
+    <h2 class="reveal">8년이라는 숫자보다, 그 8년의 방향</h2>
+
+    <div class="scale reveal">
+      <div>
+        <span class="s-v">월 12억</span>
+        <span class="s-k">생활·수납·청소·욕실</span>
+      </div>
+      <div>
+        <span class="s-v">월 16억</span>
+        <span class="s-k">주방·수입주방</span>
+      </div>
+      <div>
+        <span class="s-v">월 6.5억</span>
+        <span class="s-k">반려동물</span>
+      </div>
+      <div>
+        <span class="s-v">월 1.2억</span>
+        <span class="s-k">애슬레저 패션</span>
+      </div>
+    </div>
+    <p class="reveal">카테고리마다 상품 속성도, 프로모션 방식도, 파트너 협업 요건도 달랐습니다.</p>
+
+    <p class="reveal">더 중요한 것은 <span class="mark">양쪽을 다 해봤다는 점</span>입니다.
+      인터파크에서는 구좌를 배분하는 플랫폼 MD였고,
+      워너비즈핏에서는 4개 플랫폼(무신사·지그재그·ZVZO·29CM) 어드민에 직접 상품을 올리고
+      구좌를 신청하고 정산을 확인하는 입점 셀러였습니다.</p>
+    <p class="reveal">배분하는 쪽에서 당연한 항목이, 쓰는 쪽에서는
+      <em>"여기에 뭘 넣으라는 거지"</em> 하고 멈추는 칸이 됩니다.
+      파트너오피스 요구사항의 절반은 화면 문제가 아니라 안내 문구와 기본값의 문제라는 걸
+      사용자로서 알게 됐습니다.</p>
   </section>
 
-  <!-- ③ 규칙으로 고정 -->
+  <!-- 03 규칙으로 고정 -->
   <section id="audit">
-    <span class="sec-eyebrow reveal">03</span>
-    <h2 class="reveal">규칙으로 고정 — 이력이 남지 않는 프로세스는 개선할 수 없습니다</h2>
-    <p class="reveal">아이프라임 실적 집계는 담당자별 수작업이었습니다. 집계 규칙을 명문화하고 Excel 매크로로 도구화해 일·주·월·분기 리포트를 표준 산출물로 고정했습니다. 셀러 온보딩도 MD 구두 안내에 의존하던 것을 셀러向/MD向 안내자료와 계산기로 바꿔, 셀러가 스스로 진행할 수 있게 했습니다.</p>
-    <div class="insight reveal"><b class="lbl">🔍 여기서 배운 것</b>개선 후는 자랑할 수 있었지만, <strong>개선 전 상태를 숫자로 말할 수 없었습니다.</strong> 이력이 남지 않는 구조였기 때문입니다. 그때부터 도구를 만들 때 결과값만이 아니라 <em>언제·누가·어떤 기준으로</em>를 함께 남기도록 설계합니다. 감사 추적은 부가 기능이 아니라 개선의 전제 조건이었습니다.</div>
+    <span class="sec-eyebrow reveal">03 · 규칙으로 고정</span>
+    <h2 class="reveal">이력이 남지 않는 프로세스는 개선할 수 없습니다</h2>
+    <p class="reveal">아이프라임 실적 집계는 담당자별 수작업이었습니다.
+      집계 규칙을 명문화하고 Excel 매크로로 도구화해
+      일·주·월·분기 리포트를 <span class="mark">표준 산출물로 고정</span>했습니다.
+      셀러 온보딩도 MD 구두 안내에 의존하던 것을 셀러용·MD용 안내자료와 계산기로 바꿔,
+      셀러가 스스로 진행할 수 있게 했습니다.</p>
+
+    <div class="learned reveal">
+      <span class="lbl">배운 것</span>
+      <p>개선 후는 자랑할 수 있었지만, 개선 전 상태를 숫자로 말할 수 없었습니다.
+        이력이 남지 않는 구조였기 때문입니다.
+        그때부터 도구를 만들 때 결과값만이 아니라 <em>언제·누가·어떤 기준으로</em>를
+        함께 남기도록 설계합니다.
+        감사 추적은 부가 기능이 아니라 개선의 전제 조건이었습니다.</p>
+    </div>
+
     <details class="demo-toggle reveal">
-      <summary>🧾 일일 실적 집계 자동화 매크로, 동작 흐름 열어보기 <span class="chev">▾</span></summary>
+      <summary>일일 실적 집계 자동화 매크로, 동작 흐름 열어보기 <span class="chev" aria-hidden="true">▾</span></summary>
       <div class="toggle-body">
         <div class="embed">
           <iframe src="report-macro-flow.html" height="640"
@@ -277,37 +442,41 @@
     </details>
   </section>
 
-  <!-- 깊이 파고, 실제로 만듭니다 -->
+  <!-- 04 깊이·실행 -->
   <section id="depth">
-    <span class="sec-eyebrow reveal">Depth</span>
+    <span class="sec-eyebrow reveal">04 · 깊이·실행</span>
     <h2 class="reveal">깊이 파고, 실제로 만듭니다</h2>
-    <p class="reveal">취미로 하던 운동이 생활체육지도사 자격 취득으로, 다시 통증 부위와 사진 기반으로 3D 테이핑 가이드를 주는 <strong>TerryPiQ</strong> 기획으로 이어졌습니다. 올리브베러가 말하는 '잘 케어하기'와 닿아 있다고 생각합니다.</p>
+    <p class="reveal">취미로 하던 운동이 생활체육지도사 자격 취득으로,
+      다시 통증 부위와 사진 기반으로 3D 테이핑 가이드를 주는 TerryPiQ 기획으로 이어졌습니다.
+      올리브베러가 말하는 '잘 케어하기'와 닿아 있다고 생각합니다.</p>
     <div class="embed reveal">
       <iframe src="terrypiq-demo.html" height="640"
               loading="lazy" title="TerryPiQ — AI 3D 테이핑 가이드 프로토타입"></iframe>
       <a class="open" href="terrypiq-demo.html"
          target="_blank" rel="noopener">TerryPiQ 프로토타입 새 창에서 열기 ↗</a>
     </div>
-    <p class="reveal" style="font-size:.85rem;color:var(--sub);margin-top:8px;">※ 실제 동작하는 standalone 프로토타입(이미지·에셋 내장, 약 25MB) — 처음 로딩에 잠시 시간이 걸릴 수 있습니다.</p>
-    <p class="reveal">SQL(SQLD)·Python·GA4·Excel 매크로, 그리고 Microsoft AI School(AI-900). 아이디어를 실행으로 옮길 도구를 꾸준히 벼려왔습니다.</p>
+    <p class="meta reveal">실제 동작하는 standalone 프로토타입(이미지·에셋 내장, 약 25MB)이라
+      처음 로딩에 잠시 시간이 걸립니다.</p>
+    <p class="reveal">SQL(SQLD)·Python·GA4·Excel 매크로, 그리고 Microsoft AI School(AI-900).
+      아이디어를 실행으로 옮길 도구를 꾸준히 벼려왔습니다.</p>
   </section>
 
-  <!-- 결과는 혼자 만들 수 없습니다 -->
+  <!-- 05 협업 -->
   <section id="collab">
-    <span class="sec-eyebrow reveal">Collaboration</span>
+    <span class="sec-eyebrow reveal">05 · 협업</span>
     <h2 class="reveal">결과는 혼자 만들 수 없습니다</h2>
-    <p class="reveal">TF에서 마케팅·영업·홍보·해외직구·물류센터·개발팀과 함께 일했고, 소규모 패션 스타트업에서는 그 역할을 혼자 다 해봤습니다. 그래서 각 팀의 제약을 그들의 언어로 물어볼 수 있습니다. <strong>'우리'의 목표를 위해, 다정한 공감과 신속한 실행으로 결과를 만들겠습니다.</strong></p>
+    <p class="reveal">TF에서 마케팅·영업·홍보·해외직구·물류센터·개발팀과 함께 일했고,
+      소규모 패션 스타트업에서는 그 역할을 혼자 다 해봤습니다.
+      그래서 각 팀의 제약을 <span class="mark">그들의 언어로 물어볼 수 있습니다</span>.
+      '우리'의 목표를 위해, 다정한 공감과 신속한 실행으로 결과를 만들겠습니다.</p>
   </section>
 
-  <!-- CTA -->
-  <section id="cta">
-    <span class="sec-eyebrow reveal">Next</span>
-    <h2 class="reveal">더 알아보기</h2>
-    <div class="cta-box reveal">
-      <p class="reveal" style="margin:0;">지금까지의 여정, 경력 상세 페이지에 담았습니다 ↗</p>
-      <a class="big-link" href="https://typhoon-taleggio-f70.notion.site/BPO-3a4495dfac5081b78b26e969b54b16b1" target="_blank" rel="noopener">경력 상세 보기 ↗</a>
-    </div>
-  </section>
+  <!-- 맺음 -->
+  <div class="closing reveal" id="cta">
+    <p>지금까지의 여정, 경력 상세 페이지에 담았습니다</p>
+    <a class="big-link" href="https://typhoon-taleggio-f70.notion.site/BPO-3a4495dfac5081b78b26e969b54b16b1"
+       target="_blank" rel="noopener">경력 상세 보기 ↗</a>
+  </div>
 
 </main>
 
@@ -318,6 +487,7 @@
 </footer>
 
 <script>
+/* 스크롤 진입 시 페이드인 */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
 }), { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
@@ -325,6 +495,44 @@ document.querySelectorAll('.reveal, .bw').forEach(el => {
   if (el.getBoundingClientRect().top < innerHeight) el.classList.add('in');
   else io.observe(el);
 });
+
+/* 현재 읽고 있는 섹션의 메뉴를 볼드 처리 */
+(function () {
+  const menu  = document.querySelector('nav .menu');
+  const links = Array.from(menu.querySelectorAll('a'));
+  const secs  = links.map(a => document.querySelector(a.getAttribute('href')));
+  let current = null, ticking = false;
+
+  function sync() {
+    ticking = false;
+    const line = scrollY + 90;               // 내비 바로 아래를 판정 기준선으로 삼는다
+    let idx = -1;
+    secs.forEach((s, i) => {
+      if (s && s.getBoundingClientRect().top + scrollY <= line) idx = i;
+    });
+    // 페이지 맨 아래에서는 마지막 항목을 활성화 (짧은 맺음 블록이 건너뛰이지 않도록)
+    if (innerHeight + scrollY >= document.body.scrollHeight - 4) idx = secs.length - 1;
+
+    const next = idx >= 0 ? links[idx] : null;
+    if (next === current) return;
+    if (current) current.classList.remove('on');
+    current = next;
+    if (!current) return;
+    current.classList.add('on');
+
+    // 가로 스크롤되는 모바일 메뉴에서 활성 항목이 화면 밖이면 끌어온다
+    const l = current.offsetLeft, r = l + current.offsetWidth;
+    if (l < menu.scrollLeft || r > menu.scrollLeft + menu.clientWidth) {
+      menu.scrollTo({ left: Math.max(0, l - 16), behavior: 'smooth' });
+    }
+  }
+
+  addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(sync); }
+  }, { passive: true });
+  addEventListener('resize', sync);
+  sync();
+})();
 </script>
 
 </body>

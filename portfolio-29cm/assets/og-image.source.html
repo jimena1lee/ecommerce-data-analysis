@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:#1c1c1e; }
+  body { font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
+  .stage { position:relative; width:1200px; height:630px; overflow:hidden; color:#fff; background:#1c1c1e; }
+  .bg { position:absolute; inset:0;
+    background:
+      radial-gradient(1000px 680px at 90% 8%, rgba(214,210,201,.14), transparent 62%),
+      linear-gradient(118deg, #161617 0%, #1f1f21 50%, #2a2a2c 100%); }
+  .ring { position:absolute; border-radius:50%; border:2px solid rgba(255,255,255,.08);
+          width:460px; height:460px; right:-104px; top:-84px; }
+  .ring.i { width:300px; height:300px; right:-16px; top:52px;
+            background:rgba(214,210,201,.05); border-color:rgba(214,210,201,.14); }
+  .bar { position:absolute; left:0; top:0; bottom:0; width:13px; background:#d6d2c9; }
+  .wrap { position:absolute; inset:0; padding:70px 92px 60px 104px; display:flex; flex-direction:column; }
+  .pill { align-self:flex-start; display:flex; align-items:center; gap:11px;
+          padding:10px 24px; border-radius:999px;
+          background:rgba(255,255,255,.07); border:1.5px solid rgba(214,210,201,.34);
+          font-size:18px; font-weight:700; letter-spacing:.08em; color:#e6e3dc; }
+  .pill .dot { width:8px; height:8px; border-radius:50%; background:#d6d2c9; }
+  h1 { margin-top:30px; font-size:66px; font-weight:900; line-height:1.22; letter-spacing:-.035em; }
+  h1 .accent { color:#d6d2c9; }
+  .sub { margin-top:24px; font-size:24px; font-weight:500; line-height:1.62;
+         color:rgba(255,255,255,.86); letter-spacing:-.02em; }
+  .sub b { font-weight:800; color:#fff; }
+  .meta { margin-top:auto; display:flex; align-items:center; gap:12px; }
+  .tag { padding:9px 18px; border-radius:10px; font-size:19px; font-weight:700;
+         color:rgba(255,255,255,.86); letter-spacing:-.015em;
+         background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
+  .foot { margin-top:22px; font-size:19px; font-weight:800; color:#b8b4ab; }
+</style></head>
+<body><div class="stage">
+  <div class="bg"></div><div class="ring"></div><div class="ring i"></div><div class="bar"></div>
+  <div class="wrap">
+    <div class="pill"><span class="dot"></span>PORTFOLIO · 29CM 커머스 Program Manager</div>
+    <h1>이지원<br><span class="accent">커머스 Program Manager 지원</span></h1>
+    <div class="sub">플랫폼 MD와 <b>입점 셀러</b>, 양쪽에서 커머스 구조를 겪은 8년<br>병목을 과제로 쪼개고, 확인하고, 다시 정의해 끝까지 굴립니다.</div>
+    <div class="meta">
+      <span class="tag">8년 이커머스 MD</span>
+      <span class="tag">플랫폼 · 파트너 양쪽 경험</span>
+      <span class="tag">MS AI School 9기 PM</span>
+    </div>
+    <div class="foot">jimena1lee.github.io</div>
+  </div>
+</div></body></html>

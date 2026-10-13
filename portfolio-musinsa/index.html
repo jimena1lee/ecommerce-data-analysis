@@ -33,10 +33,14 @@
   a { color:inherit; text-underline-offset:4px; }
   a:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
   .wrap { max-width:960px; margin:0 auto; padding-inline:20px; padding-block:28px 96px; }
-  h1, h2, h3 { margin:0; font-weight:900; letter-spacing:-.03em; text-wrap:balance; }
+  h1, h2, h3 { margin:0; font-weight:900; letter-spacing:-.03em; text-wrap:pretty; }
   p { margin:0; max-width:38em; text-wrap:pretty; }
   .num { font-weight:900; letter-spacing:-.04em; font-variant-numeric:tabular-nums; line-height:1.05; }
 
+  .nw { white-space:nowrap; }
+  .steps .nw { white-space:normal; }
+  .hero p { max-width:44em; }
+  .lead { max-width:46em; }
   .top { display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
   .top b { font-weight:900; font-size:1rem; }
   .top span { font-size:.85rem; color:var(--sub); }
@@ -133,11 +137,11 @@
 
   <div class="hero" id="hero">
     <h1>캠페인을 직접 열어 본 MD가<br>AI로 집계와 회고까지 돌립니다</h1>
-    <p>위메프·인터파크에서 6년간 캠페인과 행사를 맡았고, 패션 브랜드에서는 무신사·29CM 입점 브랜드를 혼자 운영했습니다. 무엇을 집계해야 하는지 알기에 반복되는 집계는 도구로 바꾸고, 다 읽기 어려운 리뷰는 AI로 정리합니다.</p>
+    <p><span class="nw">위메프·인터파크에서</span> 6년간 캠페인과 행사를 맡았고, 패션 브랜드에서는 <span class="nw">무신사·29CM</span> 입점 브랜드를 혼자 운영했습니다. 무엇을 집계해야 하는지 알기에 반복되는 집계는 도구로 바꾸고, 다 읽기 어려운 리뷰는 AI로 정리합니다.</p>
   </div>
 
   <nav class="index" aria-label="사례 목차">
-    <a class="tile" href="#campaign"><span class="num">14,500건</span><strong>캠페인 기획·운영</strong><small>5월 아이프라임 위크 주문 (4월 2,927건)</small></a>
+    <a class="tile" href="#campaign"><span class="num">14,500건</span><strong>캠페인 <span class="nw">기획·운영</span></strong><small>5월 아이프라임 위크 주문 <span class="nw">(4월 2,927건)</span></small></a>
     <a class="tile" href="#reviews"><span class="num">1,550건</span><strong>리뷰로 소재 찾기</strong><small>패션 리뷰를 LLM으로 구조화</small></a>
     <a class="tile" href="#brand"><span class="num">1.2억</span><strong>브랜드 운영</strong><small>애슬레저 브랜드 월평균 매출</small></a>
     <a class="tile" href="#more"><span class="num">50→120</span><strong>문제 재정의</strong><small>물류비 계산기를 배포한 뒤 입점 업체 수</small></a>
@@ -145,20 +149,20 @@
 
   <section id="campaign">
     <div class="shead">
-      <div class="chapter">캠페인 기획·운영</div>
+      <div class="chapter">캠페인 <span class="nw">기획·운영</span></div>
       <h2>정기 캠페인과 브랜드 행사를 함께 짜고, 매달 운영 방식을 고쳤습니다</h2>
       <div class="meta"><span><b>인터파크커머스</b> 아이프라임</span><span>2023.08–2024.07</span><span>기여도 <b>70%</b></span></div>
       <p class="lead">아이프라임 위크를 열고 그 사이사이에 브랜드 행사를 잡았습니다. 목표, 쿠폰 조건, 집계 방식을 직접 정하고, 매달 결과를 보고 다음 달 방식을 바꿨습니다.</p>
     </div>
     <div class="figs">
-      <div><span class="num">2,927→14,500</span><small>아이프라임 위크 주문(건), 4월(2일) → 5월(3일 × 2회)</small></div>
-      <div><span class="num">0.5억→2.3억</span><small>아이프라임 위크 매출(원), 4월 → 5월</small></div>
+      <div><span class="num">2,927→14,500</span><small>아이프라임 위크 주문<span class="nw">(건)</span>, 4월<span class="nw">(2일)</span> → 5월<span class="nw">(3일 × 2회)</span></small></div>
+      <div><span class="num">0.5억→2.3억</span><small>아이프라임 위크 매출<span class="nw">(원)</span>, 4월 → 5월</small></div>
       <div><span class="num">84→96%</span><small>아이프라임 위크 목표 대비 달성, 4월 → 5월</small></div>
     </div>
     <div class="steps" style="--n:3">
-      <div><b>일정·목표</b>월별 프로모션 달력을 직접 만들어 브랜드별 행사 기간과 목표 거래건수를 영업팀과 한 시트로 공유</div>
-      <div><b>조건</b>상품별 8% 다운로드 쿠폰, 1만 원 이상·최대 1,500원. 저단가 상품이 많아 진입은 낮추고 상한으로 예산 통제. 가격·재고·이익률로 TOP10을 골라 구좌 지원</div>
-      <div><b>집계</b>일별 거래건수를 Excel 매크로로 자동 집계해 다음 달 일정·예산·상품 협의에 반영<a href="report-macro-flow.html">매크로가 어떻게 도는지 보기</a></div>
+      <div><b><span class="nw">일정·목표</span></b>월별 프로모션 달력을 직접 만들어 브랜드별 행사 기간과 목표 거래건수를 영업팀과 한 시트로 공유</div>
+      <div><b>조건</b>상품별 8% 다운로드 쿠폰, 1만 원 <span class="nw">이상·최대</span> 1,500원. 저단가 상품이 많아 진입은 낮추고 상한으로 예산 통제. <span class="nw">가격·재고·이익률로</span> TOP10을 골라 구좌 지원</div>
+      <div><b>집계</b>일별 거래건수를 Excel 매크로로 자동 집계해 다음 달 <span class="nw">일정·예산·상품</span> 협의에 반영<a href="report-macro-flow.html">매크로가 어떻게 도는지 보기</a></div>
     </div>
     <p class="why"><b>4월 → 5월, 왜 바꿨나.</b> 4월 위크는 이틀만 열어 목표 3,500건의 84%에 그쳤습니다. 그래서 5월에는 위크를 3일씩 두 번으로 늘렸고, 브랜드 목표는 행사 기간 단위에서 한 달 단위로 바꿨습니다.</p>
     <div class="cal">
@@ -206,17 +210,17 @@
       <p class="lead">상세페이지는 소재와 사이즈표를 말하지만, 고객은 리뷰에서 "여름에 입기 좋아요"처럼 착용 상황을 말합니다. 패션 리뷰 1,550건을 LLM으로 구조화해 고객이 실제로 쓰는 구매 기준을 뽑았습니다.</p>
     </div>
     <div class="steps" style="--n:4">
-      <div><b>속성 추출</b>Gemini API로 리뷰마다 핏·사이즈감·계절감 등 8개 축을 추출</div>
+      <div><b>속성 추출</b>Gemini API로 리뷰마다 <span class="nw">핏·사이즈감·계절감</span> 등 8개 축을 추출</div>
       <div><b>코드북</b>같은 뜻의 표현을 하나로 묶고 번호 부여</div>
       <div><b>상품 코드</b>상품마다 대표 속성 코드 부여 <span class="code">사2-두1-계1</span></div>
       <div><b>MD 리포트</b>대시보드로 정리하고 통계는 테스트 코드로 검증</div>
     </div>
     <div class="figs">
       <div><span class="num">261건</span><small>가장 많이 언급된 축 '계절감'. 상세페이지에는 거의 없는 정보</small></div>
-      <div><span class="num">66%</span><small>불만이 담긴 리뷰 중 전체 톤은 '만족·중립'인 비율. 감성 필터로는 놓침</small></div>
-      <div><span class="num">TOP 10</span><small>불만 언급 비율로 뽑은 반품·CS 리스크 후보 상품</small></div>
+      <div><span class="num">66%</span><small>불만이 담긴 리뷰 중 전체 톤은 '<span class="nw">만족·중립</span>'인 비율. 감성 필터로는 놓침</small></div>
+      <div><span class="num">TOP 10</span><small>불만 언급 비율로 뽑은 <span class="nw">반품·CS</span> 리스크 후보 상품</small></div>
     </div>
-    <p class="lead">같은 방식을 캠페인 소재 문구에도 쓸 수 있습니다. 리뷰에서 '간절기·데일리' 언급이 많은 상품을 묶어 시즌 전환 기획전 소재로 쓰는 식입니다.</p>
+    <p class="lead">같은 방식을 캠페인 소재 문구에도 쓸 수 있습니다. 리뷰에서 '<span class="nw">간절기·데일리</span>' 언급이 많은 상품을 묶어 시즌 전환 기획전 소재로 쓰는 식입니다.</p>
     <div class="links"><a class="btn" href="../04_fashion_crawling/kurly/output/kurly_semantic_id.html">리뷰 분석 전체 보기</a></div>
   </section>
 
@@ -225,10 +229,10 @@
       <div class="chapter">브랜드 운영</div>
       <h2>브랜드로서 캠페인에 참여했습니다</h2>
       <div class="meta"><span><b>워너비즈핏</b> 애슬레저</span><span>2024.09–2025.12</span><span>기여도 <b>100%</b></span></div>
-      <p class="lead">여성 애슬레저 브랜드의 온라인 사업을 혼자 맡아 자사몰과 무신사·29CM·지그재그·ZVZO를 운영했습니다. 구좌를 신청하고 신상품 런칭 캠페인을 기획했으며, 재고 소진 대시보드로 판매가 느려진 상품을 찾아 활용 용도와 착용 상황을 소개하는 콘텐츠와 CRM 메시지로 다시 소개했습니다.</p>
+      <p class="lead">여성 애슬레저 브랜드의 온라인 사업을 혼자 맡아 자사몰과 <span class="nw">무신사·29CM·지그재그·ZVZO를</span> 운영했습니다. 구좌를 신청하고 신상품 런칭 캠페인을 기획했으며, 재고 소진 대시보드로 판매가 느려진 상품을 찾아 활용 용도와 착용 상황을 소개하는 콘텐츠와 CRM 메시지로 다시 소개했습니다.</p>
     </div>
     <div class="figs">
-      <div><span class="num">1.2억</span><small>월평균 매출 (최고 월 1.8억)</small></div>
+      <div><span class="num">1.2억</span><small>월평균 매출 <span class="nw">(최고 월 1.8억)</span></small></div>
       <div><span class="num">32%</span><small>최고 전년 동월 대비 성장률</small></div>
       <div><span class="num">4개</span><small>운영한 입점 플랫폼</small></div>
     </div>

@@ -9,292 +9,260 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://jimena1lee.github.io/ecommerce-data-analysis/portfolio-musinsa/">
 <meta property="og:site_name" content="이지원 Portfolio">
-<meta property="og:title" content="이지원 — 온라인 세일즈기획 MD 포트폴리오">
+<meta property="og:title" content="이지원 · 온라인 세일즈기획 MD 포트폴리오">
 <meta property="og:description" content="캠페인을 직접 열어 본 MD가 AI로 집계와 회고까지 돌립니다. 아이프라임 위크 운영, 리뷰 분석, 브랜드 운영 사례">
 <title>이지원 세일즈기획 포트폴리오</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@700;900&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
 <style>
-  /* Layout: 한 줄 읽기 칼럼 + 스프레드시트처럼 생긴 근거 블록(쿠폰북·행사 달력)을 사이사이에 끼운다 */
+  /* Layout: 흰 바탕과 검은 글자. 선은 회색 헤어라인만, 검정은 글자에 쓴다. 섹션 사이는 넓게, 섹션 안은 '머리(제목·메타·리드) → 숫자 → 근거' 세 덩어리로 묶는다. 서체는 한 가족. */
   :root {
-    --paper:#fbfbf9; --ink:#121316; --ink2:#3d3f45; --sub:#6a6c72;
-    --line:#e3e3df; --panel:#f3f3f0; --mark:#efe06a; --mark-ink:#121316;
-    --bar:#2a2c31; --bar-soft:#c9c9c4;
-    --f-display:"Gothic A1","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-    --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-    --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
-    --t-cap:.76rem; --t-sm:.88rem; --t-bd:1rem; --t-lead:1.08rem;
-    --t-h2:clamp(1.35rem,3.6vw,1.7rem); --t-h1:clamp(1.8rem,6vw,3rem);
-    --r:6px;
+    --paper:#ffffff; --ink:#000000; --ink2:#3a3a3a; --sub:#757575; --line:#e6e6e6; --soft:#f5f5f5;
+    --weekband:#ececec; --brandbar:#d4d4d4;
+    --f:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper:#141518; --ink:#ececea; --ink2:#c7c8c4; --sub:#9a9b98;
-      --line:#2c2e33; --panel:#1c1d21; --mark:#6d6420; --mark-ink:#f5f2dc;
-      --bar:#e2e2de; --bar-soft:#4a4c52; color-scheme:dark;
-    }
-  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --paper:#000000; --ink:#ffffff; --ink2:#d0d0d0; --sub:#949494; --line:#262626; --soft:#111111;
+    --weekband:#1e1e1e; --brandbar:#3a3a3a; color-scheme:dark; } }
   :root[data-theme="dark"] {
-    --paper:#141518; --ink:#ececea; --ink2:#c7c8c4; --sub:#9a9b98;
-    --line:#2c2e33; --panel:#1c1d21; --mark:#6d6420; --mark-ink:#f5f2dc;
-    --bar:#e2e2de; --bar-soft:#4a4c52; color-scheme:dark;
-  }
+    --paper:#000000; --ink:#ffffff; --ink2:#d0d0d0; --sub:#949494; --line:#262626; --soft:#111111;
+    --weekband:#1e1e1e; --brandbar:#3a3a3a; color-scheme:dark; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-body); font-size:var(--t-bd); line-height:1.72; word-break:keep-all; overflow-wrap:break-word; }
-  .wrap { max-width:780px; margin:0 auto; padding-inline:20px; padding-block:56px 72px; display:flex; flex-direction:column; gap:72px; }
-  a { color:inherit; text-underline-offset:3px; }
-  a:focus-visible, button:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
-  h1,h2,h3 { font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em; }
-  h1 { font-size:var(--t-h1); font-weight:900; line-height:1.22; }
-  h2 { font-size:var(--t-h2); font-weight:900; line-height:1.35; }
-  h3 { font-size:1.06rem; font-weight:700; }
-  p { margin:0; max-width:65ch; }
-  .mono { font-family:var(--f-mono); font-variant-numeric:tabular-nums; }
-  .eyebrow { font-family:var(--f-mono); font-size:var(--t-cap); letter-spacing:.06em; color:var(--sub); text-transform:uppercase; }
-  .mk { background:var(--mark); color:var(--mark-ink); padding:0 .2em; border-radius:2px; }
-  .stack { display:flex; flex-direction:column; gap:20px; }
-  .meta { display:flex; flex-wrap:wrap; gap:8px 14px; font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); }
-  .meta span { border:1px solid var(--line); border-radius:999px; padding:2px 10px; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f); font-size:16px; line-height:1.75; word-break:keep-all; overflow-wrap:break-word; }
+  a { color:inherit; text-underline-offset:4px; }
+  a:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+  .wrap { max-width:960px; margin:0 auto; padding-inline:20px; padding-block:28px 96px; }
+  h1, h2, h3 { margin:0; font-weight:900; letter-spacing:-.03em; text-wrap:balance; }
+  p { margin:0; max-width:38em; }
+  .num { font-weight:900; letter-spacing:-.04em; font-variant-numeric:tabular-nums; line-height:1.05; }
 
-  /* hero */
-  .hero { display:flex; flex-direction:column; gap:22px; }
-  .lead { font-size:var(--t-lead); color:var(--ink2); }
-  .sides { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; }
-  .sides div { background:var(--paper); padding:14px 16px; display:flex; flex-direction:column; gap:4px; min-width:0; }
-  .sides b { font-family:var(--f-display); font-size:.98rem; }
-  .sides small { color:var(--sub); font-size:var(--t-sm); line-height:1.55; }
-  .contact { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; font-size:var(--t-sm); color:var(--ink2); }
-  .contact button { font:inherit; font-size:var(--t-cap); border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:999px; padding:2px 10px; cursor:pointer; }
-  nav.toc { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:var(--t-sm); border-top:1px solid var(--line); padding-top:14px; }
-  nav.toc a { text-decoration:none; color:var(--sub); }
-  nav.toc a:hover { color:var(--ink); }
+  .top { display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .top b { font-weight:900; font-size:1rem; }
+  .top span { font-size:.85rem; color:var(--sub); }
 
-  /* 시트 블록 */
-  .sheet { border:1px solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden; }
-  .sheet-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:10px 14px; border-bottom:1px solid var(--line); font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); }
+  .hero { padding-block:72px 48px; display:flex; flex-direction:column; gap:20px; }
+  .hero h1 { font-size:clamp(2rem,5.8vw,3.6rem); line-height:1.2; }
+  .hero p { font-size:1.05rem; color:var(--ink2); }
+
+  .index { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .tile { padding:20px 18px 20px 0; display:flex; flex-direction:column; gap:6px; text-decoration:none; min-width:0; }
+  .tile + .tile { padding-left:18px; border-left:1px solid var(--line); }
+  .tile .num { font-size:clamp(1.6rem,3.4vw,2.3rem); }
+  .tile strong { font-weight:700; font-size:.92rem; margin-top:6px; }
+  .tile small { color:var(--sub); font-size:.8rem; line-height:1.5; }
+  .tile:hover strong { text-decoration:underline; text-underline-offset:4px; }
+
+  section { padding-top:128px; display:flex; flex-direction:column; gap:40px; scroll-margin-top:16px; }
+  .chapter { border-top:1px solid var(--ink); padding-top:12px; margin-bottom:8px; font-size:.86rem; font-weight:700; }
+  .shead { display:flex; flex-direction:column; gap:12px; }
+  .shead h2 { font-size:clamp(1.45rem,3.2vw,2rem); line-height:1.35; }
+  .meta { display:flex; flex-wrap:wrap; gap:4px 16px; font-size:.84rem; color:var(--sub); }
+  .meta b { color:var(--ink2); font-weight:700; }
+  .lead { font-size:1rem; color:var(--ink2); margin-top:4px; }
+
+  .figs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+  .figs div { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .figs .num { font-size:clamp(1.6rem,3.6vw,2.3rem); }
+  .figs small { color:var(--sub); font-size:.84rem; line-height:1.55; }
+
+  .steps { display:grid; grid-template-columns:repeat(var(--n,3),minmax(0,1fr)); gap:24px; }
+  .steps > div { display:flex; flex-direction:column; gap:6px; min-width:0; font-size:.92rem; color:var(--ink2); padding-top:14px; border-top:1px solid var(--line); }
+  .steps b { color:var(--ink); font-weight:700; }
+  .steps a { margin-top:auto; padding-top:8px; font-size:.86rem; font-weight:700; color:var(--ink); }
+  .code { background:var(--soft); padding:0 5px; font-variant-numeric:tabular-nums; }
+
+  .why { background:var(--soft); padding:18px 20px; font-size:.95rem; color:var(--ink2); max-width:none; }
+  .why b { color:var(--ink); }
+
+  .cal { display:flex; flex-direction:column; gap:40px; }
+  .calbox { min-width:0; display:flex; flex-direction:column; gap:12px; }
+  .calbox h3 { font-size:1rem; font-weight:700; display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; }
+  .calbox h3 span { font-weight:400; font-size:.82rem; color:var(--sub); }
   .scroll { overflow-x:auto; }
-  table { border-collapse:collapse; width:100%; font-size:var(--t-sm); }
-  th, td { text-align:left; padding:9px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
-  th { font-family:var(--f-mono); font-weight:500; font-size:var(--t-cap); color:var(--sub); white-space:nowrap; }
-  tr:last-child td { border-bottom:0; }
-  td.n, th.n { text-align:right; font-family:var(--f-mono); font-variant-numeric:tabular-nums; white-space:nowrap; }
-  td.when { font-family:var(--f-mono); white-space:nowrap; color:var(--ink2); }
-  .note { font-size:var(--t-cap); color:var(--sub); padding:10px 14px; border-top:1px solid var(--line); }
+  .cmp { min-width:560px; display:flex; flex-direction:column; gap:6px; }
+  .crow { display:grid; grid-template-columns:9em minmax(0,1fr) 3.6em; gap:14px; align-items:center; }
+  .cname { font-size:.88rem; line-height:1.3; }
+  .cname small { display:block; color:var(--sub); font-size:.76rem; }
+  .crow.week .cname { font-weight:700; }
+  .ticks { position:relative; height:18px; font-size:.72rem; color:var(--sub); }
+  .ticks span { position:absolute; transform:translateX(-10%); }
+  .chead { font-size:.72rem; color:var(--sub); text-align:right; }
+  .lane { position:relative; height:28px; background:repeating-linear-gradient(90deg, transparent 0 calc(100%/var(--days) - 1px), var(--line) calc(100%/var(--days) - 1px) calc(100%/var(--days))); }
+  .band { position:absolute; top:-3px; bottom:-3px; background:var(--weekband); border-left:1px dashed var(--sub); border-right:1px dashed var(--sub); z-index:0; pointer-events:none; }
+  .bar { position:absolute; top:4px; bottom:4px; background:var(--ink); color:var(--paper); font-size:.72rem; font-weight:500; display:flex; align-items:center; padding-inline:6px; white-space:nowrap; overflow:hidden; z-index:1; border-radius:2px; }
+  .bar.brand { background:var(--brandbar); color:var(--ink); opacity:.9; }
+  .bar:not(.brand) { z-index:3; }
+  .cval { text-align:right; font-weight:700; font-size:.95rem; font-variant-numeric:tabular-nums; }
+  .cval.under { color:var(--sub); font-weight:500; }
+  .cgroup { font-size:.76rem; color:var(--sub); padding-top:10px; }
+  .cnote { font-size:.82rem; color:var(--sub); }
 
-  /* 막대 */
-  .bars { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; background:var(--line); }
-  .bars > div { background:var(--panel); padding:14px; display:flex; flex-direction:column; gap:10px; min-width:0; }
-  .bars h4 { margin:0; font-size:var(--t-sm); font-weight:600; }
-  .row { display:grid; grid-template-columns:3.2em minmax(0,1fr) 4.6em; align-items:center; gap:8px; font-family:var(--f-mono); font-size:var(--t-cap); }
-  .track { height:14px; background:transparent; }
-  .fill { height:100%; background:var(--bar); border-radius:2px; }
-  .fill.low { background:var(--mark); outline:1px solid var(--bar-soft); }
-  .row .v { text-align:right; font-variant-numeric:tabular-nums; }
-  .row.gap .track { border-bottom:1px dashed var(--bar-soft); height:8px; }
+  .learn { border-left:2px solid var(--ink); padding:4px 0 4px 18px; display:flex; flex-direction:column; gap:8px; }
+  .learn b { font-weight:700; }
+  .learn p { color:var(--ink2); font-size:.95rem; }
+  .learn strong { color:var(--ink); }
 
-  /* 간트 */
-  .gantt { min-width:560px; padding:14px; display:flex; flex-direction:column; gap:8px; }
-  .g-axis, .g-row { display:grid; grid-template-columns:8.5em minmax(0,1fr); gap:10px; align-items:center; }
-  .g-scale { position:relative; height:18px; font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); }
-  .g-scale span { position:absolute; transform:translateX(-50%); }
-  .g-lane { position:relative; height:26px; background:repeating-linear-gradient(90deg, transparent 0 calc(100%/var(--days,31) - 1px), var(--line) calc(100%/var(--days,31) - 1px) calc(100%/var(--days,31))); }
-  .g-bar { position:absolute; top:3px; bottom:3px; background:var(--bar); color:var(--paper); border-radius:3px; font-family:var(--f-mono); font-size:.7rem; display:flex; align-items:center; padding-inline:6px; white-space:nowrap; overflow:hidden; }
-  .g-label { font-size:var(--t-sm); line-height:1.3; }
-  .g-label b { font-weight:600; }
-  .g-band { position:absolute; top:0; bottom:0; background:var(--mark); opacity:.5; z-index:2; pointer-events:none; }
-  .g-bar.brand { background:var(--bar-soft); color:var(--ink); }
-  .g-month { position:absolute; left:0; right:0; top:50%; height:6px; transform:translateY(-50%); background:var(--bar-soft); border-radius:3px; }
-  .g-bar { z-index:1; }
-  .g-label small { display:block; color:var(--sub); font-size:var(--t-cap); }
+  .links { display:flex; flex-wrap:wrap; gap:8px 20px; }
+  .btn { font-weight:700; font-size:.92rem; text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:5px; }
+  .btn:hover { text-decoration-thickness:3px; }
 
-  /* 카테고리 짝 비교 */
-  .cmp { min-width:520px; padding:14px; display:flex; flex-direction:column; gap:6px; }
-  .c-row { display:grid; grid-template-columns:7.5em minmax(0,1fr) 4em; gap:12px; align-items:center; }
-  .c-axis { align-items:end; }
-  .c-head { font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); text-align:right; }
-  .c-group { font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); letter-spacing:.06em; border-top:1px solid var(--line); padding-top:8px; margin-top:6px; }
-  .c-val { text-align:right; font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:var(--t-sm); }
-  .c-val.under { color:var(--sub); }
-  .figs.delta strong { font-size:clamp(1.15rem,3.4vw,1.45rem); white-space:nowrap; }
-  .c-total { border-top:1px solid var(--line); padding-top:6px; margin-top:4px; }
-  .c-total .g-label, .c-total .c-val { font-weight:600; }
-  /* 리뷰 파이프라인 */
-  .steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; }
-  .steps div { background:var(--paper); padding:12px 14px; display:flex; flex-direction:column; gap:4px; min-width:0; font-size:var(--t-sm); color:var(--ink2); }
-  .step-link { margin-top:auto; padding-top:6px; font-size:var(--t-cap); color:var(--ink); }
-  .steps b { font-family:var(--f-mono); font-size:var(--t-cap); color:var(--sub); font-weight:500; }
-  .figs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-  .figs div { border-top:2px solid var(--ink); padding-top:8px; display:flex; flex-direction:column; gap:2px; min-width:0; }
-  .figs strong { font-family:var(--f-display); font-size:clamp(1.5rem,5vw,2rem); font-weight:900; line-height:1.1; }
-  .figs small { color:var(--sub); font-size:var(--t-sm); line-height:1.5; }
-  .code { font-family:var(--f-mono); background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-size:.86em; }
+  .two { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:48px; }
+  .two > div { display:flex; flex-direction:column; gap:10px; min-width:0; }
+  .two .num { font-size:clamp(1.6rem,3.6vw,2.3rem); }
+  .two h3 { font-size:1.02rem; font-weight:700; }
+  .two p { font-size:.93rem; color:var(--ink2); }
+  .two small { color:var(--sub); font-size:.82rem; }
 
-  .steps.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
-  details.sheet summary { cursor:pointer; list-style:none; }
-  details.sheet summary::-webkit-details-marker { display:none; }
-  details.sheet[open] summary span:last-child { visibility:hidden; }
-  details.sheet:not([open]) summary { border-bottom:0; }
-  details.sheet .scroll + .scroll { border-top:1px solid var(--line); }
-  .why { border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; font-size:var(--t-sm); color:var(--ink2); max-width:none; }
-  .why b { display:block; font-family:var(--f-mono); font-weight:500; font-size:var(--t-cap); color:var(--sub); margin-bottom:2px; }
-  .learn { border-left:3px solid var(--mark); padding:4px 0 4px 16px; display:flex; flex-direction:column; gap:8px; }
-  .learn .eyebrow { color:var(--ink2); }
-  .links { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:var(--t-sm); }
-  section { display:flex; flex-direction:column; gap:22px; scroll-margin-top:16px; }
-  .other { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-  .other > div { border:1px solid var(--line); border-radius:var(--r); padding:16px; display:flex; flex-direction:column; gap:8px; min-width:0; }
-  .other p { font-size:var(--t-sm); color:var(--ink2); }
-  footer { border-top:1px solid var(--line); padding-top:20px; display:flex; flex-direction:column; gap:10px; font-size:var(--t-sm); color:var(--sub); }
+  footer { margin-top:128px; border-top:1px solid var(--line); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; align-items:center; }
+  footer .contact { font-size:.92rem; color:var(--ink2); }
 
-  @media (max-width:640px) {
-    .sides, .figs, .other { grid-template-columns:1fr; }
-    .steps, .steps.three, .bars { grid-template-columns:1fr; }
-    .wrap { gap:56px; padding-block:36px 56px; }
+  @media (max-width:760px) {
+    .index { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .tile:nth-child(3) { padding-left:0; border-left:0; }
+    .tile:nth-child(n+3) { border-top:1px solid var(--line); }
+    .figs, .two, .steps { grid-template-columns:1fr; }
+    section { padding-top:88px; gap:32px; }
   }
-  @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
 </style>
 
 </head>
 <body>
-<main class="wrap">
+<div class="wrap">
+  <header class="top"><b>이지원</b><span>무신사 스탠다드 온라인 세일즈기획 MD 지원</span></header>
 
-  <header class="hero" id="hero">
-    <div class="eyebrow">지원 포지션 · 온라인 세일즈기획 MD · 무신사 스탠다드</div>
+  <div class="hero" id="hero">
     <h1>캠페인을 직접 열어 본 MD가<br>AI로 집계와 회고까지 돌립니다</h1>
-    <p class="lead">이커머스 8년 동안 캠페인의 양쪽에 있었습니다. 플랫폼에서는 참여 조건과 쿠폰 예산을 정했고, 패션 브랜드에서는 그 캠페인에 상품을 올려 팔았습니다. 무엇을 집계해야 하는지 알기 때문에 반복되는 집계는 도구로 바꿔 왔고, 지금은 AI로 리뷰처럼 사람이 다 읽기 어려운 데이터까지 정리합니다.</p>
-    <div class="sides">
-      <div><b>정하는 쪽</b><small>위메프·인터파크 플랫폼 MD 6년. 캠페인 조건, 분담 쿠폰, 노출 구좌, 행사 편성</small></div>
-      <div><b>참여하는 쪽</b><small>워너비즈핏 브랜드 MD. 무신사·29CM·지그재그·ZVZO 입점 브랜드 단독 운영</small></div>
-      <div><b>도구로 바꾸는 일</b><small>실적 집계 자동화, LLM 리뷰 분석, Microsoft AI School PM</small></div>
-    </div>
-    <nav class="toc" aria-label="목차">
-      <a href="#campaign">캠페인 기획·운영</a><a href="#reviews">리뷰로 소재 찾기</a><a href="#brand">브랜드 쪽에서</a><a href="#more">그 밖의 사례</a>
-    </nav>
-  </header>
+    <p>위메프·인터파크에서 6년간 캠페인과 행사를 맡았고, 패션 브랜드에서는 무신사·29CM 입점 브랜드를 혼자 운영했습니다. 무엇을 집계해야 하는지 알기에 반복되는 집계는 도구로 바꾸고, 다 읽기 어려운 리뷰는 AI로 정리합니다.</p>
+  </div>
+
+  <nav class="index" aria-label="사례 목차">
+    <a class="tile" href="#campaign"><span class="num">14,500건</span><strong>캠페인 기획·운영</strong><small>5월 아이프라임 위크 주문 (4월 2,927건)</small></a>
+    <a class="tile" href="#reviews"><span class="num">1,550건</span><strong>리뷰로 소재 찾기</strong><small>패션 리뷰를 LLM으로 구조화</small></a>
+    <a class="tile" href="#brand"><span class="num">1.2억</span><strong>브랜드 운영</strong><small>애슬레저 브랜드 월평균 매출</small></a>
+    <a class="tile" href="#more"><span class="num">50→120</span><strong>문제 재정의</strong><small>물류비 계산기를 배포한 뒤 입점 업체 수</small></a>
+  </nav>
 
   <section id="campaign">
-    <div class="stack">
-      <div class="eyebrow">캠페인 기획·운영 · 인터파크커머스 아이프라임 · 2023.08–2024.07 · 기여도 100%</div>
+    <div class="shead">
+      <div class="chapter">캠페인 기획·운영</div>
       <h2>정기 캠페인과 브랜드 행사를 함께 짜고, 매달 운영 방식을 고쳤습니다</h2>
-      <p>아이프라임 상품으로 월 정기 캠페인 '아이프라임 위크'를 열고, 그 사이사이에 브랜드별 행사를 잡았습니다. 목표, 쿠폰 조건, 집계 방식을 직접 정했고, 매달 결과를 보고 다음 달 운영 방식을 바꿨습니다.</p>
+      <div class="meta"><span><b>인터파크커머스</b> 아이프라임</span><span>2023.08–2024.07</span><span>기여도 <b>100%</b></span></div>
+      <p class="lead">아이프라임 위크를 열고 그 사이사이에 브랜드 행사를 잡았습니다. 목표, 쿠폰 조건, 집계 방식을 직접 정하고, 매달 결과를 보고 다음 달 방식을 바꿨습니다.</p>
     </div>
-    <div class="figs delta">
-      <div><strong>2,927 → 14,500건</strong><small>아이프라임 위크 주문, 4월(2일) → 5월(3일 × 2회)</small></div>
-      <div><strong>0.5억 → 2.3억 원</strong><small>아이프라임 위크 매출, 4월 → 5월</small></div>
-      <div><strong>84% → 96%</strong><small>아이프라임 위크 목표 대비 달성, 4월 → 5월</small></div>
+    <div class="figs">
+      <div><span class="num">2,927→14,500</span><small>아이프라임 위크 주문(건), 4월(2일) → 5월(3일 × 2회)</small></div>
+      <div><span class="num">0.5억→2.3억</span><small>아이프라임 위크 매출(원), 4월 → 5월</small></div>
+      <div><span class="num">84→96%</span><small>아이프라임 위크 목표 대비 달성, 4월 → 5월</small></div>
     </div>
-    <div class="steps three">
-      <div><b>일정·목표</b>월별 프로모션 달력을 직접 만들어, 브랜드별 행사 기간과 목표 거래건수를 영업팀과 한 시트로 공유</div>
-      <div><b>조건</b>상품별 8% 다운로드 쿠폰, 1만 원 이상·최대 1,500원. 저단가 상품이 많아 진입 허들은 낮추고 상한으로 예산을 통제. 가격·재고·이익률로 TOP10을 골라 구좌 지원</div>
-      <div><b>집계</b>일별 거래건수를 Excel 매크로로 자동 집계하고, 결과를 다음 달 일정·예산·상품 협의에 반영<a class="step-link" href="report-macro-flow.html">매크로가 어떻게 도는지 보기 ↗</a></div>
+    <div class="steps" style="--n:3">
+      <div><b>일정·목표</b>월별 프로모션 달력을 직접 만들어 브랜드별 행사 기간과 목표 거래건수를 영업팀과 한 시트로 공유</div>
+      <div><b>조건</b>상품별 8% 다운로드 쿠폰, 1만 원 이상·최대 1,500원. 저단가 상품이 많아 진입은 낮추고 상한으로 예산 통제. 가격·재고·이익률로 TOP10을 골라 구좌 지원</div>
+      <div><b>집계</b>일별 거래건수를 Excel 매크로로 자동 집계해 다음 달 일정·예산·상품 협의에 반영<a href="report-macro-flow.html">매크로가 어떻게 도는지 보기</a></div>
     </div>
-    <p class="why"><b>4월 → 5월, 왜 바꿨나</b> 4월 위크는 이틀만 열어 목표 3,500건의 84%에 그쳤습니다. 그래서 5월에는 위크를 3일씩 두 번으로 늘렸고, 브랜드 목표는 행사 기간 단위에서 한 달 단위로 바꿨습니다.</p>
-    <div class="sheet">
-      <div class="sheet-head"><span>프로모션 달력 · 2024.04</span><span>노란 띠 = 아이프라임 위크</span></div>
-      <div class="scroll"><div class="cmp" role="img" aria-label="2024년 4월. 아이프라임 위크 4월 4~5일 84%, 콜라 브랜드 P 4월 8~11일 146%, 콜라 브랜드 C 월간 115%, HMR 브랜드 A 15~18일 20%, HMR 브랜드 B 22~28일 111%, 생수 브랜드 A 월간 187%, 생수 브랜드 B 월간 179%">
-          <div class="c-row c-axis"><span></span><div class="g-scale"><span style="left:0.0%">4/1</span><span style="left:23.3%">4/8</span><span style="left:46.7%">4/15</span><span style="left:70.0%">4/22</span><span style="left:93.3%">4/29</span></div><span class="c-head">달성률</span></div>
-          <div class="c-row"><div class="g-label"><b>아이프라임 위크</b><small>2일</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar" style="left:10.00%;width:6.67%">4/4–5</div></div><div class="c-val under">84%</div></div>
-          <div class="c-group">콜라</div>
-          <div class="c-row"><div class="g-label">콜라 브랜드 P<small>주간 행사</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:23.33%;width:13.33%">4/8–11</div></div><div class="c-val">146%</div></div>
-          <div class="c-row"><div class="g-label">콜라 브랜드 C<small>월간 상시</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="c-val">115%</div></div>
-          <div class="c-group">HMR</div>
-          <div class="c-row"><div class="g-label">HMR 브랜드 A<small>주간 행사</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:46.67%;width:13.33%">4/15–18</div></div><div class="c-val under">20%</div></div>
-          <div class="c-row"><div class="g-label">HMR 브랜드 B<small>주간 행사</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:70.00%;width:23.33%">4/22–28</div></div><div class="c-val">111%</div></div>
-          <div class="c-group">생수</div>
-          <div class="c-row"><div class="g-label">생수 브랜드 A<small>월간 상시</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="c-val">187%</div></div>
-          <div class="c-row"><div class="g-label">생수 브랜드 B<small>월간 상시</small></div><div class="g-lane" style="--days:30"><div class="g-band" style="left:10.00%;width:6.67%"></div><div class="g-bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="c-val">179%</div></div>
+    <p class="why"><b>4월 → 5월, 왜 바꿨나.</b> 4월 위크는 이틀만 열어 목표 3,500건의 84%에 그쳤습니다. 그래서 5월에는 위크를 3일씩 두 번으로 늘렸고, 브랜드 목표는 행사 기간 단위에서 한 달 단위로 바꿨습니다.</p>
+    <div class="cal">
+      <div class="calbox">
+        <h3>2024년 4월 프로모션 달력<span>점선 구간 = 아이프라임 위크</span></h3>
+        <div class="scroll"><div class="cmp" role="img" aria-label="2024년 4월. 아이프라임 위크 4월 4~5일 84%. 콜라 브랜드 P 4월 8~11일 146%, 콜라 브랜드 C 월간 115%, HMR 브랜드 A 15~18일 20%, HMR 브랜드 B 22~28일 111%, 생수 브랜드 A 월간 187%, 생수 브랜드 B 월간 179%">
+<div class="crow axis"><span></span><div class="ticks"><span style="left:0.0%">4/1</span><span style="left:23.3%">4/8</span><span style="left:46.7%">4/15</span><span style="left:70.0%">4/22</span><span style="left:93.3%">4/29</span></div><span class="chead">달성률</span></div>
+<div class="crow week"><div class="cname">아이프라임 위크<small>2일</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar" style="left:10.00%;width:6.67%">4/4–5</div></div><div class="cval under">84%</div></div>
+<div class="cgroup">콜라</div>
+<div class="crow"><div class="cname">콜라 브랜드 P<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:23.33%;width:13.33%">4/8–11</div></div><div class="cval">146%</div></div>
+<div class="crow"><div class="cname">콜라 브랜드 C<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">115%</div></div>
+<div class="cgroup">HMR</div>
+<div class="crow"><div class="cname">HMR 브랜드 A<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:46.67%;width:13.33%">4/15–18</div></div><div class="cval under">20%</div></div>
+<div class="crow"><div class="cname">HMR 브랜드 B<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:70.00%;width:23.33%">4/22–28</div></div><div class="cval">111%</div></div>
+<div class="cgroup">생수</div>
+<div class="crow"><div class="cname">생수 브랜드 A<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">187%</div></div>
+<div class="crow"><div class="cname">생수 브랜드 B<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">179%</div></div>
         </div></div>
-      <div class="note">4월 위크는 이틀(4/4~5)만 열었고, 주문 2,927건으로 목표 3,500건의 84%였습니다. 브랜드 행사는 기간마다 목표를 따로 잡았습니다.</div>
-    </div>
-    <div class="sheet">
-      <div class="sheet-head"><span>프로모션 달력 · 2024.05</span><span>노란 띠 = 아이프라임 위크</span></div>
-      <div class="scroll"><div class="cmp" role="img" aria-label="2024년 5월. 아이프라임 위크 5월 3~5일, 17~19일, 목표 대비 96%. 월간 목표 생수 브랜드 A 59%, 커피음료 브랜드 A 69%, 건전지 브랜드 A 83%">
-          <div class="c-row c-axis"><span></span><div class="g-scale"><span style="left:0.0%">5/1</span><span style="left:22.6%">5/8</span><span style="left:45.2%">5/15</span><span style="left:67.7%">5/22</span><span style="left:90.3%">5/29</span></div><span class="c-head">달성률</span></div>
-          <div class="c-row"><div class="g-label"><b>아이프라임 위크</b><small>3일 × 2회</small></div><div class="g-lane" style="--days:31"><div class="g-band" style="left:6.45%;width:9.68%"></div><div class="g-band" style="left:51.61%;width:9.68%"></div><div class="g-bar" style="left:6.45%;width:9.68%">5/3–5</div><div class="g-bar" style="left:51.61%;width:9.68%">5/17–19</div></div><div class="c-val">96%</div></div>
-          <div class="c-row"><div class="g-label">생수 브랜드 A<small>생수 · 월간 목표</small></div><div class="g-lane" style="--days:31"><div class="g-band" style="left:6.45%;width:9.68%"></div><div class="g-band" style="left:51.61%;width:9.68%"></div><div class="g-bar brand" style="left:0%;width:100%">5/1–31</div></div><div class="c-val under">59%</div></div>
-          <div class="c-row"><div class="g-label">커피음료 브랜드 A<small>커피음료 · 월간 목표</small></div><div class="g-lane" style="--days:31"><div class="g-band" style="left:6.45%;width:9.68%"></div><div class="g-band" style="left:51.61%;width:9.68%"></div><div class="g-bar brand" style="left:0%;width:100%">5/1–31</div></div><div class="c-val under">69%</div></div>
-          <div class="c-row"><div class="g-label">건전지 브랜드 A<small>건전지 · 월간 목표</small></div><div class="g-lane" style="--days:31"><div class="g-band" style="left:6.45%;width:9.68%"></div><div class="g-band" style="left:51.61%;width:9.68%"></div><div class="g-bar brand" style="left:0%;width:100%">5/1–31</div></div><div class="c-val under">83%</div></div>
+        <p class="cnote">브랜드 행사마다 기간을 따로 잡고, 행사 기간 목표 대비 달성률을 기록했습니다.</p>
+      </div>
+      <div class="calbox">
+        <h3>2024년 5월 프로모션 달력<span>점선 구간 = 아이프라임 위크</span></h3>
+        <div class="scroll"><div class="cmp" role="img" aria-label="2024년 5월. 아이프라임 위크 5월 3~5일, 17~19일, 96%. 월간 목표 생수 브랜드 A 59%, 커피음료 브랜드 A 69%, 건전지 브랜드 A 83%">
+<div class="crow axis"><span></span><div class="ticks"><span style="left:0.0%">5/1</span><span style="left:22.6%">5/8</span><span style="left:45.2%">5/15</span><span style="left:67.7%">5/22</span><span style="left:90.3%">5/29</span></div><span class="chead">달성률</span></div>
+<div class="crow week"><div class="cname">아이프라임 위크<small>3일 × 2회</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar" style="left:6.45%;width:9.68%">5/3–5</div><div class="bar" style="left:51.61%;width:9.68%">5/17–19</div></div><div class="cval">96%</div></div>
+<div class="cgroup">브랜드별 월간 목표</div>
+<div class="crow"><div class="cname">생수 브랜드 A<small>생수</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">59%</div></div>
+<div class="crow"><div class="cname">커피음료 브랜드 A<small>커피음료</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">69%</div></div>
+<div class="crow"><div class="cname">건전지 브랜드 A<small>건전지</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">83%</div></div>
         </div></div>
-      <div class="note">달성률은 거래건수 목표 대비, 브랜드명은 익명입니다.</div>
+        <p class="cnote">브랜드 목표를 한 달 단위로 잡고, 위크를 두 번 열었습니다. 달성률은 거래건수 목표 대비, 브랜드명은 익명입니다.</p>
+      </div>
     </div>
     <div class="learn">
-      <div class="eyebrow">배운 것 · 전후 수치 비교의 중요성</div>
+      <b>배운 것: 전후 수치 비교의 중요성</b>
       <p>쿠폰 조건은 매달 바꿨고 결과도 매달 남겼습니다. 그런데 조건을 바꾼 날짜와 변경 전후의 매출을 기록하지 않아, 캠페인 조건에 따른 효율을 돌이켜 점검하기 어려웠습니다. 앞으로는 캠페인을 바꾸기 전에 <strong>바꾸기 전 숫자, 기대하는 변화, 확인할 날짜</strong>를 먼저 기록해 효율을 점검하겠습니다.</p>
     </div>
   </section>
 
   <section id="reviews">
-    <div class="stack">
-      <div class="eyebrow">리뷰로 소재 찾기 · 개인 프로젝트 · 2026.07 · 기여도 100%</div>
+    <div class="shead">
+      <div class="chapter">리뷰로 소재 찾기</div>
       <h2>고객이 리뷰에 쓰는 말로 상품 소재를 다시 봤습니다</h2>
-      <p>상세페이지는 소재와 사이즈표로 쓰이지만, 고객은 리뷰에서 "여름에 입기 좋아요", "데일리로 자주 입어요"처럼 착용 상황을 이야기합니다. 패션 3개 카테고리 리뷰 1,550건을 LLM으로 구조화해, 고객이 실제로 구매를 판단하는 기준을 뽑았습니다.</p>
+      <div class="meta"><span><b>개인 프로젝트</b></span><span>2026.07</span><span>기여도 <b>100%</b></span></div>
+      <p class="lead">상세페이지는 소재와 사이즈표를 말하지만, 고객은 리뷰에서 "여름에 입기 좋아요"처럼 착용 상황을 말합니다. 패션 리뷰 1,550건을 LLM으로 구조화해 고객이 실제로 쓰는 구매 기준을 뽑았습니다.</p>
     </div>
-    <div class="steps">
-      <div><b>1 속성 추출</b>Gemini API로 리뷰마다 핏·사이즈감·계절감 등 8개 축을 JSON으로 추출</div>
-      <div><b>2 코드북</b>축별로 같은 뜻의 표현을 하나로 묶고 번호 부여</div>
-      <div><b>3 상품 코드</b>상품마다 대표 속성 코드 부여 <span class="code">사2-두1-계1</span></div>
-      <div><b>4 MD 리포트</b>대시보드와 리포트로 정리, 통계는 테스트 코드로 검증</div>
+    <div class="steps" style="--n:4">
+      <div><b>속성 추출</b>Gemini API로 리뷰마다 핏·사이즈감·계절감 등 8개 축을 추출</div>
+      <div><b>코드북</b>같은 뜻의 표현을 하나로 묶고 번호 부여</div>
+      <div><b>상품 코드</b>상품마다 대표 속성 코드 부여 <span class="code">사2-두1-계1</span></div>
+      <div><b>MD 리포트</b>대시보드로 정리하고 통계는 테스트 코드로 검증</div>
     </div>
     <div class="figs">
-      <div><strong>계절감</strong><small>리뷰에서 가장 많이 언급된 축(261건). 상세페이지에는 거의 드러나지 않는 정보</small></div>
-      <div><strong>66%</strong><small>불만이 담긴 리뷰 중 전체 톤은 '만족·중립'인 비율. 감성 필터로는 놓침</small></div>
-      <div><strong>TOP 10</strong><small>불만 언급 비율로 뽑은 반품·CS 리스크 후보 상품</small></div>
+      <div><span class="num">261건</span><small>가장 많이 언급된 축 '계절감'. 상세페이지에는 거의 없는 정보</small></div>
+      <div><span class="num">66%</span><small>불만이 담긴 리뷰 중 전체 톤은 '만족·중립'인 비율. 감성 필터로는 놓침</small></div>
+      <div><span class="num">TOP 10</span><small>불만 언급 비율로 뽑은 반품·CS 리스크 후보 상품</small></div>
     </div>
-    <p>같은 방식을 캠페인 소재 문구에도 적용해 볼 수 있습니다. 예를 들어 리뷰에서 '간절기·데일리' 언급이 많은 상품을 묶어 시즌 전환 기획전의 소재로 쓰는 식입니다.</p>
-    <div class="links"><a href="../04_fashion_crawling/kurly/output/kurly_semantic_id.html">리뷰 분석 전체 보기 ↗</a></div>
+    <p class="lead">같은 방식을 캠페인 소재 문구에도 쓸 수 있습니다. 리뷰에서 '간절기·데일리' 언급이 많은 상품을 묶어 시즌 전환 기획전 소재로 쓰는 식입니다.</p>
+    <div class="links"><a class="btn" href="../04_fashion_crawling/kurly/output/kurly_semantic_id.html">리뷰 분석 전체 보기</a></div>
   </section>
 
   <section id="brand">
-    <div class="stack">
-      <div class="eyebrow">브랜드 쪽에서 · 워너비즈핏 애슬레저 · 2024.09–2025.12 · 기여도 100%</div>
+    <div class="shead">
+      <div class="chapter">브랜드 운영</div>
       <h2>브랜드로서 캠페인에 참여했습니다</h2>
-      <p>여성 애슬레저 브랜드의 온라인 사업을 혼자 맡아 자사몰과 무신사·29CM·지그재그·ZVZO를 운영했습니다. 플랫폼 구좌를 신청하고, 신상품 런칭 캠페인을 기획했습니다. 재고 소진 대시보드로 소진이 느린 상품을 찾으면 활용 용도와 착용 상황, 특장점을 소개하는 콘텐츠와 CRM 메시지로 다시 소개했습니다.</p>
+      <div class="meta"><span><b>워너비즈핏</b> 애슬레저</span><span>2024.09–2025.12</span><span>기여도 <b>100%</b></span></div>
+      <p class="lead">여성 애슬레저 브랜드의 온라인 사업을 혼자 맡아 자사몰과 무신사·29CM·지그재그·ZVZO를 운영했습니다. 구좌를 신청하고 신상품 런칭 캠페인을 기획했으며, 재고 소진 대시보드로 판매가 느려진 상품을 찾아 활용 용도와 착용 상황을 소개하는 콘텐츠와 CRM 메시지로 다시 소개했습니다.</p>
     </div>
-    <div class="links"><a href="stock-dashboard.html">재고 소진 대시보드 보기 ↗</a></div>
     <div class="figs">
-      <div><strong>1.2억</strong><small>월평균 매출 (최고 월 1.8억)</small></div>
-      <div><strong>32%</strong><small>최고 전년 동월 대비 성장률</small></div>
-      <div><strong>4개</strong><small>운영한 입점 플랫폼</small></div>
+      <div><span class="num">1.2억</span><small>월평균 매출 (최고 월 1.8억)</small></div>
+      <div><span class="num">32%</span><small>최고 전년 동월 대비 성장률</small></div>
+      <div><span class="num">4개</span><small>운영한 입점 플랫폼</small></div>
     </div>
+    <div class="links"><a class="btn" href="stock-dashboard.html">재고 소진 대시보드 보기</a></div>
   </section>
 
   <section id="more">
-    <div class="stack">
-      <div class="eyebrow">그 밖의 사례</div>
+    <div class="shead">
+      <div class="chapter">문제 재정의</div>
       <h2>막힌 원인을 다시 찾고, 검증할 수 있는 도구로 풉니다</h2>
     </div>
-    <div class="other">
+    <div class="two">
       <div>
-        <div class="eyebrow">인터파크커머스 · 2023.09–11 · 기여도 80%</div>
-        <h3>입점 업체 50 → 120개</h3>
-        <p>안내자료를 두 번 고쳐도 아이프라임 참여가 늘지 않았습니다. MD들이 반복한 "배송비가 얼마 나오는지 모르겠다"는 말에서 원인을 계산 도구의 부재로 다시 정의하고, 물류비 계산기를 만들어 배포했습니다.</p>
-        <div class="links"><a href="logistics-calculator.html">물류비 계산기 써 보기 ↗</a></div>
+        <span class="num">50→120</span>
+        <h3>아이프라임 입점 업체 수</h3>
+        <p>안내자료를 두 번 고쳐도 참여가 늘지 않았습니다. MD들이 반복한 "배송비가 얼마 나오는지 모르겠다"는 말에서 원인을 계산 도구의 부재로 다시 정의하고, 물류비 계산기를 만들어 배포했습니다.</p>
+        <div class="meta"><span><b>인터파크커머스</b></span><span>2023.09–11</span><span>기여도 <b>80%</b></span></div>
+        <div class="links"><a class="btn" href="logistics-calculator.html">물류비 계산기 써 보기</a></div>
       </div>
       <div>
-        <div class="eyebrow">Microsoft AI School · PM · 기여도 50%</div>
-        <h3>QuoPilot B2B 견적 AI</h3>
-        <p>양식이 제각각인 견적서를 맞추고 비교하는 요구를 MATCH → COMPARE → REASON 세 단계로 나눴습니다. 판정은 규칙과 임베딩 매칭에 맡기고, AI는 근거를 설명하는 데만 써서 결과를 검증할 수 있게 했습니다.</p>
+        <span class="num">1등상</span>
+        <h3>QuoPilot, B2B 견적 AI</h3>
+        <p>양식이 제각각인 견적서를 맞추고 비교하는 요구를 MATCH, COMPARE, REASON 세 단계로 나눴습니다. 판정은 규칙과 임베딩 매칭에 맡기고 AI는 근거 설명에만 써서, 결과를 검증할 수 있게 설계했습니다.</p>
+        <div class="meta"><span><b>Microsoft AI School</b> 프로젝트 1등상</span><span>PM</span><span>기여도 <b>50%</b></span></div>
       </div>
     </div>
   </section>
 
   <footer id="cta">
-    <div class="links"><a href="https://typhoon-taleggio-f70.notion.site/MD-3f8495dfac5081c2bbcee86124956e29">경력 상세 보기 ↗</a><a href="https://github.com/jimena1lee">GitHub ↗</a><a href="https://www.linkedin.com/in/jiwon-lee-5760673ba/">LinkedIn ↗</a></div>
-    <div class="contact">이지원 · <span id="mail" class="mono">daemie@naver.com</span> <button type="button" id="copy">주소 복사</button></div>
+    <div class="links"><a class="btn" href="https://typhoon-taleggio-f70.notion.site/MD-3f8495dfac5081c2bbcee86124956e29">경력 상세 보기</a><a class="btn" href="https://github.com/jimena1lee">GitHub</a><a class="btn" href="https://www.linkedin.com/in/jiwon-lee-5760673ba/">LinkedIn</a></div>
+    <div class="contact"><span>daemie@naver.com</span></div>
   </footer>
-</main>
+</div>
 
-<script>
-  document.getElementById('copy').addEventListener('click', function () {
-    var b = this, t = document.getElementById('mail').textContent;
-    var done = function () { b.textContent = '복사됨'; setTimeout(function () { b.textContent = '주소 복사'; }, 1600); };
-    try {
-      navigator.clipboard.writeText(t).then(done, function () { select(); });
-    } catch (e) { select(); }
-    function select() { var r = document.createRange(); r.selectNodeContents(document.getElementById('mail')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-  });
-</script>
 
 </body>
 </html>

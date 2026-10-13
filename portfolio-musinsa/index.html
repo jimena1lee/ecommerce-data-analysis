@@ -34,7 +34,7 @@
   a:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
   .wrap { max-width:960px; margin:0 auto; padding-inline:20px; padding-block:28px 96px; }
   h1, h2, h3 { margin:0; font-weight:900; letter-spacing:-.03em; text-wrap:balance; }
-  p { margin:0; max-width:38em; }
+  p { margin:0; max-width:38em; text-wrap:pretty; }
   .num { font-weight:900; letter-spacing:-.04em; font-variant-numeric:tabular-nums; line-height:1.05; }
 
   .top { display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
@@ -96,7 +96,7 @@
   .cval { text-align:right; font-weight:700; font-size:.95rem; font-variant-numeric:tabular-nums; }
   .cval.under { color:var(--sub); font-weight:500; }
   .cgroup { font-size:.76rem; color:var(--sub); padding-top:10px; }
-  .cnote { font-size:.82rem; color:var(--sub); }
+  .cnote { font-size:.82rem; color:var(--sub); max-width:none; }
 
   .learn { border-left:2px solid var(--ink); padding:4px 0 4px 18px; display:flex; flex-direction:column; gap:8px; }
   .learn b { font-weight:700; }

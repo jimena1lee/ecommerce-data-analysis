@@ -138,6 +138,15 @@
   .mbar .s2 { background:var(--weekband); color:var(--ink); }
   .mbar .s3 { background:var(--soft); color:var(--sub); }
   .mbar .s3.hi { background:var(--ink); color:var(--paper); font-weight:700; }
+  .ba { display:flex; flex-direction:column; gap:12px; }
+  .ba h3 { font-size:1rem; font-weight:700; }
+  .ba table { border-collapse:collapse; width:100%; max-width:600px; min-width:420px; font-size:.92rem; }
+  .ba th, .ba td { text-align:left; padding:10px 12px 10px 0; border-bottom:1px solid var(--line); font-weight:400; }
+  .ba thead th { font-size:.8rem; color:var(--sub); }
+  .ba tbody th { color:var(--sub); width:9em; }
+  .ba td { color:var(--ink2); }
+  .ba td b { color:var(--ink); font-weight:700; }
+  .ba .sub { color:var(--sub); font-size:.8rem; }
 </style>
 
 </head>
@@ -194,37 +203,17 @@
       <div><b>조건</b><span>상품별 8% 다운로드 쿠폰, 1만 원 <span class="nw">이상·최대</span> 1,500원. 저단가 상품이 많아 진입은 낮추고 상한으로 예산 통제. <span class="nw">가격·재고·이익률로</span> TOP10을 골라 구좌 지원</span></div>
       <div><b>집계</b><span>일별 거래건수를 Excel 매크로로 자동 집계해 다음 달 <span class="nw">일정·예산·상품</span> 협의에 반영</span><a href="report-macro-flow.html">매크로가 어떻게 도는지 보기</a></div>
     </div>
-    <p class="why"><b>4월 → 5월, 왜 바꿨나.</b> 4월 위크는 이틀만 열어 목표 3,500건의 84%에 그쳤습니다. 그래서 5월에는 위크를 3일씩 두 번으로 늘렸고, 브랜드 목표는 행사 기간 단위에서 한 달 단위로 바꿨습니다.</p>
-    <div class="cal">
-      <div class="calbox">
-        <h3>2024년 4월 프로모션 달력<span>점선 구간 = 아이프라임 위크</span></h3>
-        <div class="scroll"><div class="cmp" role="img" aria-label="2024년 4월. 아이프라임 위크 4월 4~5일 84%. 콜라 브랜드 P 4월 8~11일 146%, 콜라 브랜드 C 월간 115%, HMR 브랜드 A 15~18일 20%, HMR 브랜드 B 22~28일 111%, 생수 브랜드 A 월간 187%, 생수 브랜드 B 월간 179%">
-<div class="crow axis"><span></span><div class="ticks"><span style="left:0.0%">4/1</span><span style="left:23.3%">4/8</span><span style="left:46.7%">4/15</span><span style="left:70.0%">4/22</span><span style="left:93.3%">4/29</span></div><span class="chead">달성률</span></div>
-<div class="crow week"><div class="cname">아이프라임 위크<small>2일</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar" style="left:10.00%;width:6.67%">4/4–5</div></div><div class="cval under">84%</div></div>
-<div class="cgroup">콜라</div>
-<div class="crow"><div class="cname">콜라 브랜드 P<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:23.33%;width:13.33%">4/8–11</div></div><div class="cval">146%</div></div>
-<div class="crow"><div class="cname">콜라 브랜드 C<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">115%</div></div>
-<div class="cgroup">HMR</div>
-<div class="crow"><div class="cname">HMR 브랜드 A<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:46.67%;width:13.33%">4/15–18</div></div><div class="cval under">20%</div></div>
-<div class="crow"><div class="cname">HMR 브랜드 B<small>주간 행사</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:70.00%;width:23.33%">4/22–28</div></div><div class="cval">111%</div></div>
-<div class="cgroup">생수</div>
-<div class="crow"><div class="cname">생수 브랜드 A<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">187%</div></div>
-<div class="crow"><div class="cname">생수 브랜드 B<small>월간 상시</small></div><div class="lane" style="--days:30"><div class="band" style="left:10.00%;width:6.67%"></div><div class="bar brand" style="left:0.00%;width:100.00%">4/1–30</div></div><div class="cval">179%</div></div>
-        </div></div>
-        <p class="cnote">브랜드 행사마다 기간을 따로 잡고, 행사 기간 목표 대비 달성률을 기록했습니다.</p>
-      </div>
-      <div class="calbox">
-        <h3>2024년 5월 프로모션 달력<span>점선 구간 = 아이프라임 위크</span></h3>
-        <div class="scroll"><div class="cmp" role="img" aria-label="2024년 5월. 아이프라임 위크 5월 3~5일, 17~19일, 96%. 월간 목표 생수 브랜드 A 59%, 커피음료 브랜드 A 69%, 건전지 브랜드 A 83%">
-<div class="crow axis"><span></span><div class="ticks"><span style="left:0.0%">5/1</span><span style="left:22.6%">5/8</span><span style="left:45.2%">5/15</span><span style="left:67.7%">5/22</span><span style="left:90.3%">5/29</span></div><span class="chead">달성률</span></div>
-<div class="crow week"><div class="cname">아이프라임 위크<small>3일 × 2회</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar" style="left:6.45%;width:9.68%">5/3–5</div><div class="bar" style="left:51.61%;width:9.68%">5/17–19</div></div><div class="cval">96%</div></div>
-<div class="cgroup">브랜드별 월간 목표</div>
-<div class="crow"><div class="cname">생수 브랜드 A<small>생수</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">59%</div></div>
-<div class="crow"><div class="cname">커피음료 브랜드 A<small>커피음료</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">69%</div></div>
-<div class="crow"><div class="cname">건전지 브랜드 A<small>건전지</small></div><div class="lane" style="--days:31"><div class="band" style="left:6.45%;width:9.68%"></div><div class="band" style="left:51.61%;width:9.68%"></div><div class="bar brand" style="left:0.00%;width:100.00%">5/1–31</div></div><div class="cval under">83%</div></div>
-        </div></div>
-        <p class="cnote">브랜드 목표를 한 달 단위로 잡고, 위크를 두 번 열었습니다. 달성률은 거래건수 목표 대비, 브랜드명은 익명입니다.</p>
-      </div>
+    <div class="ba">
+      <h3>4월 결과를 보고 5월에 바꾼 것</h3>
+      <div class="scroll"><table>
+        <thead><tr><th></th><th>4월</th><th>5월</th></tr></thead>
+        <tbody>
+          <tr><th>위크 운영</th><td>2일 × 1회</td><td><b>3일 × 2회</b></td></tr>
+          <tr><th>브랜드 목표</th><td>행사 기간별</td><td><b>한 달 단위</b></td></tr>
+          <tr><th>목표 대비 달성</th><td>84% <span class="sub">(목표 3,500건)</span></td><td><b>96%</b></td></tr>
+        </tbody>
+      </table></div>
+      <p class="cnote">근거: 영업팀과 공유한 월별 프로모션 달력(브랜드별 행사 기간·목표 거래건수·달성률)</p>
     </div>
     <div class="learn">
       <b>배운 것: 전후 수치 비교의 중요성</b>
@@ -278,10 +267,6 @@
     </div>
     <p class="lead">같은 방식을 상세페이지와 기획전 문구에도 쓸 수 있습니다. 러그·침구처럼 사진으로 전하기 어려운 사용감을 리뷰에서 찾아 문구로 옮기는 식입니다.</p>
     <div class="links"><a class="btn" href="https://jimena1lee.github.io/ecommerce-data-analysis/04_fashion_crawling/kurly/output/kurly_semantic_id.html">리뷰 분석 전체 보기</a></div>
-    <div class="learn">
-      <b>AI를 쓰는 원칙</b>
-      <p>Microsoft AI School에서 PM을 맡은 QuoPilot(B2B 견적 AI, 프로젝트 1등상)에서도 판정은 규칙과 매칭에 맡기고 AI는 근거 설명에만 썼습니다. <strong>AI가 만든 결과는 원데이터와 대조해 검수합니다.</strong></p>
-    </div>
   </section>
 
   <footer id="cta">
